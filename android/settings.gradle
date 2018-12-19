@@ -1,0 +1,3 @@
+rootProject.name = 'AccessU'
+
+include ':app'
