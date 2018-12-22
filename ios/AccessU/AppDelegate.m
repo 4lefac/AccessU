@@ -17,7 +17,7 @@
 {
     NSURL *jsCodeLocation;
   
-  [GMSServices provideAPIKey:@"AIzaSyDeTeQsHcvh25Mt5OTFCq7nixAF9zteEw"]; // add this line using the api key obtained from Google Console
+  [GMSServices provideAPIKey:@"AIzaSyDeTeQsHcvh25Mt5OTFCq7nixAF9zteEwtesting"]; // add this line using the api key obtained from Google Console
   
 
  
