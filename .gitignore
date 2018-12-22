@@ -36,7 +36,7 @@ local.properties
 
 #hiding api key for android
 #
-android/app/AndroidManifest.xml
+android/app/src/AndroidManifest.xml
 
 # node.js
 #
