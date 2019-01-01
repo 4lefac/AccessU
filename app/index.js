@@ -5,6 +5,8 @@ import Home from './screens/Home'
 
 EStyleSheet.build({
     //put global styles here
+    $white: '#FFFFFF',
+    $inputText: '#000000',
 });
 
 export default () => <Home/>;
