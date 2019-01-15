@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Dimensions} from 'react-native';
+import {View, Dimensions, Text, Button, Overlay} from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import EStyleSheet from 'react-native-extended-stylesheet';
 
@@ -51,10 +51,34 @@ export default class Map extends Component {
   }
 
   render() {
-    console.log("rendered")
-    console.log(this.state.userPosition)
+    //console.log("rendered")
+    //console.log(this.state.userPosition)
     return (
       <View style = {{...EStyleSheet.absoluteFillObject} }>
+        {/* top menu bar */}
+        <View style={{position: 'absolute', top: 30, zIndex: 999, flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+          <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', width: '90%'}}>
+            <Button
+              title="t1"
+              accessibilityLabel="Main Menu"
+              style={{aspectRatio: 1}}
+              onPress={() => alert('menu!')}
+            />
+            <Button
+              title="t2"
+              accessibilityLabel="Search"
+              style={{aspectRatio: 1}}
+              onPress={() => alert('search!')}
+            />
+            <Button
+              title="t3"
+              accessibilityLabel="Find Route"
+              style={{aspectRatio: 1}}
+              onPress={() => alert('route!')}
+            />
+          </View>
+        </View>
+        {/* map */}
         <MapView
           provider = { PROVIDER_GOOGLE }
           style = { {flex: 1 }}
@@ -62,9 +86,12 @@ export default class Map extends Component {
           showsUserLocation={true}
           zoomEnabled={true}
           scrollEnabled={true}
-          />
-          <InputEntrance/>
-          <FindUserButton onPress = {this.goToUserPosition}/>
+        />
+        {/* bottom menu */}
+
+        <InputEntrance/>
+        <FindUserButton onPress = {this.goToUserPosition}/>
+
       </View>
     );
   }

@@ -12,6 +12,7 @@ export default class Home extends Component {
         <Text>This is the main screen. Sign-in and other details will be added here.</Text>
         <Button
           title="Take me to the map!"
+          accessibilityLabel="screenreader should read this but test it to make sure."
           onPress={() => navigate('Map')}
         />
       </View>
