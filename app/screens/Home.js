@@ -39,7 +39,7 @@ export default class Home extends Component{
       }
 
       this.setState({userPosition: initialRegion})
-    }, (error) => alert(JSON.stringify(error)),
+    }, (error) => alert(JSON.stringify("Please Turn on Location Services")),
     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
   }
   //this method will only run once in the initial render of the program. This will update the user location before 
