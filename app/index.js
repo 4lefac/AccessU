@@ -5,22 +5,23 @@ import {StyleSheet} from 'react-native';
 import {createAppContainer, createStackNavigator} from 'react-navigation';
 
 // screens
-import Home from './screens/Home';
+import Search from './screens/Search';
 import Map from './screens/Map';
 
 
 EStyleSheet.build({
-    //put global styles here
-    $white: '#FFFFFF',
-    $inputText: '#000000',
+  // global styles
+  $white: '#FFFFFF',
+  $inputText: '#000000',
+  $background: '#ccc',
 });
 
 const App = createAppContainer(
   // screen navigator
   createStackNavigator(
     {
-      Home: {screen: Home},
-      Map: {screen: Map},
+      Home: {screen: Map},
+      Search: {screen: Search},
     },
     {
       headerMode: 'screen',
