@@ -85,10 +85,10 @@ export default class Map extends Component {
             <TouchableOpacity
             accessibilityLabel="Main Menu"
             style={styles.navButton}
-            onPress={() => {alert('menu')}}
+            onPress={() => navigate('Menu')}
             >
               <Text style={styles.navText}>
-                t1
+                Menu
               </Text>
             </TouchableOpacity>
             {/* Search */}

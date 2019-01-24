@@ -5,8 +5,9 @@ import {StyleSheet} from 'react-native';
 import {createAppContainer, createStackNavigator} from 'react-navigation';
 
 // screens
-import Search from './screens/Search';
 import Map from './screens/Map';
+import Menu from './screens/Menu';
+import Search from './screens/Search';
 
 
 EStyleSheet.build({
@@ -18,15 +19,13 @@ EStyleSheet.build({
 
 const App = createAppContainer(
   // screen navigator
-  createStackNavigator(
-    {
+  createStackNavigator({
+
       Home: {screen: Map},
+      Menu: {screen: Menu},
       Search: {screen: Search},
-    },
-    {
-      headerMode: 'screen',
-    }
-  )
+
+  }, { headerMode: 'screen' })
 );
 
 export default App;
