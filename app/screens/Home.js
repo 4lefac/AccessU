@@ -1,17 +1,38 @@
 import React, {Component} from 'react';
-import {View, Dimensions} from 'react-native';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import EStyleSheet from 'react-native-extended-stylesheet';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {announceForAccessibility} from 'react-native-accessibility';
 
-import {FindUserButton} from '../components/Buttons';
-import {InputEntrance} from '../components/TextInput';
+const styles = StyleSheet.create({
+  section: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  button: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  text: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: 'white',
+  },
+});
+
+
+
 
 const {width, height} = Dimensions.get('window')
 const ASPECT_RATIO = width / height
 const LATITUDE_DELTA =0.0922
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 
-export default class Home extends Component{
+
+
+
+export default class Home extends Component {
+  
+  static navigationOptions = { header: null };
 
   constructor(props) {
     super(props);
@@ -24,7 +45,7 @@ export default class Home extends Component{
       }
     }
   }
-
+    
   //when this method is called the user location is updated.
   goToUserPosition = () => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -47,25 +68,42 @@ export default class Home extends Component{
   componentWillMount(){
     this.goToUserPosition()
   }
-  
+
+
   render() {
-    console.log("rendered")
-    console.log(this.state.userPosition)
+    announceForAccessibility('Welcome to AccessU. Press the bar at the bottom of the screen to go to the map.');
+
+    const {navigate} = this.props.navigation;
     return (
-      <View style = {{...EStyleSheet.absoluteFillObject} }>
-        <MapView
-          provider = { PROVIDER_GOOGLE }
-          style = { {flex: 1 }}
-          region={this.state.userPosition}
-          showsUserLocation={true}
-          zoomEnabled={true}
-          scrollEnabled={true} 
-          />
-          <InputEntrance/>
-          <FindUserButton onPress = {this.goToUserPosition}/>
+      <View
+        style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}
+      >
+        {/* header */}
+        <View style={[styles.section, {backgroundColor: 'red'}]}>
+          <TouchableOpacity
+            style={styles.button}
+            accessibilityLabel="Sign in"
+            onPress={() => alert('sign in')}
+          >
+            <Text style={styles.text}>Sign in</Text>
+          </TouchableOpacity>
+        </View>
+        {/* body */}
+        <View style={[styles.section, {backgroundColor: 'blue'}]}>
+          <Text style={styles.text}>This is a test.</Text>
+        </View>
+        {/* footer */}
+        <View style={[styles.section, {backgroundColor: 'green'}]}>
+          <TouchableOpacity
+            style={styles.button}
+            accessibilityLabel="Go to the map"
+            onPress={() => navigate('Map')}
+          >
+            <Text style={styles.text}>Go to the map</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
-  
-}
 
+}
