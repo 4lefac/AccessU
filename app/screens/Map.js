@@ -45,28 +45,28 @@ export default class Map extends Component {
       },
       entrences: [
         {
+          "name": "Baker East",
+          "id": 1,
           "coordinate": {
-            "latitude": "39.996261",
-            "longitude": "-83.009689"
-          },
-          "title": "Baker East",
-          "id": "1"
+            "latitude": 39.996261,
+            "longitude": -83.009689
+          }
         },
         {
+          "name": "Kennedy Commons",
+          "id": 2,
           "coordinate": {
-            "latitude": "39.996709",
-            "longitude": "-83.013714"
-          },
-          "title": "Kennedy Commons",
-          "id": "2"
+            "latitude": 39.996709,
+            "longitude": -83.013714
+          }
         },
         {
+          "name": "Union 1",
+          "id": 3,
           "coordinate": {
-            "latitude": "39.997708",
-            "longitude": "-83.008036"
-          },
-          "title": "Union 1",
-          "id": "3"
+            "latitude": 39.997708,
+            "longitude": -83.008036
+          }
         }
       ]
     }
@@ -149,9 +149,10 @@ export default class Map extends Component {
 
         {this.state.entrences.map(entrence  => (  
               <MapView.Marker
-                identifier={entrence.id}
+                identifier={entrence.id.toString()}
+                key = {entrence.id.toString()}
                 coordinate={entrence.coordinate}
-                title={entrence.title}
+                title={entrence.name}
               />
         
         ))}
