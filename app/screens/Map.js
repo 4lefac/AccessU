@@ -6,7 +6,7 @@
 //      - if user refuses location, show map without location tracking
 import React, {Component} from 'react';
 import {View, Dimensions, Text, Overlay, StyleSheet, TouchableOpacity} from 'react-native';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {announceForAccessibility} from 'react-native-accessibility';
 
@@ -42,7 +42,33 @@ export default class Map extends Component {
         longitude: -83.00776,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
-      }
+      },
+      entrences: [
+        {
+          "coordinate": {
+            "latitude": "39.996261",
+            "longitude": "-83.009689"
+          },
+          "title": "Baker East",
+          "id": "1"
+        },
+        {
+          "coordinate": {
+            "latitude": "39.996709",
+            "longitude": "-83.013714"
+          },
+          "title": "Kennedy Commons",
+          "id": "2"
+        },
+        {
+          "coordinate": {
+            "latitude": "39.997708",
+            "longitude": "-83.008036"
+          },
+          "title": "Union 1",
+          "id": "3"
+        }
+      ]
     }
   }
 
@@ -119,7 +145,17 @@ export default class Map extends Component {
           showsUserLocation={true}
           zoomEnabled={true}
           scrollEnabled={true}
-        />
+        >
+
+        {this.state.entrences.map(entrence  => (  
+              <MapView.Marker
+                identifier={entrence.id}
+                coordinate={entrence.coordinate}
+                title={entrence.title}
+              />
+        
+        ))}
+        </MapView>
         {/* bottom menu */}
         <View style={{position: 'absolute', bottom: 30, zIndex: 999, flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
           <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', width: '80%'}}>
