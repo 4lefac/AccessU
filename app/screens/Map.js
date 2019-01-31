@@ -6,7 +6,7 @@
 //      - if user refuses location, show map without location tracking
 import React, {Component} from 'react';
 import {View, Dimensions, Text, Overlay, StyleSheet, TouchableOpacity} from 'react-native';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {announceForAccessibility} from 'react-native-accessibility';
 
@@ -42,7 +42,33 @@ export default class Map extends Component {
         longitude: -83.00776,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
-      }
+      },
+      entrences: [
+        {
+          "name": "Baker East",
+          "id": 1,
+          "coordinate": {
+            "latitude": 39.996261,
+            "longitude": -83.009689
+          }
+        },
+        {
+          "name": "Kennedy Commons",
+          "id": 2,
+          "coordinate": {
+            "latitude": 39.996709,
+            "longitude": -83.013714
+          }
+        },
+        {
+          "name": "Union 1",
+          "id": 3,
+          "coordinate": {
+            "latitude": 39.997708,
+            "longitude": -83.008036
+          }
+        }
+      ]
     }
   }
 
@@ -62,7 +88,7 @@ export default class Map extends Component {
       }
 
       this.setState({userPosition: initialRegion})
-    }, (error) => alert(JSON.stringify(error)),
+    }, (error) => alert(JSON.stringify("Please make sure to have location services turned on!")),
     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
   }
   //this method will only run once in the initial render of the program. This will update the user location before
@@ -119,7 +145,18 @@ export default class Map extends Component {
           showsUserLocation={true}
           zoomEnabled={true}
           scrollEnabled={true}
-        />
+        >
+
+        {this.state.entrences.map(entrence  => (  
+              <MapView.Marker
+                identifier={entrence.id.toString()}
+                key = {entrence.id.toString()}
+                coordinate={entrence.coordinate}
+                title={entrence.name}
+              />
+        
+        ))}
+        </MapView>
         {/* bottom menu */}
         <View style={{position: 'absolute', bottom: 30, zIndex: 999, flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
           <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', width: '80%'}}>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, TextInput} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, TextInput, FlatList} from 'react-native';
 import {announceForAccessibility} from 'react-native-accessibility';
 
 const styles = StyleSheet.create({
@@ -86,7 +86,20 @@ export default class Search extends Component {
         </View>
         {/* other content */}
         <View style={styles.content}>
-          <Text>Other information goes here.</Text>
+          <Text>Suggestions</Text>
+          <FlatList
+            data={[
+              {key: 'Devin'},
+              {key: 'Jackson'},
+              {key: 'James'},
+              {key: 'Joel'},
+              {key: 'John'},
+              {key: 'Jillian'},
+              {key: 'Jimmy'},
+              {key: 'Julie'},
+            ]}
+            renderItem={({item}) => <Text>{item.key}</Text>}
+          />
         </View>
       </View>
     );
