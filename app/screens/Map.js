@@ -9,11 +9,13 @@ import {View, Dimensions, Text, Overlay, StyleSheet, TouchableOpacity} from 'rea
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {announceForAccessibility} from 'react-native-accessibility';
+import { db } from '../config/config';
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+let entrenceRef = db.ref('/Entrences');
 
 const styles = StyleSheet.create({
   navButton: {
@@ -43,32 +45,7 @@ export default class Map extends Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       },
-      entrences: [
-        {
-          "name": "Baker East",
-          "id": 1,
-          "coordinate": {
-            "latitude": 39.996261,
-            "longitude": -83.009689
-          }
-        },
-        {
-          "name": "Kennedy Commons",
-          "id": 2,
-          "coordinate": {
-            "latitude": 39.996709,
-            "longitude": -83.013714
-          }
-        },
-        {
-          "name": "Union 1",
-          "id": 3,
-          "coordinate": {
-            "latitude": 39.997708,
-            "longitude": -83.008036
-          }
-        }
-      ]
+      entrences: []
     }
   }
 
@@ -95,6 +72,13 @@ export default class Map extends Component {
   //the map is actually rendered on the screen.
   componentWillMount(){
     this.goToUserPosition()
+  }
+  componentDidMount() {
+    entrenceRef.on('value', snapshot => {
+      let data = snapshot.val();
+      let entrences = Object.values(data);
+      this.setState({ entrences });
+    });
   }
 
   render() {

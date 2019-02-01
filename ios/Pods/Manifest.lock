@@ -6,6 +6,9 @@ PODS:
     - FirebaseAnalytics (= 5.4.0)
   - Firebase/CoreOnly (5.15.0):
     - FirebaseCore (= 5.1.10)
+  - Firebase/Database (5.15.0):
+    - Firebase/CoreOnly
+    - FirebaseDatabase (= 5.0.4)
   - FirebaseAnalytics (5.4.0):
     - FirebaseCore (~> 5.1)
     - FirebaseInstanceID (~> 3.3)
@@ -15,8 +18,13 @@ PODS:
     - GoogleUtilities/Network (~> 5.2)
     - "GoogleUtilities/NSData+zlib (~> 5.2)"
     - nanopb (~> 0.3)
+  - FirebaseAuthInterop (1.0.0)
   - FirebaseCore (5.1.10):
     - GoogleUtilities/Logger (~> 5.2)
+  - FirebaseDatabase (5.0.4):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 5.1)
+    - leveldb-library (~> 1.18)
   - FirebaseInstanceID (3.3.0):
     - FirebaseCore (~> 5.1)
     - GoogleUtilities/Environment (~> 5.3)
@@ -71,6 +79,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (5.3.7):
     - GoogleUtilities/Logger
+  - leveldb-library (1.20)
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
     - nanopb/encode (= 0.3.901)
@@ -136,6 +145,7 @@ PODS:
 DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - Firebase/Core (~> 5.15.0)
+  - Firebase/Database (~> 5.15.0)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - Google-Maps-iOS-Utils
@@ -163,12 +173,15 @@ SPEC REPOS:
     - boost-for-react-native
     - Firebase
     - FirebaseAnalytics
+    - FirebaseAuthInterop
     - FirebaseCore
+    - FirebaseDatabase
     - FirebaseInstanceID
     - Google-Maps-iOS-Utils
     - GoogleAppMeasurement
     - GoogleMaps
     - GoogleUtilities
+    - leveldb-library
     - nanopb
 
 EXTERNAL SOURCES:
@@ -194,7 +207,9 @@ SPEC CHECKSUMS:
   DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
   Firebase: 8bb9268bff82374f2cbaaabb143e725743c316ae
   FirebaseAnalytics: c06f9d70577d79074214700a71fd5d39de5550fb
+  FirebaseAuthInterop: 0ffa57668be100582bb7643d4fcb7615496c41fc
   FirebaseCore: 35747502d9e8c6ee217385ad04446c7c2aaf9c5c
+  FirebaseDatabase: 0621689f77528d62b47e1c06ca737c4c19275d1a
   FirebaseInstanceID: e2fa4cb35ef5558c200f7f0ad8a53e212215f93e
   Folly: c89ac2d5c6ab169cd7397ef27485c44f35f742c7
   glog: e8acf0ebbf99759d3ff18c86c292a5898282dcde
@@ -202,6 +217,7 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: 98b71f5e04142793729a5ef23e5b96651ff4b70f
   GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
   GoogleUtilities: 111a012f4c3a29c9e7c954c082fafd6ee3c999c0
+  leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
   react-native-google-maps: b946d62e25dc66097921ed82520e45b0b081768a
@@ -209,6 +225,6 @@ SPEC CHECKSUMS:
   RNGestureHandler: afde2addc517e85cc97a25bfe119acbee779a7ce
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: 33f0fc2a03e4d971ee4d358d556985b6465e8903
+PODFILE CHECKSUM: 3101e1408d98006df855643ee8774be6ad7adaa5
 
 COCOAPODS: 1.5.3
