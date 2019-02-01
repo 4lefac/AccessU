@@ -3,7 +3,7 @@ package com.accessu;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.RNFirebasePackage; 
 import io.invertase.firebase.database.RNFirebaseDatabasePackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.reactlibrary.RNReactNativeAccessibilityPackage;

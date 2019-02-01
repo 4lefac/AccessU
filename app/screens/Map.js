@@ -9,6 +9,7 @@ import {View, Dimensions, Text, Overlay, StyleSheet, TouchableOpacity} from 'rea
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import {announceForAccessibility} from 'react-native-accessibility';
+//getting database reference from the config files.
 import { db } from '../config/config';
 
 const {width, height} = Dimensions.get('window');
@@ -45,6 +46,7 @@ export default class Map extends Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       },
+      //holds the entrences data in an array of objects
       entrences: []
     }
   }
@@ -74,6 +76,7 @@ export default class Map extends Component {
     this.goToUserPosition()
   }
   componentDidMount() {
+    //loading the entrance locations from the database into the entrenes array
     entrenceRef.on('value', snapshot => {
       let data = snapshot.val();
       let entrences = Object.values(data);
@@ -131,7 +134,8 @@ export default class Map extends Component {
           scrollEnabled={true}
         >
 
-        {this.state.entrences.map(entrence  => (  
+        {this.state.entrences.map(entrence  => (
+          // looping through the entrences array and adding markers to the map  
               <MapView.Marker
                 identifier={entrence.id.toString()}
                 key = {entrence.id.toString()}
