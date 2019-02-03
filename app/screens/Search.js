@@ -1,3 +1,6 @@
+// TODO - clear input
+// TODO - dynamic input
+
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, TextInput, FlatList} from 'react-native';
 import {announceForAccessibility} from 'react-native-accessibility';
@@ -56,7 +59,7 @@ export default class Search extends Component {
             <TouchableOpacity
             style={styles.button}
             accessibilityLabel="Filter"
-            onPress={() => alert('filter')}
+            onPress={() => navigate('Filter')}
             >
               <Text style={styles.buttonText}>
                 filter
@@ -74,7 +77,7 @@ export default class Search extends Component {
 
             <TouchableOpacity
             style={styles.button}
-            accessibilityLabel="Close Search"
+            accessibilityLabel="Back to map"
             onPress={() => navigate('Home')}
             >
               <Text style={styles.buttonText}>

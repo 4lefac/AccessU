@@ -4,8 +4,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import Base from '../styles/Base';
 import {announceForAccessibility} from 'react-native-accessibility';
 
-
-export default class Menu extends Component {
+export default class Route extends Component {
 
   constructor(props) {
     super(props);
@@ -19,19 +18,19 @@ export default class Menu extends Component {
 
     return (
       <View style={[Base.Container]}>
+
+
         <View style={[Base.Content]}>
-
-          <Text>Hey, this is test text for the menu. More content coming soon.</Text>
-
+          <Text>this screen is to route to different places</Text>
         </View>
 
         <TouchableOpacity
-        style={[Base.ButtonTouch]}
+        style={[Base.IconButtonTouch]}
         accessibilityLabel="Back to map"
         onPress={() => navigate('Home')}
         >
-          <Text style={[Base.ButtonText]}>
-            Go back
+          <Text style={[Base.IconButtonText]}>
+            close
           </Text>
         </TouchableOpacity>
 

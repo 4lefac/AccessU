@@ -1,14 +1,16 @@
 // TODO - animate moving to user position/location
-// TODO - remove Google's default "recenter on user" button in top right corner
 // TODO - change announceForAccessibility text to state the user-approximated position
 // TODO - replace text buttons with icons
 // TODO - prompt location before using map.
 //      - if user refuses location, show map without location tracking
+
 import React, {Component} from 'react';
-import {View, Dimensions, Text, Overlay, StyleSheet, TouchableOpacity} from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import {View, Dimensions, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import Base from '../styles/Base';
 import {announceForAccessibility} from 'react-native-accessibility';
+
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -16,20 +18,22 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const styles = StyleSheet.create({
-  navButton: {
-    flex: 0.2,
-    justifyContent: 'center',
-    aspectRatio: 1,
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 4,
-    borderWidth: 3,
-    borderColor: '#ddd',
+
+  bar: {
+    position: 'absolute',
+    zIndex: 999,
+
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+
+    width: '100%',
   },
-  navText: {
-    color: '#444',
-    textAlign: 'center',
-  }
+  topBar: { top: 30 },
+  bottomBar: { bottom: 30 },
+
+  map: { flex: 1 },
+
 });
 
 
@@ -77,10 +81,10 @@ export default class Map extends Component {
   //when this method is called the user location is updated.
   goToUserPosition = () => {
     navigator.geolocation.getCurrentPosition((position) => {
-      var lat = parseFloat(position.coords.latitude)
-      var long = parseFloat(position.coords.longitude)
+      let lat = parseFloat(position.coords.latitude)
+      let long = parseFloat(position.coords.longitude)
 
-      var initialRegion = {
+      let initialRegion = {
         latitude: lat,
         longitude: long,
         latitudeDelta: LATITUDE_DELTA,
@@ -91,95 +95,109 @@ export default class Map extends Component {
     }, (error) => alert(JSON.stringify("Please make sure to have location services turned on!")),
     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
   }
-  //this method will only run once in the initial render of the program. This will update the user location before
-  //the map is actually rendered on the screen.
-  componentWillMount(){
+  // This method will only run once in the initial render of the program.
+  // This updates the user location before the map is actually rendered
+  // on the screen.
+  componentWillMount() {
     this.goToUserPosition()
   }
 
   render() {
     announceForAccessibility('announce location here for screen readers. There are 3 buttons at the top of the screen and 2 buttons at the bottom of the screen.');
 
-    const {navigate} = this.props.navigation;
+    const { navigate } = this.props.navigation;
+    
+    // Custom map styling can be generated using https://mapstyle.withgoogle.com
+    const mapStyle = [{"elementType":"geometry","stylers":[{"color":"#f5f5f5"}]},{"elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"elementType":"labels.text.stroke","stylers":[{"color":"#f5f5f5"}]},{"featureType":"administrative.land_parcel","elementType":"labels.text.fill","stylers":[{"color":"#bdbdbd"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#c4ebbe"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"poi.park","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"road","elementType":"geometry","stylers":[{"color":"#ebdfb6"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#e1c49b"}]},{"featureType":"road.highway","elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"featureType":"road.local","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"transit.station","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#9bcdff"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]}];
 
     return (
-      <View style = {{...EStyleSheet.absoluteFillObject} }>
-        {/* top menu bar */}
-        <View style={{position: 'absolute', top: 30, zIndex: 999, flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-          <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', width: '90%'}}>
-            {/* main menu */}
+      <View style={{ ...EStyleSheet.absoluteFillObject }}>
+
+          <MapView
+          provider={PROVIDER_GOOGLE}
+          style={[styles.map]}
+          region={this.state.userPosition}
+          showsUserLocation={true}
+          showsMyLocationButton={false}
+          showsCompass={false}
+          showsScale={false}
+          showsTraffic={false}
+          toolbarEnabled={false}
+          zoomEnabled={true}
+          scrollEnabled={true}
+          customMapStyle={mapStyle}
+          >
+            {this.state.entrences.map(entrence  => (
+              <MapView.Marker
+              identifier={entrence.id.toString()}
+              key={entrence.id.toString()}
+              coordinate={entrence.coordinate}
+              title={entrence.name}
+              onCalloutPress={() => navigate('MarkerInfo')}
+              />
+            ))}
+          </MapView>
+
+
+          <View style={[styles.bar, styles.topBar]}>
+
             <TouchableOpacity
+            style={[Base.ButtonTouch]}
             accessibilityLabel="Main Menu"
-            style={styles.navButton}
             onPress={() => navigate('Menu')}
             >
-              <Text style={styles.navText}>
+              <Text style={[Base.ButtonText]}>
                 Menu
               </Text>
             </TouchableOpacity>
-            {/* Search */}
+
             <TouchableOpacity
+            style={[Base.ButtonTouch]}
             accessibilityLabel="Search"
-            style={styles.navButton}
             onPress={() => navigate('Search')}
             >
-              <Text style={styles.navText}>
-                search
+              <Text style={[Base.ButtonText]}>
+                Search
               </Text>
             </TouchableOpacity>
-            {/* find route */}
-            <TouchableOpacity
-            accessibilityLabel="Find route"
-            style={styles.navButton}
-            onPress={() => {alert('route')}}
-            >
-              <Text style={styles.navText}>t3</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        {/* map */}
-        <MapView
-          provider = { PROVIDER_GOOGLE }
-          style = { {flex: 1 }}
-          region={this.state.userPosition}
-          showsUserLocation={true}
-          zoomEnabled={true}
-          scrollEnabled={true}
-        >
 
-        {this.state.entrences.map(entrence  => (  
-              <MapView.Marker
-                identifier={entrence.id.toString()}
-                key = {entrence.id.toString()}
-                coordinate={entrence.coordinate}
-                title={entrence.name}
-              />
-        
-        ))}
-        </MapView>
-        {/* bottom menu */}
-        <View style={{position: 'absolute', bottom: 30, zIndex: 999, flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-          <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', width: '80%'}}>
-            {/* recenter location */}
             <TouchableOpacity
-            accessibilityLabel="Recenter Location"
-            style={styles.navButton}
+            style={[Base.ButtonTouch]}
+            accessibilityLabel="Find Route"
+            onPress={() => navigate('Route')}
+            >
+              <Text style={[Base.ButtonText]}>
+                Find Route
+              </Text>
+            </TouchableOpacity>
+
+          </View>
+
+
+          <View style={[styles.bar, styles.bottomBar]}>
+
+            <TouchableOpacity
+            style={[Base.ButtonTouch]}
+            accessibilityLabel="Recenter location"
             onPress={this.goToUserPosition}
             >
-              <Text style={styles.navText}>
-                recenter
+              <Text style={[Base.ButtonText]}>
+                Recenter
               </Text>
             </TouchableOpacity>
-            {/* Add info/entrances */}
+
             <TouchableOpacity
+            style={[Base.ButtonTouch]}
             accessibilityLabel="Add information or entrances"
-            style={styles.navButton}
-            onPress={() => {alert('add')}}
+            onPress={() => navigate('Add')}
             >
-              <Text style={styles.navText}>t5</Text>
+              <Text style={[Base.ButtonText]}>
+                Add
+              </Text>
             </TouchableOpacity>
+
           </View>
-        </View>
+
       </View>
     );
   }

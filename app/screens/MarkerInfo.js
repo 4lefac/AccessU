@@ -5,7 +5,7 @@ import Base from '../styles/Base';
 import {announceForAccessibility} from 'react-native-accessibility';
 
 
-export default class Menu extends Component {
+export default class MarkerInfo extends Component {
 
   constructor(props) {
     super(props);
@@ -21,7 +21,7 @@ export default class Menu extends Component {
       <View style={[Base.Container]}>
         <View style={[Base.Content]}>
 
-          <Text>Hey, this is test text for the menu. More content coming soon.</Text>
+          <Text>Don't forget to add a button to navigate to show to the route</Text>
 
         </View>
 
