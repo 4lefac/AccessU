@@ -9,6 +9,8 @@ import {View, Dimensions, Text, StyleSheet, TouchableOpacity} from 'react-native
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Base from '../styles/Base';
 import {announceForAccessibility} from 'react-native-accessibility';
+//getting database reference from the config files.
+import { db } from '../config/config';
 
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 
@@ -16,6 +18,7 @@ const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+let entrenceRef = db.ref('/Entrences');
 
 const styles = StyleSheet.create({
 
@@ -47,32 +50,8 @@ export default class Map extends Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       },
-      entrences: [
-        {
-          "name": "Baker East",
-          "id": 1,
-          "coordinate": {
-            "latitude": 39.996261,
-            "longitude": -83.009689
-          }
-        },
-        {
-          "name": "Kennedy Commons",
-          "id": 2,
-          "coordinate": {
-            "latitude": 39.996709,
-            "longitude": -83.013714
-          }
-        },
-        {
-          "name": "Union 1",
-          "id": 3,
-          "coordinate": {
-            "latitude": 39.997708,
-            "longitude": -83.008036
-          }
-        }
-      ]
+      //holds the entrences data in an array of objects
+      entrences: []
     }
   }
 
@@ -100,6 +79,14 @@ export default class Map extends Component {
   // on the screen.
   componentWillMount() {
     this.goToUserPosition()
+  }
+  componentDidMount() {
+    //loading the entrance locations from the database into the entrenes array
+    entrenceRef.on('value', snapshot => {
+      let data = snapshot.val();
+      let entrences = Object.values(data);
+      this.setState({ entrences });
+    });
   }
 
   render() {
