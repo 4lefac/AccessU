@@ -2,35 +2,15 @@
 // TODO - dynamic input
 
 import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, TextInput, FlatList} from 'react-native';
+import {View, Dimensions, Text, StyleSheet, TouchableOpacity, TextInput, FlatList, Keyboard} from 'react-native';
+import EStyleSheet from 'react-native-extended-stylesheet';
+import Base from '../styles/Base';
 import {announceForAccessibility} from 'react-native-accessibility';
 
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    backgroundColor: '#ddd',
-  },
-  content: {
-    width: '95%',
-    marginTop: '2%',
-    padding: '2%',
-    backgroundColor: 'white',
-  },
-  button: {
-    flex: 0.1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 5,
-    aspectRatio: 1,
-  },
-  buttonText: {
-    textAlign: 'center',
-  },
   searchbar: {
-    flex: 0.8,
+    flex: 1,
     width: '100%',
     borderRadius: 4,
     backgroundColor: 'white',
@@ -51,17 +31,17 @@ export default class Search extends Component {
     const {navigate} = this.props.navigation;
 
     return (
-      <View style={styles.container}>
-        {/* search bar */}
-        <View style={[styles.content, { backgroundColor: 'rgba(0,0,0,0)' }]}>
+      <View style={[Base.Container]}>
+
+        <View style={[Base.Content, { backgroundColor: 'rgba(0,0,0,0)', width: '100%' }]}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
 
             <TouchableOpacity
-            style={styles.button}
-            accessibilityLabel="Filter"
+            style={[Base.IconButtonTouch]}
+            accessibilityLabel="Filter search"
             onPress={() => navigate('Filter')}
             >
-              <Text style={styles.buttonText}>
+              <Text style={[Base.IconButtonText]}>
                 filter
               </Text>
             </TouchableOpacity>
@@ -76,19 +56,19 @@ export default class Search extends Component {
             />
 
             <TouchableOpacity
-            style={styles.button}
+            style={[Base.IconButtonTouch]}
             accessibilityLabel="Back to map"
-            onPress={() => navigate('Home')}
+            onPress={() => {/*Keyboard.dismiss();*/navigate('Home')}}
             >
-              <Text style={styles.buttonText}>
+              <Text style={[Base.IconButtonText]}>
                 close
               </Text>
             </TouchableOpacity>
 
           </View>
         </View>
-        {/* other content */}
-        <View style={styles.content}>
+
+        <View style={[Base.Content]}>
           <Text>Suggestions</Text>
           <FlatList
             data={[
