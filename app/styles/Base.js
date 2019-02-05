@@ -16,7 +16,7 @@ export default EStyleSheet.create({
     },
     // provides a padded white container for content
     Content: {
-      width: '95%',
+      width: '100%',
       marginTop: '1%',
       marginBottom: '1%',
       padding: '2%',

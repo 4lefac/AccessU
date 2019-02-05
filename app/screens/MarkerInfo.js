@@ -17,11 +17,15 @@ export default class MarkerInfo extends Component {
 
     const {navigate} = this.props.navigation;
 
+    let data = this.props.navigation.getParam("data", "fallback if unavailable");
+
     return (
       <View style={[Base.Container]}>
         <View style={[Base.Content]}>
 
           <Text>Don't forget to add a button to navigate to show to the route</Text>
+
+          <Text>Selected location data: {JSON.stringify(data)}</Text>
 
         </View>
 

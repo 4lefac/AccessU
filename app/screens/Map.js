@@ -9,6 +9,7 @@ import {View, Dimensions, Text, StyleSheet, TouchableOpacity} from 'react-native
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Base from '../styles/Base';
 import {announceForAccessibility} from 'react-native-accessibility';
+
 //getting database reference from the config files.
 import { db } from '../config/config';
 
@@ -18,7 +19,7 @@ const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-let entrenceRef = db.ref('/Entrences');
+let entranceRef = db.ref('/entrances');
 
 const styles = StyleSheet.create({
 
@@ -50,8 +51,8 @@ export default class Map extends Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       },
-      //holds the entrences data in an array of objects
-      entrences: []
+      //holds the entrances data in an array of objects
+      entrances: []
     }
   }
 
@@ -82,10 +83,10 @@ export default class Map extends Component {
   }
   componentDidMount() {
     //loading the entrance locations from the database into the entrenes array
-    entrenceRef.on('value', snapshot => {
-      let data = snapshot.val();
-      let entrences = Object.values(data);
-      this.setState({ entrences });
+    entranceRef.on('value', snapshot => {
+      //let data = snapshot.val();
+      //let entrances = Object.values(data);
+      //this.setState({ entrances });
     });
   }
 
@@ -93,12 +94,14 @@ export default class Map extends Component {
     announceForAccessibility('announce location here for screen readers. There are 3 buttons at the top of the screen and 2 buttons at the bottom of the screen.');
 
     const { navigate } = this.props.navigation;
-    
+
     // Custom map styling can be generated using https://mapstyle.withgoogle.com
     const mapStyle = [{"elementType":"geometry","stylers":[{"color":"#f5f5f5"}]},{"elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"elementType":"labels.text.stroke","stylers":[{"color":"#f5f5f5"}]},{"featureType":"administrative.land_parcel","elementType":"labels.text.fill","stylers":[{"color":"#bdbdbd"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#c4ebbe"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"poi.park","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"road","elementType":"geometry","stylers":[{"color":"#ebdfb6"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#e1c49b"}]},{"featureType":"road.highway","elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"featureType":"road.local","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"transit.station","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#9bcdff"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]}];
 
     return (
-      <View style={{ ...EStyleSheet.absoluteFillObject }}>
+      <View onLayout={(event) =>
+      {var {height} = event.nativeEvent.layout; this.setState({height}) }}
+      style={[{ ...EStyleSheet.absoluteFillObject }, {height: this.state.height}]}>
 
           <MapView
           provider={PROVIDER_GOOGLE}
@@ -114,13 +117,13 @@ export default class Map extends Component {
           scrollEnabled={true}
           customMapStyle={mapStyle}
           >
-            {this.state.entrences.map(entrence  => (
+            {this.state.entrances.map(entrance  => (
               <MapView.Marker
-              identifier={entrence.id.toString()}
-              key={entrence.id.toString()}
-              coordinate={entrence.coordinate}
-              title={entrence.name}
-              onCalloutPress={() => navigate('MarkerInfo')}
+              identifier={entrance.id.toString()}
+              key={entrance.id.toString()}
+              coordinate={entrance.coordinate}
+              title={entrance.name}
+              onCalloutPress={() => navigate('MarkerInfo', {data: this.state.userPosition})}
               />
             ))}
           </MapView>
