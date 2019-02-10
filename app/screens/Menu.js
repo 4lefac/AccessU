@@ -18,22 +18,27 @@ export default class Menu extends Component {
     const {navigate} = this.props.navigation;
 
     return (
-      <View style={[Base.Container]}>
-        <View style={[Base.Content]}>
+      <View style={[Base.ColumnContainer]}>
 
-          <Text>Hey, this is test text for the menu. More content coming soon.</Text>
+        <View style={[Base.ColumnContent]}>
+
+          <View style={[Base.Content]}>
+            <Text>Test text here.</Text>
+          </View>
 
         </View>
 
-        <TouchableOpacity
-        style={[Base.ButtonTouch]}
-        accessibilityLabel="Back to map"
-        onPress={() => navigate('Home')}
-        >
-          <Text style={[Base.ButtonText]}>
-            Go back
-          </Text>
-        </TouchableOpacity>
+        <View style={[Base.ColumnContent, {flex: 0.5}]}>
+          <TouchableOpacity
+          style={[Base.ButtonTouch]}
+          accessibilityLabel="Back to map"
+          onPress={() => navigate('Home')}
+          >
+            <Text style={[Base.ButtonText]}>
+              back
+            </Text>
+          </TouchableOpacity>
+        </View>
 
       </View>
     );

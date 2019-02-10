@@ -8,7 +8,7 @@ import Base from '../styles/Base';
 import {announceForAccessibility} from 'react-native-accessibility';
 
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   searchbar: {
     flex: 1,
     width: '100%',
@@ -52,13 +52,14 @@ export default class Search extends Component {
             autoFocus={true}
             onChangeText={(text) => this.setState({text})}
             value={this.state.text}
-            onSubmitEditing={() => {alert(this.state.text)}}
+            onSubmitEditing={() => {alert("Do something with this test: " + this.state.text)}}
+            clearInputMode="always"
             />
 
             <TouchableOpacity
             style={[Base.IconButtonTouch]}
             accessibilityLabel="Back to map"
-            onPress={() => {/*Keyboard.dismiss();*/navigate('Home')}}
+            onPress={() => {navigate('Home')}}
             >
               <Text style={[Base.IconButtonText]}>
                 close
