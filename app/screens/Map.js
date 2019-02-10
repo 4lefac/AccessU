@@ -10,8 +10,8 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import Base from '../styles/Base';
 import {announceForAccessibility} from 'react-native-accessibility';
 
-//getting database reference from the config files.
-import { db } from '../config/config';
+// reference to db
+import { db } from '../db';
 
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 
@@ -21,7 +21,7 @@ const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 let entranceRef = db.ref('/entrances');
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
 
   bar: {
     position: 'absolute',
@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
 
     width: '100%',
   },
-  topBar: { top: 30 },
-  bottomBar: { bottom: 30 },
+  topBar: { top: '$verticalPadding' },
+  bottomBar: { bottom: '$verticalPadding' },
 
   map: { flex: 1 },
 

@@ -4,6 +4,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 
 export default EStyleSheet.create({
+
     // sets up the alignment, sizing and background of the screen
     Container: {
       flex: 1,
@@ -14,14 +15,37 @@ export default EStyleSheet.create({
       paddingTop: '1%',
       paddingBottom: '1%',
     },
+    '@media ios': {
+      Container: {
+        paddingTop: '5%',
+      }
+    },
+
     // provides a padded white container for content
     Content: {
-      width: '100%',
+      width: '95%',
       marginTop: '1%',
       marginBottom: '1%',
       padding: '2%',
       backgroundColor: '#fff',
+      borderRadius: 2,
     },
+
+    // Useful container for vertical-column content
+    ColumnContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      alignItems: 'flex-start',
+      backgroundColor: '#ddd',
+      paddingTop: '1%',
+      paddingBottom: '1%',
+    },
+    ColumnContent: {
+      flex: 1,
+      alignItems: 'center'
+    },
+
     // standalone buttons for map screens
     ButtonTouch: {
       flex: 0.2,
@@ -31,13 +55,12 @@ export default EStyleSheet.create({
       padding: 20,
       borderRadius: 4,
       opacity: 0.9,
-      //borderWidth: 3,
-      //borderColor: '#ddd',
     },
     ButtonText: {
       color: '#444',
       textAlign: 'center',
     },
+
     // simple icons used for navigations
     IconButtonTouch: {
       justifyContent: 'center',

@@ -4,6 +4,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import Base from '../styles/Base';
 import {announceForAccessibility} from 'react-native-accessibility';
 
+
 export default class Add extends Component {
 
   constructor(props) {
