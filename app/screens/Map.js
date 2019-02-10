@@ -9,9 +9,7 @@ import {View, Dimensions, Text, StyleSheet, TouchableOpacity} from 'react-native
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Base from '../styles/Base';
 import {announceForAccessibility} from 'react-native-accessibility';
-
-// reference to db
-import { db } from '../db';
+import {Routes} from '../api/Routes';
 
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 
@@ -19,7 +17,7 @@ const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-let entranceRef = db.ref('/entrances');
+//let entranceRef = db.ref('/entrances');
 
 const styles = EStyleSheet.create({
 
@@ -52,7 +50,7 @@ export default class Map extends Component {
         longitudeDelta: LONGITUDE_DELTA
       },
       //holds the entrances data in an array of objects
-      entrances: []
+      //entrances: []
     }
   }
 
@@ -83,11 +81,11 @@ export default class Map extends Component {
   }
   componentDidMount() {
     //loading the entrance locations from the database into the entrenes array
-    entranceRef.on('value', snapshot => {
+    //entranceRef.on('value', snapshot => {
       //let data = snapshot.val();
       //let entrances = Object.values(data);
       //this.setState({ entrances });
-    });
+    //});
   }
 
   render() {
@@ -116,7 +114,8 @@ export default class Map extends Component {
           zoomEnabled={true}
           scrollEnabled={true}
           customMapStyle={mapStyle}
-          >
+          />
+{/* >
             {this.state.entrances.map(entrance  => (
               <MapView.Marker
               identifier={entrance.id.toString()}
@@ -127,7 +126,7 @@ export default class Map extends Component {
               />
             ))}
           </MapView>
-
+*/}
 
           <View style={[styles.bar, styles.topBar]}>
 
@@ -179,7 +178,20 @@ export default class Map extends Component {
             <TouchableOpacity
             style={[Base.ButtonTouch]}
             accessibilityLabel="Add information or entrances"
-            onPress={() => navigate('Add')}
+            onPress={() => {
+              /*
+              ** The request object includes parameters and other stuff we
+              ** want to pass to the server. For example, we might want to
+              ** pass the id of the entrance we just clicked, or the name
+              ** of a user. Then in the Routes.js file, we will figure out
+              ** what to do with that actual information.
+              */
+              let req = {
+                navigate: navigate,
+              }
+              // call the Add route
+              Routes.Add(req);
+            }}
             >
               <Text style={[Base.ButtonText]}>
                 Add

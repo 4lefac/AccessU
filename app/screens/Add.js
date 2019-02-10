@@ -17,12 +17,16 @@ export default class Add extends Component {
 
     const {navigate} = this.props.navigation;
 
+    let data = this.props.navigation.getParam("data", "fallback if unavailable");
+
     return (
       <View style={[Base.Container]}>
 
 
         <View style={[Base.Content]}>
-          <Text>Add new information or entrances</Text>
+          <Text>
+            {data}
+          </Text>
         </View>
 
         <TouchableOpacity
