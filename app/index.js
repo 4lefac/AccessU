@@ -22,6 +22,9 @@ EStyleSheet.build({
   $white: '#FFF',
   $black: '#000',
   $gray: '#CCC',
+
+  $verticalPadding: '2%',
+  '@media ios': { $verticalPadding: '5%' }
 });
 
 // screen navigator

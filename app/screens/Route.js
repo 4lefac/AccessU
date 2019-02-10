@@ -4,6 +4,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import Base from '../styles/Base';
 import {announceForAccessibility} from 'react-native-accessibility';
 
+
 export default class Route extends Component {
 
   constructor(props) {
@@ -17,8 +18,8 @@ export default class Route extends Component {
     const {navigate} = this.props.navigation;
 
     return (
-      <View style={[Base.Container]}>
 
+      <View style={[Base.Container]}>
 
         <View style={[Base.Content]}>
           <Text>this screen is to route to different places</Text>
