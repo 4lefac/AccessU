@@ -17,7 +17,7 @@ const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-//let entranceRef = db.ref('/entrances');
+
 
 const styles = EStyleSheet.create({
 
@@ -49,8 +49,7 @@ export default class Map extends Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       },
-      //holds the entrances data in an array of objects
-      //entrances: []
+      entrances: []
     }
   }
 
@@ -70,7 +69,7 @@ export default class Map extends Component {
       }
 
       this.setState({userPosition: initialRegion})
-    }, (error) => alert(JSON.stringify("Please make sure to have location services turned on!")),
+    }, (error) => {/*alert("Please make sure to have location services turned on!")*/},
     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
   }
   // This method will only run once in the initial render of the program.
@@ -80,16 +79,16 @@ export default class Map extends Component {
     this.goToUserPosition()
   }
   componentDidMount() {
-    //loading the entrance locations from the database into the entrenes array
-    //entranceRef.on('value', snapshot => {
-      //let data = snapshot.val();
-      //let entrances = Object.values(data);
-      //this.setState({ entrances });
-    //});
+    Routes.GET_map().entrances.then( entrances => {
+      this.setState({ entrances });
+    })
   }
+
+
 
   render() {
     announceForAccessibility('announce location here for screen readers. There are 3 buttons at the top of the screen and 2 buttons at the bottom of the screen.');
+
 
     const { navigate } = this.props.navigation;
 
@@ -114,19 +113,18 @@ export default class Map extends Component {
           zoomEnabled={true}
           scrollEnabled={true}
           customMapStyle={mapStyle}
-          />
-{/* >
-            {this.state.entrances.map(entrance  => (
+          >
+            {this.state.entrances.map ( entrance =>
               <MapView.Marker
               identifier={entrance.id.toString()}
               key={entrance.id.toString()}
-              coordinate={entrance.coordinate}
+              coordinate={{latitude: entrance.coord.lat, longitude: entrance.coord.long}}
               title={entrance.name}
               onCalloutPress={() => navigate('MarkerInfo', {data: this.state.userPosition})}
               />
-            ))}
+            )}
           </MapView>
-*/}
+
 
           <View style={[styles.bar, styles.topBar]}>
 
@@ -190,7 +188,7 @@ export default class Map extends Component {
                 navigate: navigate,
               }
               // call the Add route
-              Routes.Add(req);
+              Routes.GET_Add(req);
             }}
             >
               <Text style={[Base.ButtonText]}>
