@@ -57,9 +57,9 @@ export default EStyleSheet.create({
       opacity: 0.9,
     },
     ButtonText: {
-      color: '#444',
       textAlign: 'center',
     },
+    ButtonSize: 30,
 
     // simple icons used for navigations
     IconButtonTouch: {
@@ -69,8 +69,9 @@ export default EStyleSheet.create({
       aspectRatio: 1,
     },
     IconButtonText: {
+      color: '#777',
       textAlign: 'center',
     },
-
+    IconButtonSize: 30,
 
 });

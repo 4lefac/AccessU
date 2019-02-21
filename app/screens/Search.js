@@ -4,6 +4,7 @@
 import React, {Component} from 'react';
 import {View, Dimensions, Text, StyleSheet, TouchableOpacity, TextInput, FlatList, Keyboard} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Base from '../styles/Base';
 import {announceForAccessibility} from 'react-native-accessibility';
 
@@ -14,6 +15,9 @@ const styles = EStyleSheet.create({
     width: '100%',
     borderRadius: 4,
     backgroundColor: 'white',
+    padding: 2,
+    paddingLeft: 5,
+    paddingRight: 5,
   },
 });
 
@@ -41,9 +45,7 @@ export default class Search extends Component {
             accessibilityLabel="Filter search"
             onPress={() => navigate('Filter')}
             >
-              <Text style={[Base.IconButtonText]}>
-                filter
-              </Text>
+              <Icon name="filter" size={Base.IconButtonSize} style={[Base.IconButtonText]} />
             </TouchableOpacity>
 
             <TextInput
@@ -62,7 +64,7 @@ export default class Search extends Component {
             onPress={() => {navigate('Home')}}
             >
               <Text style={[Base.IconButtonText]}>
-                close
+                <Icon name="close" size={Base.IconButtonSize} style={[Base.IconButtonText]} />
               </Text>
             </TouchableOpacity>
 

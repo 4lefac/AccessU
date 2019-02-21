@@ -17,6 +17,12 @@ In the project directory, run the following command:
 
     npm install
 
+Then make sure all dependencies are linked:
+
+    react-native link
+
+From there, instructions will be different depending on the type of mobile device you own.
+
 ### iOS:
 
 ...

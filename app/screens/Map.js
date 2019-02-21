@@ -1,12 +1,12 @@
 // TODO - animate moving to user position/location
 // TODO - change announceForAccessibility text to state the user-approximated position
-// TODO - replace text buttons with icons
 // TODO - prompt location before using map.
 //      - if user refuses location, show map without location tracking
 
 import React, {Component} from 'react';
 import {View, Dimensions, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Base from '../styles/Base';
 import {announceForAccessibility} from 'react-native-accessibility';
 import {Routes} from '../api/Routes';
@@ -69,7 +69,7 @@ export default class Map extends Component {
       }
 
       this.setState({userPosition: initialRegion})
-    }, (error) => {/*alert("Please make sure to have location services turned on!")*/},
+    }, (error) => {alert("Please make sure to have location services turned on!")},
     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
   }
   // This method will only run once in the initial render of the program.
@@ -133,9 +133,7 @@ export default class Map extends Component {
             accessibilityLabel="Main Menu"
             onPress={() => navigate('Menu')}
             >
-              <Text style={[Base.ButtonText]}>
-                Menu
-              </Text>
+              <Icon name="list-ul" size={Base.ButtonSize} style={[Base.ButtonText]} />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -143,9 +141,7 @@ export default class Map extends Component {
             accessibilityLabel="Search"
             onPress={() => navigate('Search')}
             >
-              <Text style={[Base.ButtonText]}>
-                Search
-              </Text>
+              <Icon name="search" size={Base.ButtonSize} style={[Base.ButtonText]} />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -153,9 +149,7 @@ export default class Map extends Component {
             accessibilityLabel="Find Route"
             onPress={() => navigate('Route')}
             >
-              <Text style={[Base.ButtonText]}>
-                Find Route
-              </Text>
+              <Icon name="map-signs" size={Base.ButtonSize} style={[Base.ButtonText]} />
             </TouchableOpacity>
 
           </View>
@@ -168,9 +162,7 @@ export default class Map extends Component {
             accessibilityLabel="Recenter location"
             onPress={this.goToUserPosition}
             >
-              <Text style={[Base.ButtonText]}>
-                Recenter
-              </Text>
+              <Icon name="crosshairs" size={Base.ButtonSize} style={[Base.ButtonText]} />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -191,9 +183,7 @@ export default class Map extends Component {
               Routes.GET_Add(req);
             }}
             >
-              <Text style={[Base.ButtonText]}>
-                Add
-              </Text>
+              <Icon name="plus" size={Base.ButtonSize} style={[Base.ButtonText]} />
             </TouchableOpacity>
 
           </View>
