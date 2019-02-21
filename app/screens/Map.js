@@ -1,7 +1,5 @@
 // TODO - animate moving to user position/location
 // TODO - change announceForAccessibility text to state the user-approximated position
-// TODO - prompt location before using map.
-//      - if user refuses location, show map without location tracking
 
 import React, {Component} from 'react';
 import {View, Dimensions, Text, StyleSheet, TouchableOpacity} from 'react-native';
@@ -12,6 +10,7 @@ import {announceForAccessibility} from 'react-native-accessibility';
 import {Routes} from '../api/Routes';
 
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import LocationSwitch from 'react-native-location-switch';
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -69,7 +68,18 @@ export default class Map extends Component {
       }
 
       this.setState({userPosition: initialRegion})
-    }, (error) => {alert("Please make sure to have location services turned on!")},
+    }, (error) => {
+      // check if location is enabled
+      LocationSwitch.isLocationEnabled(
+        () => { /* location is already enabled so this should never execute */ },
+        () => {
+          LocationSwitch.enableLocationService(1000, true,
+            () => {/* location turned on */ },
+            () => {/* location kept off */ },
+          );
+        },
+      );
+    },
     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
   }
   // This method will only run once in the initial render of the program.

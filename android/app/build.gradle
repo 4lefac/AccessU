@@ -141,6 +141,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-location-switch')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-firebase')
     implementation project(':react-native-maps')
