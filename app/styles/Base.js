@@ -4,6 +4,11 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 
 export default EStyleSheet.create({
+    
+
+
+
+
 
     // sets up the alignment, sizing and background of the screen
     Container: {
@@ -74,4 +79,13 @@ export default EStyleSheet.create({
     },
     IconButtonSize: 30,
 
+    // clear background
+    Clear: {
+      backgroundColor: 'rgba(0,0,0,0)',
+    },
+
+    // standard header
+    h2: {
+      fontSize: 30,
+    }
 });

@@ -1,5 +1,8 @@
 // TODO - animate moving to user position/location
 // TODO - change announceForAccessibility text to state the user-approximated position
+//TODO on map marker press, accessibility
+//TODO custom mapview callout
+//TODO custom mapview location tracking icon
 
 import React, {Component} from 'react';
 import {View, Dimensions, Text, StyleSheet, TouchableOpacity} from 'react-native';
@@ -9,7 +12,8 @@ import Base from '../styles/Base';
 import {announceForAccessibility} from 'react-native-accessibility';
 import {Routes} from '../api/Routes';
 
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+// Maps
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import LocationSwitch from 'react-native-location-switch';
 
 const {width, height} = Dimensions.get('window');
@@ -34,7 +38,9 @@ const styles = EStyleSheet.create({
   bottomBar: { bottom: '$verticalPadding' },
 
   map: { flex: 1 },
-
+  marker: {
+    color: '#4FC3F7',
+  }
 });
 
 
@@ -48,7 +54,7 @@ export default class Map extends Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       },
-      entrances: []
+      entrances: [],
     }
   }
 
@@ -99,7 +105,6 @@ export default class Map extends Component {
   render() {
     announceForAccessibility('announce location here for screen readers. There are 3 buttons at the top of the screen and 2 buttons at the bottom of the screen.');
 
-
     const { navigate } = this.props.navigation;
 
     // Custom map styling can be generated using https://mapstyle.withgoogle.com
@@ -124,17 +129,43 @@ export default class Map extends Component {
           scrollEnabled={true}
           customMapStyle={mapStyle}
           >
-            {this.state.entrances.map ( entrance =>
+
+            {this.state.entrances.map( entrance =>
               <MapView.Marker
+              accessibilityLabel={entrance.name}
               identifier={entrance.id.toString()}
               key={entrance.id.toString()}
-              coordinate={{latitude: entrance.coord.lat, longitude: entrance.coord.long}}
-              title={entrance.name}
-              onCalloutPress={() => navigate('MarkerInfo', {data: this.state.userPosition})}
-              />
-            )}
-          </MapView>
+              coordinate={{
+              latitude: entrance.coord.lat,
+              longitude: entrance.coord.long
+              }}
+              >
+                <Icon name="map-marker" size={Base.ButtonSize + 10} style={[Base.ButtonText, styles.marker]} />
 
+                <MapView.Callout
+                tooltip={true}
+                onPress={() => navigate('MarkerInfo', {data: this.state.userPosition})}
+                >
+
+                  <View style={[{flex: 1}]}>
+                    <View style={[{height: 50, width: 50, backgroundColor: 'red'}]}>
+                      <Text>Go to this place!</Text>
+                    </View>
+                  </View>
+
+                </MapView.Callout>
+
+              </MapView.Marker>
+            )}
+{/*
+  title={entrance.name}
+  <MapView.Callout
+  >
+    <Icon name="map" size={Base.ButtonSize + 30} style={[Base.ButtonText, styles.marker]} />
+  </MapView.Callout>
+  */}
+
+          </MapView>
 
           <View style={[styles.bar, styles.topBar]}>
 
