@@ -19,7 +19,29 @@ In the project directory, run the following command:
 
 ### iOS:
 
-...
+#### STEP 1
+
+Install Xcode
+
+You will need a developer account and it should be free so do not pay for one!
+
+#### STEP 2
+
+Generate your provision profile. So basically sign into Xcode and set your self as the Team developer.
+
+Go to this link:
+
+https://ioscodesigning.com/generating-code-signing-files/
+
+Then run your program on a simulator or you can run it in your phone.
+
+Instructions to run your app on your phone:
+
+https://www.twilio.com/blog/2018/07/how-to-test-your-ios-application-on-a-real-device.html
+
+Now you can actually run from the command line if you would like. CD into the AccessU directory in the terminal. Then run:
+
+    react-native run-ios
 
 Run the command to install and run the app on a connected device:
 
@@ -48,7 +70,7 @@ Run the command to install and run the app on a connected device:
 
 # AccessU Rest API VERSION 1
 
-## Client Side Data Structure
+### Client Side Data Structure
 
 Currently every json object return or given to the API must have the following format: 
 
@@ -81,9 +103,10 @@ https://accessu-c0933.firebaseapp.com/api/v1/entrances/PUT-ID-HERE
 You will get back a single json object of an entrance. 
 If the document does not exist you will get back a json object that looks like this:
 
-{
-    message: 'No Such Document'
-}
+    {
+        "message" : "no such document"
+    }
+
 
 ### add a specific entrance
 https://accessu-c0933.firebaseapp.com/api/v1/entrances
@@ -93,17 +116,20 @@ make a post request and send a single json object.
 
 Once your entrance is added you will get a message and the id of the entrance in the database. Example:
 
-{
-   message: 'Successfully added document',
-   id: ENTRACE-ID-WILL-BE-HERE
-}
+    {
+        message: 'Successfully added document',
+        id: ENTRACE_ID_WILL_BE_HERE
+    }
 
 ## ERRORS
 
 If something happens that is not supposed to like for example you put in a wrong url, you will get an error message json back.
 An example is :
 
-{"error":{"message":"Not found"}}
+    {
+        "error": {"message": "Not found"}
+    }
+
 
 Usually the message will consist of what mistake you made!
 
