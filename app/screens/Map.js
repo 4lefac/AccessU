@@ -88,6 +88,7 @@ export default class Map extends Component {
     },
     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
   }
+
   // This method will only run once in the initial render of the program.
   // This updates the user location before the map is actually rendered
   // on the screen.
@@ -95,9 +96,11 @@ export default class Map extends Component {
     this.goToUserPosition()
   }
   componentDidMount() {
-    Routes.GET_map().entrances.then( entrances => {
-      this.setState({ entrances });
-    })
+    // Routes.GET_map().entrances.then( entrances => {
+    //   this.setState({ entrances });
+    // })
+    entrances = Routes.GET_map();
+
   }
 
 
@@ -221,7 +224,7 @@ export default class Map extends Component {
                 navigate: navigate,
               }
               // call the Add route
-              Routes.GET_Add(req);
+              //Routes.GET_Add(req);
             }}
             >
               <Icon name="plus" size={Base.ButtonSize} style={[Base.ButtonText]} />
