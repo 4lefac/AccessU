@@ -1,17 +1,20 @@
 // TODO - animate moving to user position/location
 // TODO - change announceForAccessibility text to state the user-approximated position
-// TODO - replace text buttons with icons
-// TODO - prompt location before using map.
-//      - if user refuses location, show map without location tracking
+//TODO on map marker press, accessibility
+//TODO custom mapview callout
+//TODO custom mapview location tracking icon
 
 import React, {Component} from 'react';
 import {View, Dimensions, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Base from '../styles/Base';
 import {announceForAccessibility} from 'react-native-accessibility';
 import {Routes} from '../api/Routes';
 
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+// Maps
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import LocationSwitch from 'react-native-location-switch';
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -35,7 +38,9 @@ const styles = EStyleSheet.create({
   bottomBar: { bottom: '$verticalPadding' },
 
   map: { flex: 1 },
-
+  marker: {
+    color: '#4FC3F7',
+  }
 });
 
 
@@ -49,7 +54,7 @@ export default class Map extends Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       },
-      entrances: []
+      entrances: [],
     }
   }
 
@@ -69,7 +74,18 @@ export default class Map extends Component {
       }
 
       this.setState({userPosition: initialRegion})
-    }, (error) => {/*alert("Please make sure to have location services turned on!")*/},
+    }, (error) => {
+      // check if location is enabled
+      LocationSwitch.isLocationEnabled(
+        () => { /* location is already enabled so this should never execute */ },
+        () => {
+          LocationSwitch.enableLocationService(1000, true,
+            () => {/* location turned on */ },
+            () => {/* location kept off */ },
+          );
+        },
+      );
+    },
     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
   }
 
@@ -91,7 +107,6 @@ export default class Map extends Component {
 
   render() {
     announceForAccessibility('announce location here for screen readers. There are 3 buttons at the top of the screen and 2 buttons at the bottom of the screen.');
-
 
     const { navigate } = this.props.navigation;
 
@@ -117,17 +132,43 @@ export default class Map extends Component {
           scrollEnabled={true}
           customMapStyle={mapStyle}
           >
-            {this.state.entrances.map ( entrance =>
+
+            {this.state.entrances.map( entrance =>
               <MapView.Marker
+              accessibilityLabel={entrance.name}
               identifier={entrance.id.toString()}
               key={entrance.id.toString()}
-              coordinate={{latitude: entrance.coord.lat, longitude: entrance.coord.long}}
-              title={entrance.name}
-              onCalloutPress={() => navigate('MarkerInfo', {data: this.state.userPosition})}
-              />
-            )}
-          </MapView>
+              coordinate={{
+              latitude: entrance.coord.lat,
+              longitude: entrance.coord.long
+              }}
+              >
+                <Icon name="map-marker" size={Base.ButtonSize + 10} style={[Base.ButtonText, styles.marker]} />
 
+                <MapView.Callout
+                tooltip={true}
+                onPress={() => navigate('MarkerInfo', {data: this.state.userPosition})}
+                >
+
+                  <View style={[{flex: 1}]}>
+                    <View style={[{height: 50, width: 50, backgroundColor: 'red'}]}>
+                      <Text>Go to this place!</Text>
+                    </View>
+                  </View>
+
+                </MapView.Callout>
+
+              </MapView.Marker>
+            )}
+{/*
+  title={entrance.name}
+  <MapView.Callout
+  >
+    <Icon name="map" size={Base.ButtonSize + 30} style={[Base.ButtonText, styles.marker]} />
+  </MapView.Callout>
+  */}
+
+          </MapView>
 
           <View style={[styles.bar, styles.topBar]}>
 
@@ -136,9 +177,7 @@ export default class Map extends Component {
             accessibilityLabel="Main Menu"
             onPress={() => navigate('Menu')}
             >
-              <Text style={[Base.ButtonText]}>
-                Menu
-              </Text>
+              <Icon name="list-ul" size={Base.ButtonSize} style={[Base.ButtonText]} />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -146,9 +185,7 @@ export default class Map extends Component {
             accessibilityLabel="Search"
             onPress={() => navigate('Search')}
             >
-              <Text style={[Base.ButtonText]}>
-                Search
-              </Text>
+              <Icon name="search" size={Base.ButtonSize} style={[Base.ButtonText]} />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -156,9 +193,7 @@ export default class Map extends Component {
             accessibilityLabel="Find Route"
             onPress={() => navigate('Route')}
             >
-              <Text style={[Base.ButtonText]}>
-                Find Route
-              </Text>
+              <Icon name="map-signs" size={Base.ButtonSize} style={[Base.ButtonText]} />
             </TouchableOpacity>
 
           </View>
@@ -171,9 +206,7 @@ export default class Map extends Component {
             accessibilityLabel="Recenter location"
             onPress={this.goToUserPosition}
             >
-              <Text style={[Base.ButtonText]}>
-                Recenter
-              </Text>
+              <Icon name="crosshairs" size={Base.ButtonSize} style={[Base.ButtonText]} />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -194,9 +227,7 @@ export default class Map extends Component {
               //Routes.GET_Add(req);
             }}
             >
-              <Text style={[Base.ButtonText]}>
-                Add
-              </Text>
+              <Icon name="plus" size={Base.ButtonSize} style={[Base.ButtonText]} />
             </TouchableOpacity>
 
           </View>
