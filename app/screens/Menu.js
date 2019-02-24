@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, Dimensions, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Base from '../styles/Base';
 import {announceForAccessibility} from 'react-native-accessibility';
 
