@@ -25,3 +25,11 @@ module.exports.IconButton = IconButton;
 
 import RadioButton from './RadioButton';
 module.exports.RadioButton = RadioButton;
+
+// map
+
+import MapButton from './MapButton';
+module.exports.MapButton = MapButton;
+
+import MapMarker from './MapMarker';
+module.exports.MapMarker = MapMarker;

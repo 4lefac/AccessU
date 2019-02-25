@@ -15,14 +15,9 @@ import Route from './screens/Route';
 import Search from './screens/Search';
 
 
-// globals
-// see also: themed elements in "styles/base.js"
-
+// Global style variables
 EStyleSheet.build({
-  $white: '#FFF',
-  $black: '#000',
-  $gray: '#CCC',
-
+  // account for iPhone X top notch
   $verticalPadding: '2%',
   '@media ios': { $verticalPadding: '5%' }
 });

@@ -9,6 +9,10 @@ import Base from '../styles/Base';
 import {announceForAccessibility} from 'react-native-accessibility';
 import {API_KEY} from '../db.js';
 
+import {
+  IconButton
+} from '../components/Components';
+
 // Search
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 
@@ -43,13 +47,11 @@ export default class Search extends Component {
         <View style={[Base.Content, { backgroundColor: 'rgba(0,0,0,0)', width: '100%' }]}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
 
-            <TouchableOpacity
-            style={[Base.IconButtonTouch]}
+            <IconButton
             accessibilityLabel="Filter search"
             onPress={() => navigate('Filter')}
-            >
-              <Icon name="filter" size={Base.IconButtonSize} style={[Base.IconButtonText]} />
-            </TouchableOpacity>
+            icon='filter'
+            />
 
             <TextInput
             style={styles.searchbar}
@@ -113,20 +115,14 @@ export default class Search extends Component {
                   renderLeftButton={()  => <Text>Yo</Text>}
                   renderRightButton={() => <Text>Custom text after the input</Text>}
                 />
-*/}
+                */}
 
 
-
-
-            <TouchableOpacity
-            style={[Base.IconButtonTouch]}
+            <IconButton
             accessibilityLabel="Back to map"
             onPress={() => {navigate('Home')}}
-            >
-              <Text style={[Base.IconButtonText]}>
-                <Icon name="close" size={Base.IconButtonSize} style={[Base.IconButtonText]} />
-              </Text>
-            </TouchableOpacity>
+            icon='close'
+            />
 
           </View>
         </View>

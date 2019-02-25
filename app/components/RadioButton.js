@@ -79,7 +79,7 @@ class RadioButton extends Component {
       <View>
         <TouchableOpacity
         accessibilityLabel={this.props.accessibilityLabel}
-        style={{flexDirection: 'row', alignItems: 'center'}}
+        style={[{flexDirection: 'row', alignItems: 'center'}, this.props.style]}
         onPress={this.toggle}
         >
           <Icon style={{color: this.state.iconColor}} size={Theme.IconSize-10} name={this.state.icon} />

@@ -4,49 +4,53 @@
 //TODO custom mapview callout
 //TODO custom mapview location tracking icon
 
-import React, {Component} from 'react';
-import {View, Dimensions, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React, { Component } from 'react';
+import {
+  View,
+  Dimensions,
+} from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Base from '../styles/Base';
-import {announceForAccessibility} from 'react-native-accessibility';
-import {Routes} from '../api/Routes';
-
-// Maps
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import { announceForAccessibility } from 'react-native-accessibility';
+import { Routes } from '../api/Routes';
+import Theme from '../styles/Theme';
+import {
+  MapButton,
+  MapMarker
+} from '../components/Components';
+// Map
+import MapView, {
+  Animated,
+  Marker,
+  Callout,
+  PROVIDER_GOOGLE
+} from 'react-native-maps';
 import LocationSwitch from 'react-native-location-switch';
+
+
 
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-
 const styles = EStyleSheet.create({
-
   bar: {
     position: 'absolute',
     zIndex: 999,
-
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-
     width: '100%',
+    justifyContent: 'space-evenly',
   },
   topBar: { top: '$verticalPadding' },
   bottomBar: { bottom: '$verticalPadding' },
-
-  map: { flex: 1 },
-  marker: {
-    color: '#4FC3F7',
-  }
 });
-
 
 export default class Map extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       userPosition: {
         latitude : 39.998361,
@@ -56,37 +60,48 @@ export default class Map extends Component {
       },
       entrances: [],
     }
+
   }
 
   static navigationOptions = { header: null };
 
   //when this method is called the user location is updated.
   goToUserPosition = () => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      let lat = parseFloat(position.coords.latitude)
-      let long = parseFloat(position.coords.longitude)
 
+    let success = (pos) => {
       let initialRegion = {
-        latitude: lat,
-        longitude: long,
+        latitude: parseFloat(pos.coords.latitude),
+        longitude: parseFloat(pos.coords.longitude),
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
-      }
+      };
 
-      this.setState({userPosition: initialRegion})
-    }, (error) => {
+      // animate
+      /*
+      this.refs.map.animateCamera({
+        camera: this.refs.map.getCamera(),
+        duration: 2000,
+      });
+      */
+      
+      this.setState({ userPosition: initialRegion });
+    }
+
+    let error = (error) => {
       // check if location is enabled
-      LocationSwitch.isLocationEnabled(
-        () => { /* location is already enabled so this should never execute */ },
-        () => {
-          LocationSwitch.enableLocationService(1000, true,
-            () => {/* location turned on */ },
-            () => {/* location kept off */ },
-          );
-        },
-      );
-    },
-    {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
+      LocationSwitch.isLocationEnabled( () => {}, () => {
+        LocationSwitch.enableLocationService(1000, true);
+      });
+    }
+
+    let options = {
+      enableHighAccuracy: true,
+      timeout: 20000,
+      maximumAge: 500,
+    }
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
+
   }
 
   // This method will only run once in the initial render of the program.
@@ -96,14 +111,15 @@ export default class Map extends Component {
     this.goToUserPosition()
   }
   componentDidMount() {
-    // Routes.GET_map().entrances.then( entrances => {
-    //   this.setState({ entrances });
-    // })
-    entrances = Routes.GET_map();
-
+    let pins = [];
+    Routes.GET_map()
+    .then( (markers) => {
+      for (let m in markers) pins.push(markers[m]);
+      this.setState({entrances: pins});
+    })
+    // this should never call since it would throw an error in the route first
+    .catch( (e) => { throw e })
   }
-
-
 
   render() {
     announceForAccessibility('announce location here for screen readers. There are 3 buttons at the top of the screen and 2 buttons at the bottom of the screen.');
@@ -111,16 +127,19 @@ export default class Map extends Component {
     const { navigate } = this.props.navigation;
 
     // Custom map styling can be generated using https://mapstyle.withgoogle.com
-    const mapStyle = [{"elementType":"geometry","stylers":[{"color":"#f5f5f5"}]},{"elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"elementType":"labels.text.stroke","stylers":[{"color":"#f5f5f5"}]},{"featureType":"administrative.land_parcel","elementType":"labels.text.fill","stylers":[{"color":"#bdbdbd"}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#c4ebbe"}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"poi.park","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"road","elementType":"geometry","stylers":[{"color":"#ebdfb6"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#e1c49b"}]},{"featureType":"road.highway","elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"featureType":"road.local","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"transit.station","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#9bcdff"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]}];
+    const mapStyle =
+    [{"elementType":"geometry","stylers":[{"color":"#f5f5f5"}]},{"elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"elementType":"labels.text.stroke","stylers":[{"color":"#f5f5f5"}]},{"featureType":"administrative.land_parcel","elementType":"labels.text.fill","stylers":[{"color":"#bdbdbd"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"color":Theme.Landscape}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"color":Theme.PointsOfInterest}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"poi.park","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"road","elementType":"geometry","stylers":[{"color":"#ffffff"}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#dadada"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":Theme.Highway}]},{"featureType":"road.highway","elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"featureType":"road.local","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"transit.station","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#c9c9c9"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":Theme.Water}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]}];
+
 
     return (
       <View onLayout={(event) =>
       {var {height} = event.nativeEvent.layout; this.setState({height}) }}
       style={[{ ...EStyleSheet.absoluteFillObject }, {height: this.state.height}]}>
 
-          <MapView
+          <MapView.Animated
+          ref="map"
           provider={PROVIDER_GOOGLE}
-          style={[styles.map]}
+          style={{flex: 1}}
           region={this.state.userPosition}
           showsUserLocation={true}
           showsMyLocationButton={false}
@@ -129,106 +148,81 @@ export default class Map extends Component {
           showsTraffic={false}
           toolbarEnabled={false}
           zoomEnabled={true}
+          pitchEnabled={false}
           scrollEnabled={true}
           customMapStyle={mapStyle}
           >
 
+            {/* display each marker */}
             {this.state.entrances.map( entrance =>
-              <MapView.Marker
-              accessibilityLabel={entrance.name}
-              identifier={entrance.id.toString()}
+
+              <MapMarker
               key={entrance.id.toString()}
-              coordinate={{
-              latitude: entrance.coord.lat,
-              longitude: entrance.coord.long
-              }}
+              id={entrance.id.toString()}
+              accessibilityLabel={entrance.name}
+              latitude={entrance.coordinates._latitude}
+              longitude={entrance.coordinates._longitude}
+              icon='map-marker'
+              onPressCallout={() => navigate('MarkerInfo', {data: this.state.userPosition})}
               >
-                <Icon name="map-marker" size={Base.ButtonSize + 10} style={[Base.ButtonText, styles.marker]} />
+              </MapMarker>
 
-                <MapView.Callout
-                tooltip={true}
-                onPress={() => navigate('MarkerInfo', {data: this.state.userPosition})}
-                >
-
-                  <View style={[{flex: 1}]}>
-                    <View style={[{height: 50, width: 50, backgroundColor: 'red'}]}>
-                      <Text>Go to this place!</Text>
-                    </View>
-                  </View>
-
-                </MapView.Callout>
-
-              </MapView.Marker>
             )}
-{/*
-  title={entrance.name}
-  <MapView.Callout
-  >
-    <Icon name="map" size={Base.ButtonSize + 30} style={[Base.ButtonText, styles.marker]} />
-  </MapView.Callout>
-  */}
 
-          </MapView>
+          </MapView.Animated>
 
           <View style={[styles.bar, styles.topBar]}>
 
-            <TouchableOpacity
-            style={[Base.ButtonTouch]}
+            <MapButton
             accessibilityLabel="Main Menu"
             onPress={() => navigate('Menu')}
-            >
-              <Icon name="list-ul" size={Base.ButtonSize} style={[Base.ButtonText]} />
-            </TouchableOpacity>
+            icon='th-list'
+            />
 
-            <TouchableOpacity
-            style={[Base.ButtonTouch]}
+            <MapButton
             accessibilityLabel="Search"
             onPress={() => navigate('Search')}
-            >
-              <Icon name="search" size={Base.ButtonSize} style={[Base.ButtonText]} />
-            </TouchableOpacity>
+            icon='search'
+            />
 
-            <TouchableOpacity
-            style={[Base.ButtonTouch]}
+            <MapButton
             accessibilityLabel="Find Route"
             onPress={() => navigate('Route')}
-            >
-              <Icon name="map-signs" size={Base.ButtonSize} style={[Base.ButtonText]} />
-            </TouchableOpacity>
+            icon='road'
+            />
 
           </View>
 
 
           <View style={[styles.bar, styles.bottomBar]}>
 
-            <TouchableOpacity
-            style={[Base.ButtonTouch]}
+            <MapButton
             accessibilityLabel="Recenter location"
             onPress={this.goToUserPosition}
-            >
-              <Icon name="crosshairs" size={Base.ButtonSize} style={[Base.ButtonText]} />
-            </TouchableOpacity>
+            icon='crosshairs'
+            />
 
-            <TouchableOpacity
-            style={[Base.ButtonTouch]}
-            accessibilityLabel="Add information or entrances"
+            {/* dummy button to add spacing (this is a hacky solution!) */}
+            <MapButton
+            style={{backgroundColor: Theme.Clear, opacity: 0}}
+            accessibilityLabel=""
+            onPress={()=>{}}
+            icon='user'
+            iconStyle={{opacity: 0}}
+            />
+
+            <MapButton
+            accessibilityLabel="Add information or entrance"
+            icon='plus'
             onPress={() => {
-              /*
-              ** The request object includes parameters and other stuff we
-              ** want to pass to the server. For example, we might want to
-              ** pass the id of the entrance we just clicked, or the name
-              ** of a user. Then in the Routes.js file, we will figure out
-              ** what to do with that actual information.
-              */
+              // request
               let req = {
                 navigate: navigate,
               }
               // call the Add route
               //Routes.GET_Add(req);
             }}
-            >
-              <Icon name="plus" size={Base.ButtonSize} style={[Base.ButtonText]} />
-            </TouchableOpacity>
+            />
 
           </View>
 

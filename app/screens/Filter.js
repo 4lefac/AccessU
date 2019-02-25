@@ -24,6 +24,10 @@ const styles = {
     top: 10,
     right: 10,
   },
+  RadioButton: {
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
 };
 
 export default class Filter extends Component {
@@ -50,17 +54,35 @@ export default class Filter extends Component {
         icon="close"
         />
 
-        <Section backgroundColor={Theme.Clear}>
+        <Section padding={true} margin={true}>
 
           {/* filter by type */}
           <Header>Filter By Type</Header>
 
           <RadioButton
+          style={styles.RadioButton}
           accessibilityLabel="Filter search for wheelchair ramp"
           onToggle={(value) => { /* add functionality here*/ }}
           >
             <IconText icon='wheelchair'>Ramp accessible</IconText>
           </RadioButton>
+
+          <RadioButton
+          style={styles.RadioButton}
+          accessibilityLabel="Filter search for automatic door"
+          onToggle={(value) => { /* add functionality here*/ }}
+          >
+            <IconText icon='power-off'>Automatic door</IconText>
+          </RadioButton>
+
+          <RadioButton
+          style={styles.RadioButton}
+          accessibilityLabel="Filter search for braille signs"
+          onToggle={(value) => { /* add functionality here*/ }}
+          >
+            <IconText icon='braille'>Braille signs</IconText>
+          </RadioButton>
+
 
           {/* filter by info */}
           <Header>Filter By Info</Header>

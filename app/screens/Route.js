@@ -1,10 +1,18 @@
-import React, {Component} from 'react';
-import {View, Dimensions, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import EStyleSheet from 'react-native-extended-stylesheet';
+import React, { Component } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {
+  Container,
+  Section,
+  IconButton
+} from '../components/Components';
 import Base from '../styles/Base';
 import {announceForAccessibility} from 'react-native-accessibility';
-
+import Theme from '../styles/Theme';
 
 export default class Route extends Component {
 
@@ -15,28 +23,24 @@ export default class Route extends Component {
   static navigationOptions = { header: null };
 
   render() {
-
     const {navigate} = this.props.navigation;
 
     return (
 
-      <View style={[Base.Container]}>
+      <Container>
 
-        <View style={[Base.Content]}>
-          <Text>this screen is to route to different places</Text>
-        </View>
+        <Section padding={true} margin={true} visible={true}>
+          <Text>this will include two search bars</Text>
+        </Section>
 
-        <TouchableOpacity
-        style={[Base.IconButtonTouch]}
+        <IconButton
         accessibilityLabel="Back to map"
         onPress={() => navigate('Home')}
-        >
-          <Text style={[Base.IconButtonText]}>
-            <Icon name="close" size={Base.IconButtonSize} style={[Base.IconButtonText]} />
-          </Text>
-        </TouchableOpacity>
+        icon='close'
+        />
 
-      </View>
+      </Container>
+
     );
   }
 

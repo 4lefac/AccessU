@@ -1,8 +1,6 @@
 
 var baseURL = 'https://accessu-c0933.firebaseapp.com/api/v1/entrances';
 
-//import {db} from '../db';
-
 
 
 module.exports.Routes = {
@@ -11,24 +9,15 @@ module.exports.Routes = {
   */
 
  GET_map: () => {
+
   return fetch(baseURL)
-    .then((response) => response.json())
+    .then( (response) => response.json())
     .then(function(data) {
       return data;
     })
-    .catch((error) => {
+    .catch( (error) => {
       console.error(error);
     });
-    // return {
-
-    //   // kept in JSON format in case we need to return future data
-    //   entrances:
-    //     db.ref('Entrances').once('value').then( snap => {
-    //       // returns a Promise
-    //       return snap.val()
-    //     }),
-
-    // };
 
   },
   //getting a specific id and return a json object of that entrance
@@ -42,16 +31,16 @@ module.exports.Routes = {
         console.error(error);
       });
       // return {
-  
+
       //   // kept in JSON format in case we need to return future data
       //   entrances:
       //     db.ref('Entrances').once('value').then( snap => {
       //       // returns a Promise
       //       return snap.val()
       //     }),
-  
+
       // };
-  
+
     },
 
     //add an entrance data to the database. data has to be a json object or string doens't matter
