@@ -140,6 +140,8 @@ PODS:
     - React/RCTBlob
   - RNGestureHandler (1.0.15):
     - React
+  - RNVectorIcons (6.3.0):
+    - React
   - yoga (0.57.8.React)
 
 DEPENDENCIES:
@@ -166,6 +168,7 @@ DEPENDENCIES:
   - React/RCTVibration (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga/yoga.podspec`)
 
 SPEC REPOS:
@@ -199,6 +202,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-maps"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga/yoga.podspec"
 
@@ -223,8 +228,9 @@ SPEC CHECKSUMS:
   react-native-google-maps: b946d62e25dc66097921ed82520e45b0b081768a
   react-native-maps: 066c2afcc89e18726377bcc685315f989ca22449
   RNGestureHandler: afde2addc517e85cc97a25bfe119acbee779a7ce
+  RNVectorIcons: 8c52e1e8da1153613fdef44748e865c25556cb9c
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: 3101e1408d98006df855643ee8774be6ad7adaa5
+PODFILE CHECKSUM: 5ea11bd0242aaed7695d739f0ed585b97f9e778e
 
 COCOAPODS: 1.5.3

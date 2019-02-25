@@ -20,7 +20,13 @@ const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-
+const animateToRegionDefaultTime = 1000;
+const defaultUserRegion = {
+  latitude : 39.998361,
+  longitude: -83.00776,
+  latitudeDelta: LATITUDE_DELTA,
+  longitudeDelta: LONGITUDE_DELTA
+}
 
 const styles = EStyleSheet.create({
 
@@ -48,32 +54,33 @@ export default class Map extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userPosition: {
-        latitude : 39.998361,
-        longitude: -83.00776,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA
-      },
+      userRegion: defaultUserRegion,
       entrances: [],
     }
   }
 
   static navigationOptions = { header: null };
 
-  //when this method is called the user location is updated.
-  goToUserPosition = () => {
+  //updates the state without re rendering the map.
+  updateUserRegionState = () => {
+    var tempRegion = this.getUserRegion();
+    this.setState(() => {
+      userRegion: tempRegion
+    });
+  }
+
+  //returns the users last known location
+  getUserRegion= () => {
+    var tempRegion = this.state.userRegion;
     navigator.geolocation.getCurrentPosition((position) => {
       let lat = parseFloat(position.coords.latitude)
       let long = parseFloat(position.coords.longitude)
-
-      let initialRegion = {
+      tempRegion = {
         latitude: lat,
         longitude: long,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       }
-
-      this.setState({userPosition: initialRegion})
     }, (error) => {
       // check if location is enabled
       LocationSwitch.isLocationEnabled(
@@ -87,19 +94,28 @@ export default class Map extends Component {
       );
     },
     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000})
+
+    return tempRegion;
+  }
+
+  //goes to user postion and updates the state
+  goToUserRegion = (time) => {
+    var tempRegion = this.getUserRegion();
+    this.map.animateToRegion(tempRegion,time);
+    this.updateUserRegionState();
   }
 
   // This method will only run once in the initial render of the program.
   // This updates the user location before the map is actually rendered
   // on the screen.
   componentWillMount() {
-    this.goToUserPosition()
+    this.setState(this.getUserRegion());
   }
   componentDidMount() {
     // Routes.GET_map().entrances.then( entrances => {
     //   this.setState({ entrances });
     // })
-    entrances = Routes.GET_map();
+    //entrances = Routes.GET_map();
 
   }
 
@@ -121,7 +137,7 @@ export default class Map extends Component {
           <MapView
           provider={PROVIDER_GOOGLE}
           style={[styles.map]}
-          region={this.state.userPosition}
+          region={this.state.userRegion}
           showsUserLocation={true}
           showsMyLocationButton={false}
           showsCompass={false}
@@ -131,6 +147,7 @@ export default class Map extends Component {
           zoomEnabled={true}
           scrollEnabled={true}
           customMapStyle={mapStyle}
+          ref={ref => { this.map = ref; }}
           >
 
             {this.state.entrances.map( entrance =>
@@ -147,7 +164,7 @@ export default class Map extends Component {
 
                 <MapView.Callout
                 tooltip={true}
-                onPress={() => navigate('MarkerInfo', {data: this.state.userPosition})}
+                onPress={() => navigate('MarkerInfo', {data: this.state.userRegion})}
                 >
 
                   <View style={[{flex: 1}]}>
@@ -204,7 +221,7 @@ export default class Map extends Component {
             <TouchableOpacity
             style={[Base.ButtonTouch]}
             accessibilityLabel="Recenter location"
-            onPress={this.goToUserPosition}
+            onPress={() => this.goToUserRegion(animateToRegionDefaultTime)}
             >
               <Icon name="crosshairs" size={Base.ButtonSize} style={[Base.ButtonText]} />
             </TouchableOpacity>
