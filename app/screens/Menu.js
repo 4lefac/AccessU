@@ -8,6 +8,7 @@ import Theme from '../styles/Theme';
 import {
   Container,
   Section,
+  Header,
   IconButton
 } from '../components/Components';
 import {announceForAccessibility} from 'react-native-accessibility';
@@ -31,8 +32,6 @@ export default class Menu extends Component {
 
   render() {
 
-    const {navigate} = this.props.navigation;
-
     return (
 
       <Container grid='row'>
@@ -41,52 +40,33 @@ export default class Menu extends Component {
         flex={0.7}
         padding={true}
         margin={true}
-        visible={true}
         >
-          <Text>left pane</Text>
+
+          <Header style={{textAlign: 'center'}}>AccessU v0.0.1</Header>
+
+          <Section padding={true} margin={true} visible={true}>
+            <Text>Test text</Text>
+          </Section>
+
+          <Section padding={true} margin={true} visible={true}>
+            <Text>Test text 2</Text>
+          </Section>
+
         </Section>
 
         <Section
         flex={0.3}
-        padding={true}
-        margin={true}
         >
 
           <IconButton
           accessibilityLabel="Back to map"
-          onPress={() => navigate('Home')}
+          onPress={() => this.props.navigation.goBack()}
           icon='close'
           />
 
         </Section>
 
       </Container>
-
-      /*
-      <View style={[Base.ColumnContainer]}>
-
-        <View style={[Base.ColumnContent]}>
-
-          <View style={[Base.Content]}>
-            <Text>Test text here.</Text>
-          </View>
-
-        </View>
-
-        <View style={[Base.ColumnContent, {flex: 0.5}]}>
-          <TouchableOpacity
-          style={[Base.ButtonTouch]}
-          accessibilityLabel="Back to map"
-          onPress={() => navigate('Home')}
-          >
-            <Text style={[Base.ButtonText]}>
-              back
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-      </View>
-      */
 
     );
   }

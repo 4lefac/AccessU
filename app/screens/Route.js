@@ -35,7 +35,7 @@ export default class Route extends Component {
 
         <IconButton
         accessibilityLabel="Back to map"
-        onPress={() => navigate('Home')}
+        onPress={() => navigate('Map')}
         icon='close'
         />
 

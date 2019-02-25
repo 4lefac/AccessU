@@ -1,8 +1,8 @@
 
 
-import React from 'react';
+import React, { Component } from 'react';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import {createAppContainer, createStackNavigator} from 'react-navigation';
+import { createAppContainer, createStackNavigator } from 'react-navigation';
 
 // screens
 
@@ -16,29 +16,27 @@ import Search from './screens/Search';
 
 
 // Global style variables
-EStyleSheet.build({
-  // account for iPhone X top notch
-  $verticalPadding: '2%',
-  '@media ios': { $verticalPadding: '5%' }
-});
+EStyleSheet.build();
 
 // screen navigator
 
-const App = createAppContainer(
+const AppNavigator = createStackNavigator(
+  {
+    Add: Add,
+    Filter: Filter,
+    Map: Map,
+    MarkerInfo: MarkerInfo,
+    Menu: Menu,
+    Route: Route,
+    Search: Search,
+  },
+  {
+    initialRouteName: 'Map',
+  }
+)
 
-  createStackNavigator({
+const AppContainer = createAppContainer(AppNavigator);
 
-      Home: {screen: Map},
-
-      Add: {screen: Add},
-      Filter: {screen: Filter},
-      MarkerInfo: {screen: MarkerInfo},
-      Menu: {screen: Menu},
-      Route: {screen: Route},
-      Search: {screen: Search},
-
-
-  }, { headerMode: 'screen' })
-);
-
-export default App;
+export default class App extends Component {
+  render() { return <AppContainer /> }
+}

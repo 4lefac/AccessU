@@ -18,7 +18,6 @@ import {
   MapButton,
   MapMarker
 } from '../components/Components';
-// Map
 import MapView, {
   Animated,
   Marker,
@@ -43,8 +42,10 @@ const styles = EStyleSheet.create({
     width: '100%',
     justifyContent: 'space-evenly',
   },
-  topBar: { top: '$verticalPadding' },
-  bottomBar: { bottom: '$verticalPadding' },
+  // account for iPhone X top notch
+  topBar: { top: '2%' },
+  '@media ios': { topBar: { top: '5%' }, },
+  bottomBar: { bottom: '5%' },
 });
 
 export default class Map extends Component {
@@ -83,7 +84,7 @@ export default class Map extends Component {
         duration: 2000,
       });
       */
-      
+
       this.setState({ userPosition: initialRegion });
     }
 
@@ -125,6 +126,7 @@ export default class Map extends Component {
     announceForAccessibility('announce location here for screen readers. There are 3 buttons at the top of the screen and 2 buttons at the bottom of the screen.');
 
     const { navigate } = this.props.navigation;
+    const { push } = this.props.navigation;
 
     // Custom map styling can be generated using https://mapstyle.withgoogle.com
     const mapStyle =
@@ -132,9 +134,11 @@ export default class Map extends Component {
 
 
     return (
-      <View onLayout={(event) =>
-      {var {height} = event.nativeEvent.layout; this.setState({height}) }}
-      style={[{ ...EStyleSheet.absoluteFillObject }, {height: this.state.height}]}>
+
+      <View onLayout={ (e) => {
+      var {height} = e.nativeEvent.layout; this.setState({height})
+      }} style={[{position: 'absolute', top: 0, right: 0, bottom: -26, left: 0,
+      height: this.state.height}]}>
 
           <MapView.Animated
           ref="map"
@@ -175,19 +179,19 @@ export default class Map extends Component {
 
             <MapButton
             accessibilityLabel="Main Menu"
-            onPress={() => navigate('Menu')}
+            onPress={() => this.props.navigation.navigate('Menu')}
             icon='th-list'
             />
 
             <MapButton
             accessibilityLabel="Search"
-            onPress={() => navigate('Search')}
+            onPress={() => this.props.navigation.navigate('Search')}
             icon='search'
             />
 
             <MapButton
             accessibilityLabel="Find Route"
-            onPress={() => navigate('Route')}
+            onPress={() => this.props.navigation.navigate('Route')}
             icon='road'
             />
 
@@ -221,6 +225,7 @@ export default class Map extends Component {
               }
               // call the Add route
               //Routes.GET_Add(req);
+              this.props.navigation.navigate('Add');
             }}
             />
 

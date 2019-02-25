@@ -6,7 +6,7 @@
 ** padded   - boolean. If the section is padded. Default is false.
 ** margin   - boolean. If the section has a margin. Default is false.
 ** flex     - float in [0, 1]. The amount of space a Section will take in a
-**            container between 0 and 1. Default is 1.
+**            container between 0 and 1. Default is 0.
 ** visible  - boolean. Specifies whether background and border will be displayed
 **            or not. Default is false.
 */
@@ -32,7 +32,7 @@ class Section extends Component {
 
     this.padding = this.props.padding ? '2%' : 0;
     this.margin = this.props.margin ? '2%' : 0;
-    this.flex = this.props.flex ? this.props.flex : 1;
+    this.flex = this.props.flex ? this.props.flex : 0;
   }
 
   render() {

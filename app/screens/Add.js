@@ -33,7 +33,7 @@ export default class Add extends Component {
         <TouchableOpacity
         style={[Base.IconButtonTouch]}
         accessibilityLabel="Back to map"
-        onPress={() => navigate('Home')}
+        onPress={() => navigate('Map')}
         >
           <Text style={[Base.IconButtonText]}>
             <Icon name="close" size={Base.IconButtonSize} style={[Base.IconButtonText]} />

@@ -31,7 +31,8 @@ class Header extends Component {
 
   render() {
     return (
-      <Text style={[{fontSize: this.size, marginTop: 10, marginBottom: 10}]}>
+      <Text style={[{fontSize: this.size, fontWeight: 'bold', marginTop: 10,
+      marginBottom: 10,}, this.props.style]}>
         {this.props.children}
       </Text>
     );
