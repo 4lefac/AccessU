@@ -125,9 +125,6 @@ export default class Map extends Component {
   render() {
     announceForAccessibility('announce location here for screen readers. There are 3 buttons at the top of the screen and 2 buttons at the bottom of the screen.');
 
-    const { navigate } = this.props.navigation;
-    const { push } = this.props.navigation;
-
     // Custom map styling can be generated using https://mapstyle.withgoogle.com
     const mapStyle =
     [{"elementType":"geometry","stylers":[{"color":"#f5f5f5"}]},{"elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"elementType":"labels.text.stroke","stylers":[{"color":"#f5f5f5"}]},{"featureType":"administrative.land_parcel","elementType":"labels.text.fill","stylers":[{"color":"#bdbdbd"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"color":Theme.Landscape}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"color":Theme.PointsOfInterest}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"poi.park","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"road","elementType":"geometry","stylers":[{"color":"#ffffff"}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#dadada"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":Theme.Highway}]},{"featureType":"road.highway","elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"featureType":"road.local","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"transit.station","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#c9c9c9"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":Theme.Water}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]}];
@@ -140,8 +137,7 @@ export default class Map extends Component {
       }} style={[{position: 'absolute', top: 0, right: 0, bottom: -26, left: 0,
       height: this.state.height}]}>
 
-          <MapView.Animated
-          ref="map"
+          <MapView
           provider={PROVIDER_GOOGLE}
           style={{flex: 1}}
           region={this.state.userPosition}
@@ -167,13 +163,13 @@ export default class Map extends Component {
               latitude={entrance.coordinates._latitude}
               longitude={entrance.coordinates._longitude}
               icon='map-marker'
-              onPressCallout={() => navigate('MarkerInfo', {data: this.state.userPosition})}
+              onPressCallout={() => this.props.navigation.navigate('MarkerInfo', {data: this.state.userPosition})}
               >
               </MapMarker>
 
             )}
 
-          </MapView.Animated>
+          </MapView>
 
           <View style={[styles.bar, styles.topBar]}>
 
@@ -221,8 +217,7 @@ export default class Map extends Component {
             onPress={() => {
               // request
               let req = {
-                navigate: navigate,
-              }
+              };
               // call the Add route
               //Routes.GET_Add(req);
               this.props.navigation.navigate('Add');
