@@ -19,19 +19,24 @@ import {
   MapMarker
 } from '../components/Components';
 import MapView, {
-  Animated,
   Marker,
   Callout,
   PROVIDER_GOOGLE
 } from 'react-native-maps';
 import LocationSwitch from 'react-native-location-switch';
 
-
-
+//default variables
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+const animateToRegionDefaultTime = 500;
+const defaultUserRegion = {
+  latitude : 39.998361,
+  longitude: -83.00776,
+  latitudeDelta: LATITUDE_DELTA,
+  longitudeDelta: LONGITUDE_DELTA
+}
 
 const styles = EStyleSheet.create({
   bar: {
@@ -53,12 +58,7 @@ export default class Map extends Component {
     super(props);
 
     this.state = {
-      userPosition: {
-        latitude : 39.998361,
-        longitude: -83.00776,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA
-      },
+      userRegion: defaultUserRegion,
       entrances: [],
     }
 
@@ -66,26 +66,25 @@ export default class Map extends Component {
 
   static navigationOptions = { header: null };
 
-  //when this method is called the user location is updated.
-  goToUserPosition = () => {
+  //updates the state without re rendering the map.
+  updateUserRegionState = () => {
+    var tempRegion = this.getUserRegion();
+    this.setState(() => {
+      userRegion: tempRegion
+    });
+  }
 
-    let success = (pos) => {
-      let initialRegion = {
-        latitude: parseFloat(pos.coords.latitude),
-        longitude: parseFloat(pos.coords.longitude),
+  //returns the users last known location
+  getUserRegion= () => {
+    let tempRegion = this.state.userRegion;
+
+    let success = (position) => {
+      tempRegion = {
+        latitude: parseFloat(position.coords.latitude),
+        longitude: parseFloat(position.coords.longitude),
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
-      };
-
-      // animate
-      /*
-      this.refs.map.animateCamera({
-        camera: this.refs.map.getCamera(),
-        duration: 2000,
-      });
-      */
-
-      this.setState({ userPosition: initialRegion });
+      }
     }
 
     let error = (error) => {
@@ -98,18 +97,25 @@ export default class Map extends Component {
     let options = {
       enableHighAccuracy: true,
       timeout: 20000,
-      maximumAge: 500,
+      maximumAge: 1000
     }
 
     navigator.geolocation.getCurrentPosition(success, error, options);
 
+    return tempRegion;
+  }
+
+  //goes to users current postion and updates the state
+  goToUserRegion = (time) => {
+    this.updateUserRegionState();
+    this.map.animateToRegion(this.state.userRegion,time);
   }
 
   // This method will only run once in the initial render of the program.
   // This updates the user location before the map is actually rendered
   // on the screen.
   componentWillMount() {
-    this.goToUserPosition()
+    this.setState(this.getUserRegion());
   }
   componentDidMount() {
     let pins = [];
@@ -140,7 +146,7 @@ export default class Map extends Component {
           <MapView
           provider={PROVIDER_GOOGLE}
           style={{flex: 1}}
-          region={this.state.userPosition}
+          region={this.state.userRegion}
           showsUserLocation={true}
           showsMyLocationButton={false}
           showsCompass={false}
@@ -151,6 +157,7 @@ export default class Map extends Component {
           pitchEnabled={false}
           scrollEnabled={true}
           customMapStyle={mapStyle}
+          ref={ref => { this.map = ref; }}
           >
 
             {/* display each marker */}
@@ -163,7 +170,7 @@ export default class Map extends Component {
               latitude={entrance.coordinates._latitude}
               longitude={entrance.coordinates._longitude}
               icon='map-marker'
-              onPressCallout={() => this.props.navigation.navigate('MarkerInfo', {data: this.state.userPosition})}
+              onPressCallout={() => this.props.navigation.navigate('MarkerInfo', {data: this.state.userRegion})}
               >
               </MapMarker>
 
@@ -198,7 +205,7 @@ export default class Map extends Component {
 
             <MapButton
             accessibilityLabel="Recenter location"
-            onPress={this.goToUserPosition}
+            onPress={() => this.goToUserRegion(animateToRegionDefaultTime)}
             icon='crosshairs'
             />
 
