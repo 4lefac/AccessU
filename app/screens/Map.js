@@ -28,15 +28,17 @@ import LocationSwitch from 'react-native-location-switch';
 //default variables
 const {width, height} = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
-const LATITUDE_DELTA = 0.0922;
+const LATITUDE_DELTA = 0.009;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-const animateToRegionDefaultTime = 500;
+const animateToRegionDefaultTime = 1000;
 const defaultUserRegion = {
   latitude : 39.998361,
   longitude: -83.00776,
   latitudeDelta: LATITUDE_DELTA,
   longitudeDelta: LONGITUDE_DELTA
 }
+//hold the user current position
+var userRegion = defaultUserRegion;
 
 const styles = EStyleSheet.create({
   bar: {
@@ -58,7 +60,6 @@ export default class Map extends Component {
     super(props);
 
     this.state = {
-      userRegion: defaultUserRegion,
       entrances: [],
     }
 
@@ -67,16 +68,15 @@ export default class Map extends Component {
   static navigationOptions = { header: null };
 
   //updates the state without re rendering the map.
-  updateUserRegionState = () => {
-    var tempRegion = this.getUserRegion();
-    this.setState(() => {
-      userRegion: tempRegion
-    });
-  }
+  // updateUserRegionState = () => {
+  //   var tempRegion = this.getUserRegion();
+  //   this.setState(() => {
+  //     userRegion: tempRegion
+  //   });
+  // }
 
   //returns the users last known location
-  getUserRegion= () => {
-    let tempRegion = this.state.userRegion;
+  updateUserRegion= () => {
 
     let success = (position) => {
       tempRegion = {
@@ -85,6 +85,7 @@ export default class Map extends Component {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       }
+      userRegion = tempRegion;
     }
 
     let error = (error) => {
@@ -101,21 +102,19 @@ export default class Map extends Component {
     }
 
     navigator.geolocation.getCurrentPosition(success, error, options);
-
-    return tempRegion;
   }
 
   //goes to users current postion and updates the state
   goToUserRegion = (time) => {
-    this.updateUserRegionState();
-    this.map.animateToRegion(this.state.userRegion,time);
+    this.updateUserRegion();
+    this.map.animateToRegion(userRegion,time);
   }
 
   // This method will only run once in the initial render of the program.
   // This updates the user location before the map is actually rendered
   // on the screen.
   componentWillMount() {
-    this.setState(this.getUserRegion());
+    this.updateUserRegion();
   }
   componentDidMount() {
     let pins = [];
@@ -146,7 +145,7 @@ export default class Map extends Component {
           <MapView
           provider={PROVIDER_GOOGLE}
           style={{flex: 1}}
-          region={this.state.userRegion}
+          region={userRegion}
           showsUserLocation={true}
           showsMyLocationButton={false}
           showsCompass={false}
