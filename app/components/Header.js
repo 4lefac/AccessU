@@ -4,6 +4,7 @@
 ** Properties:
 **
 ** size - {1, 2, 3, 4, 5}. The size of the text. Default is 3.
+** marginTopBottom - integer. Amount of margin space above and below the text.
 */
 
 
@@ -21,23 +22,22 @@ const sizeFactor = {
   5: 50,
 }
 
-class Header extends Component {
+export default class Header extends Component {
   constructor(props) {
     super(props);
 
-    this.size = sizeFactor[this.props.size] || sizeFactor[3];
-
-  }
+    this.size = this.props.size ? sizeFactor[this.props.size] : sizeFactor[3];
+    this.margin = this.props.marginTopBottom ?
+                  this.props.marginTopBottom : 10;
+   }
 
   render() {
     return (
-      <Text style={[{fontSize: this.size, fontWeight: 'bold', marginTop: 10,
-      marginBottom: 10,}, this.props.style]}>
+      <Text style={[{fontSize: this.size, fontWeight: 'bold',
+      marginTop: this.margin, marginBottom: this.margin }, this.props.style]}>
         {this.props.children}
       </Text>
     );
   }
 
 }
-
-export default Header;

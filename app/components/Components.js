@@ -10,6 +10,12 @@ module.exports.Container = Container;
 import Section from './Section';
 module.exports.Section = Section;
 
+import CardScroll from './CardScroll';
+module.exports.CardScroll = CardScroll;
+
+import Card from './Card';
+module.exports.Card = Card;
+
 // text
 
 import Header from './Header';

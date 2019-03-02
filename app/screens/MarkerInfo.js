@@ -59,6 +59,8 @@ class MarkerInfo extends Component {
 
       </Container>
 
+
+
   /*    <View style={[Base.Container]}>
         <View style={[Base.Content]}>
 

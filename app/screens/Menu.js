@@ -56,12 +56,19 @@ export default class Menu extends Component {
 
         <Section
         flex={0.3}
+        style={{justifyContent: 'space-between'}}
         >
 
           <IconButton
           accessibilityLabel="Back to map"
           onPress={() => this.props.navigation.goBack()}
           icon='close'
+          />
+
+          <IconButton
+          accessibilityLabel="Settings"
+          onPress={() => alert("settings")}
+          icon='gear'
           />
 
         </Section>

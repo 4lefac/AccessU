@@ -39,21 +39,6 @@ class MapMarker extends Component {
   render() {
 
     return (
-/*
-      <Circle
-      center = {{
-      latitude: this.props.latitude,
-      longitude: this.props.longitude,
-      }}
-      fillColor="#000"
-      strokeColor="rgba(0,0,0,0)"
-      radius={50}
-      >
-
-        <Icon name={this.props.icon} size={Theme.IconSize-5} color={Theme.IconColorHighlight} />
-
-      </Circle>
-*/
       <Marker
       identifier={this.props.id}
       accessibilityLabel={this.props.accessibilityLabel}
@@ -62,23 +47,25 @@ class MapMarker extends Component {
       longitude: this.props.longitude,
       }}
       tracksViewChanges={false}
+      onPress={this.props.onPress}
       >
 
         <Icon name={this.props.icon} size={Theme.IconSize+5} color={Theme.IconColorHighlight} />
-
+        {/*
         <Callout
         tooltip={true}
         onPress={this.props.onPressCallout}
+        style={{backgroundColor: 'green'}}
         >
 
-          <View style={[{flex: 1}]}>
-            <View style={[{height: 50, width: 50, backgroundColor: Theme.IconColorHighlight}]}>
+          <View style={[{flex: 1, backgroundColor: 'red'}]}>
+            <View style={[{height: 100, width: 50, backgroundColor: Theme.IconColorHighlight}]}>
               <Text>Go to this place!</Text>
             </View>
           </View>
 
         </Callout>
-
+        */}
       </Marker>
 
     );

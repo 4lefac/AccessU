@@ -4,6 +4,7 @@
 ** Properties:
 **
 ** icon - string. The name of the icon to be displayed. Required.
+** size - {-2, -1, 0, 1, 2}. The size of the icon. Default is 0.
 */
 
 
@@ -18,13 +19,18 @@ import Theme from '../styles/Theme';
 class IconText extends Component {
   constructor(props) {
     super(props);
+
+    this.iconSize = this.props.size ?
+                    (Theme.IconSize + 10 * this.props.size) :
+                    Theme.IconSize;
+
   }
 
   render() {
     return (
 
-      <View style={{alignItems: 'center', flexDirection: 'row'}}>
-        <Icon name={this.props.icon} size={Theme.IconSize} />
+      <View style={[{alignItems: 'center', flexDirection: 'row'}, this.props.style]}>
+        <Icon name={this.props.icon} size={this.iconSize} />
         <Text style={{marginLeft: 10}}>{this.props.children}</Text>
       </View>
 

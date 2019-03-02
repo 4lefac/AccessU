@@ -28,6 +28,7 @@ const styles = {
     padding: 10,
     borderRadius: 4,
     opacity: 0.9,
+//    elevation: 1,
   }
 };
 

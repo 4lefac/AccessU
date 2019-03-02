@@ -9,7 +9,6 @@ module.exports.Routes = {
   */
 
  GET_map: () => {
-
   return fetch(baseURL)
     .then( (response) => response.json())
     .then(function(data) {
