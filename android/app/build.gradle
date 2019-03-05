@@ -141,6 +141,12 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-vector-icons')
+    compile project(':react-native-maps')
+    compile project(':react-native-location-switch')
+    compile project(':react-native-gesture-handler')
+    compile project(':react-native-firebase')
+    compile project(':react-native-accessibility')
     implementation project(':react-native-location-switch')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-firebase')
