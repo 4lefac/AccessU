@@ -6,7 +6,8 @@ import {
   Animated,
   Easing,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Base from '../styles/Base';
@@ -30,7 +31,6 @@ const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.009;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const ANIMATE_TIME = 500;
-
 // initial position
 let userRegion = {
   latitude : 39.998361,
@@ -128,7 +128,6 @@ export default class Map extends Component {
   toggleCallout = (state) => {
     let cardScrollBottom = state ? 0 : -1 * height;
     let barBottom = state ? -1 * height / 2 : styles.bottomBar.bottom;
-
     Animated.timing(this.state.cardScrollPos, {
       toValue: cardScrollBottom,
       easing: Easing.linear(),
@@ -140,7 +139,6 @@ export default class Map extends Component {
       easing: Easing.linear(),
       duration: ANIMATE_TIME,
     }).start();
-
   }
 
   /*
@@ -219,7 +217,12 @@ export default class Map extends Component {
               latitude={entrance.coordinates._latitude}
               longitude={entrance.coordinates._longitude}
               icon='map-marker'
-              onPress={() => {
+              onPress={(event) => {
+                  /*
+                   ** This is added for ios because whenever the onPress function is called it also calles the map onPress function
+                   ** only available work around for this is to call event.stopPropagation();
+                  */
+                event.stopPropagation(); 
                 this.toggleCallout(1);
                 //this.props.navigation.navigate('MarkerInfo', {data: this.state.userRegion});
               }}
