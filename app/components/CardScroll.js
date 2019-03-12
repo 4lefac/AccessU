@@ -25,7 +25,6 @@ export default class CardScroll extends Component {
 
   render() {
     return (
-
       <Animated.ScrollView
       horizontal
       scrollEventThrottle={1}

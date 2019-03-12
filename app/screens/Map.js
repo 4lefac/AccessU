@@ -40,7 +40,6 @@ const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.009;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const ANIMATE_TIME = 500;
-
 // initial position
 let userRegion = {
   latitude : 39.998361,
@@ -285,8 +284,7 @@ export default class Map extends Component {
             onPress={() => {
               this.toggleCallout(1);
               //this.props.navigation.navigate('MarkerInfo', {data: this.state.userRegion});
-            }}
-            >
+            }}>
             </MapMarker>
           )})}
 

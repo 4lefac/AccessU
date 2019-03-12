@@ -8,6 +8,12 @@ import com.airbnb.android.react.maps.MapsPackage;
 import org.pweitz.reactnative.locationswitch.LocationSwitchPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import io.invertase.firebase.RNFirebasePackage;
+import com.reactlibrary.RNReactNativeAccessibilityPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.airbnb.android.react.maps.MapsPackage;
+import org.pweitz.reactnative.locationswitch.LocationSwitchPackage;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.database.RNFirebaseDatabasePackage;
 import com.reactlibrary.RNReactNativeAccessibilityPackage;
 import com.facebook.react.ReactNativeHost;
@@ -29,6 +35,12 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new VectorIconsPackage(),
+            new MapsPackage(),
+            new LocationSwitchPackage(),
+            new RNGestureHandlerPackage(),
+            new RNFirebasePackage(),
+            new RNReactNativeAccessibilityPackage(),
           new VectorIconsPackage(),
           new MapsPackage(),
           new RNGestureHandlerPackage(),
