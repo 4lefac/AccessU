@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "postinstall": "(del ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json || rm ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json) && cp ./android/LocationSwitchPackage.java ./node_modules/react-native-location-switch/android/src/main/java/org/pweitz/reactnative/locationswitch/",
+    "postinstall": "( (del ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json || rm ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json) && cp ./android/LocationSwitchPackage.java ./node_modules/react-native-location-switch/android/src/main/java/org/pweitz/reactnative/locationswitch/ ) 2> /dev/null || exit 0",
     "test": "jest || exit 0"
   },
   "dependencies": {

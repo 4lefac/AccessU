@@ -35,19 +35,13 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new VectorIconsPackage(),
-            new MapsPackage(),
-            new LocationSwitchPackage(),
-            new RNGestureHandlerPackage(),
-            new RNFirebasePackage(),
-            new RNReactNativeAccessibilityPackage(),
           new VectorIconsPackage(),
           new MapsPackage(),
+          new LocationSwitchPackage(),
           new RNGestureHandlerPackage(),
           new RNFirebasePackage(),
           new RNReactNativeAccessibilityPackage(),
-          new RNFirebaseDatabasePackage(),
-          new LocationSwitchPackage()
+          new RNFirebaseDatabasePackage()
       );
     }
 

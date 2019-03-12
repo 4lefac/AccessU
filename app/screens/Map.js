@@ -53,7 +53,6 @@ let userRegion = {
 const mapStyle =
 [{"elementType":"geometry","stylers":[{"color":"#f5f5f5"}]},{"elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"elementType":"labels.text.stroke","stylers":[{"color":"#f5f5f5"}]},{"featureType":"administrative.land_parcel","elementType":"labels.text.fill","stylers":[{"color":"#bdbdbd"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"color":Theme.Landscape}]},{"featureType":"poi","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"color":Theme.PointsOfInterest}]},{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"poi.park","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"road","elementType":"geometry","stylers":[{"color":"#ffffff"}]},{"featureType":"road","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#757575"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#dadada"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":Theme.Highway}]},{"featureType":"road.highway","elementType":"labels.text.fill","stylers":[{"color":"#616161"}]},{"featureType":"road.local","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"color":"#e5e5e5"}]},{"featureType":"transit.station","elementType":"geometry","stylers":[{"color":"#eeeeee"}]},{"featureType":"water","elementType":"geometry","stylers":[{"color":"#c9c9c9"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":Theme.Water}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#9e9e9e"}]}];
 
-
 const styles = EStyleSheet.create({
   bar: {
     position: 'absolute',
@@ -86,9 +85,7 @@ export default class Map extends Component {
       bottomBarPos: new Animated.Value(styles.bottomBar.bottom),
 
       searchBarTop: new Animated.Value(-1 * height),
-      //searchBarText: "",
-
-      //searchResults: [],
+      searchResults: [],
 
       cardScrollPos: new Animated.Value(-1 * height),
 
@@ -250,14 +247,6 @@ export default class Map extends Component {
         style={{flex: 1}}
         region={userRegion}
         showsUserLocation={true}
-        onUserLocationChange={(coordinate) => {
-          userRegion = {
-            latitude: parseFloat(coordinate.latitude),
-            longitude: parseFloat(coordinate.longitude),
-            latitudeDelta: LATITUDE_DELTA,
-            longitudeDelta: LONGITUDE_DELTA
-          }
-        }}
         showsMyLocationButton={false}
         showsCompass={false}
         showsScale={false}
@@ -281,10 +270,7 @@ export default class Map extends Component {
             latitude={entrance.coordinates._latitude}
             longitude={entrance.coordinates._longitude}
             icon='map-marker'
-            onPress={() => {
-              this.toggleCallout(1);
-              //this.props.navigation.navigate('MarkerInfo', {data: this.state.userRegion});
-            }}>
+            onPress={() => this.toggleCallout(1)}>
             </MapMarker>
           )})}
 
@@ -398,10 +384,7 @@ export default class Map extends Component {
           <MapButton
           accessibilityLabel="Search"
           icon='search'
-          onPress={() => {
-          //  this.props.navigation.navigate('Search')
-            this.toggleSearch(1);
-          }}
+          onPress={() => this.toggleSearch(1)}
           />
 
           <MapButton
@@ -438,8 +421,8 @@ export default class Map extends Component {
             // request
             let req = {
               coordinate: {
-
-              } ,
+                // user location
+              },
             };
             // call the Add route
             //Routes.GET_Add(req);
@@ -478,24 +461,26 @@ export default class Map extends Component {
               margin: 0,
             }}
             onChangeText={(searchBarText) => {
-              //this.setState({searchBarText});
 
               let results = this.getSearchResults(searchBarText);
 
               results.then((results) => {
-                //this.setState({searchResults: results});
+                this.setState({searchResults: results});
                 alert(results.length);
               })
 
             }}
-            onSubmitEditing={() => {}}
+            onSubmitEditing={() => {
+              // hide soft keyboard
+              Keyboard.dismiss();
+            }}
             />
 
-            {/*this.state.searchResults.map( result => {
+            {this.state.searchResults.map( result => {
+              /*<Text>{result.description}</Text>*/
+              <Text>hi</Text>
+            })}
 
-              <Text>{result.description}</Text>
-
-            })*/}
             <Text>search results or somethin</Text>
             <Text>search results or somethin</Text>
             <Text>search results or somethin</Text>
