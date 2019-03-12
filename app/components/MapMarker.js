@@ -9,6 +9,7 @@
 ** longitude          - float. The marker longitude. Required.
 ** icon               - string. The icon to display. Required.
 ** iconSelected       - string. The icon to display when seleted.
+** Color              - string. The color of the icon
 **/
 
 
@@ -30,8 +31,7 @@ import Theme from '../styles/Theme';
 
 
 
-class MapMarker extends Component {
-
+export default class MapMarker extends Component {
   constructor(props) {
     super(props);
   }
@@ -48,29 +48,23 @@ class MapMarker extends Component {
       }}
       tracksViewChanges={false}
       onPress={this.props.onPress}
+      calloutAnchor={{ x: 0.5, y: 1 }}
       >
 
-        <Icon name={this.props.icon} size={Theme.IconSize+5} color={Theme.IconColorHighlight} />
-        {/*
-        <Callout
-        tooltip={true}
-        onPress={this.props.onPressCallout}
-        style={{backgroundColor: 'green'}}
-        >
+        <Icon name={this.props.icon} size={Theme.IconSize+5}
+        color={Theme.IconColorHighlight} />
 
-          <View style={[{flex: 1, backgroundColor: 'red'}]}>
-            <View style={[{height: 100, width: 50, backgroundColor: Theme.IconColorHighlight}]}>
-              <Text>Go to this place!</Text>
-            </View>
+        <Callout tooltip={true}>
+          <View style={{width: 50, justifyContent: 'center',
+          alignItems: 'center'}}>
+            <Icon name={this.props.icon} size={Theme.IconSize+5}
+            color={Theme.IconColorHighlight2} />
           </View>
-
         </Callout>
-        */}
+
       </Marker>
 
     );
   }
 
 }
-
-export default MapMarker;

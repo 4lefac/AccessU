@@ -12,7 +12,7 @@ import Map from './screens/Map';
 import MarkerInfo from './screens/MarkerInfo';
 import Menu from './screens/Menu';
 import Route from './screens/Route';
-import Search from './screens/Search';
+import Settings from './screens/Settings';
 
 
 // Global style variables
@@ -28,7 +28,7 @@ const AppNavigator = createStackNavigator(
     MarkerInfo: MarkerInfo,
     Menu: Menu,
     Route: Route,
-    Search: Search,
+    Settings: Settings,
   },
   {
     initialRouteName: 'Map',

@@ -22,8 +22,7 @@ const styles = {
   },
 };
 
-export default class Menu extends Component {
-
+export default class Settings extends Component {
   constructor(props) {
     super(props);
   }
@@ -42,33 +41,20 @@ export default class Menu extends Component {
         margin={true}
         >
 
-          <Header style={{textAlign: 'center'}}>AccessU v0.0.1</Header>
+          <Header style={{textAlign: 'center'}}>Settings</Header>
 
           <Section padding={true} margin={true} visible={true}>
-            <Text>Test text</Text>
-          </Section>
-
-          <Section padding={true} margin={true} visible={true}>
-            <Text>Test text 2</Text>
+            <Text>All setting can go here.</Text>
           </Section>
 
         </Section>
 
-        <Section
-        flex={0.3}
-        style={{justifyContent: 'space-between'}}
-        >
+        <Section flex={0.3}>
 
           <IconButton
           accessibilityLabel="Back to map"
           onPress={() => this.props.navigation.goBack()}
           icon='close'
-          />
-
-          <IconButton
-          accessibilityLabel="Settings"
-          onPress={() => this.props.navigation.navigate('Settings')}
-          icon='gear'
           />
 
         </Section>

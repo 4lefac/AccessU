@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "postinstall": "rm ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json && cp ./android/LocationSwitchPackage.java ./node_modules/react-native-location-switch/android/src/main/java/org/pweitz/reactnative/locationswitch/",
+    "postinstall": "(del ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json || rm ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json) && cp ./android/LocationSwitchPackage.java ./node_modules/react-native-location-switch/android/src/main/java/org/pweitz/reactnative/locationswitch/",
     "test": "jest || exit 0"
   },
   "dependencies": {
@@ -16,11 +16,11 @@
     "react-native-firebase": "^5.2.1",
     "react-native-fontawesome": "^6.0.1",
     "react-native-gesture-handler": "^1.0.15",
-    "react-native-google-places-autocomplete": "^1.3.9",
     "react-native-location-switch": "^0.1.0",
     "react-native-maps": "^0.22.1",
     "react-native-vector-icons": "^6.3.0",
-    "react-navigation": "^3.0.9"
+    "react-navigation": "^3.0.9",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "babel-jest": "^24.1.0",

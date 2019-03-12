@@ -24,7 +24,7 @@ import Theme from '../styles/Theme';
 
 const styles = {
   Card: {
-    elevation: 2,
+    elevation: 1,
     borderRadius: 10,
     backgroundColor: Theme.BackgroundColorContent,
     overflow: 'hidden',
