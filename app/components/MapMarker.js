@@ -55,11 +55,13 @@ export default class MapMarker extends Component {
         color={Theme.IconColorHighlight} />
 
         <Callout tooltip={true}>
+
           <View style={{width: 50, justifyContent: 'center',
           alignItems: 'center'}}>
             <Icon name={this.props.icon} size={Theme.IconSize+5}
             color={Theme.IconColorHighlight2} />
           </View>
+
         </Callout>
 
       </Marker>

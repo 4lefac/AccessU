@@ -1,15 +1,15 @@
 
-var baseURL = 'https://accessu-c0933.firebaseapp.com/api/v1/entrances';
+var baseURL = 'https://accessu-c0933.firebaseapp.com/api/v2';
 
 
 
 module.exports.Routes = {
-  /*
-  ** GET request for the main map screen will return a json of all the entrances.
-  */
 
+  /*
+  ** GET request for the main map screen.
+  */
  GET_map: () => {
-  return fetch(baseURL)
+  return fetch(baseURL + '/locations')
     .then( (response) => response.json())
     .then(function(data) {
       return data;

@@ -79,7 +79,7 @@ export default class Map extends Component {
     super(props);
 
     this.state = {
-      markers: [],
+      locations: [],
 
       topBarPos: new Animated.Value(styles.topBar.top),
       bottomBarPos: new Animated.Value(styles.bottomBar.bottom),
@@ -96,7 +96,7 @@ export default class Map extends Component {
   static navigationOptions = { header: null };
 
   /*
-  ** Returns the users' last position
+  ** Returns the last recorded user position
   */
   updateUserRegion = () => {
 
@@ -112,19 +112,15 @@ export default class Map extends Component {
     let error = (error) => {
       // check if location is enabled
       LocationSwitch.isLocationEnabled( () => {}, () => {
-        LocationSwitch.enableLocationService(1000, true,
-          () => {
-            // on location enable, reload position
-            this.updateUserRegion();
-          }, () => {}
-        );
+        LocationSwitch.enableLocationService(1000, true, () => {
+          // on location enable, reload position
+          this.updateUserRegion();
+        }, () => {});
       });
     }
 
     let options = {
       enableHighAccuracy: true,
-      // timeout: 10000,
-      // maximumAge: 1000
       timeout: 5000,
       maximumAge: 60000
     }
@@ -141,18 +137,10 @@ export default class Map extends Component {
   }
 
   /*
-  ** Toggles search bar visibility based on a provided state value of 0 or 1.
+  ** Toggle top bar visibility based on a provided value of 0 or 1.
   */
-  toggleSearch = (state) => {
-    let searchBarTop = state ? styles.topBar.top : -1 * height;
-    let barTop = state ? -1 * height : styles.topBar.top;
-    // animate search bar
-    Animated.timing(this.state.searchBarTop, {
-      toValue: searchBarTop,
-      easing: Easing.linear(),
-      duration: ANIMATE_TIME,
-    }).start();
-    // animate bottom bar
+  toggleTopBar = (state) => {
+    let barTop = state ? styles.topBar.top : -1 * height;
     Animated.timing(this.state.topBarPos, {
       toValue: barTop,
       easing: Easing.linear(),
@@ -161,18 +149,10 @@ export default class Map extends Component {
   }
 
   /*
-  ** Toggles callout visibility based on a provided state value of 0 or 1.
+  ** Toggle bottom bar visibility based on a provided value of 0 or 1.
   */
-  toggleCallout = (state) => {
-    let cardScrollBottom = state ? 0 : -1 * height;
-    let barBottom = state ? -1 * height : styles.bottomBar.bottom;
-    // animate card
-    Animated.timing(this.state.cardScrollPos, {
-      toValue: cardScrollBottom,
-      easing: Easing.linear(),
-      duration: ANIMATE_TIME,
-    }).start();
-    // animate bottom bar
+  toggleBottomBar = (state) => {
+    let barBottom = state ? styles.bottomBar.bottom :  -1 * height;
     Animated.timing(this.state.bottomBarPos, {
       toValue: barBottom,
       easing: Easing.linear(),
@@ -181,11 +161,43 @@ export default class Map extends Component {
   }
 
   /*
+  ** Toggles search bar visibility based on a provided state value of 0 or 1.
+  */
+  toggleSearch = (state) => {
+    let searchBarTop = state ? styles.topBar.top : -1 * height;
+    // animate search bar
+    Animated.timing(this.state.searchBarTop, {
+      toValue: searchBarTop,
+      easing: Easing.linear(),
+      duration: ANIMATE_TIME,
+    }).start();
+    // animate top bar
+    this.toggleTopBar(state ? 0 : 1);
+    // if enabled, focus search bar
+    this.searchTextInput.focus();
+  }
+
+  /*
+  ** Toggles callout visibility based on a provided state value of 0 or 1.
+  */
+  toggleCallout = (state) => {
+    let cardScrollBottom = state ? 0 : -1 * height;
+    // animate card
+    Animated.timing(this.state.cardScrollPos, {
+      toValue: cardScrollBottom,
+      easing: Easing.linear(),
+      duration: ANIMATE_TIME,
+    }).start();
+    // animate bottom bar
+    this.toggleBottomBar(state ? 0 : 1);
+  }
+
+  /*
   ** Retrieves and returns entrance/building json asynchronously.
   */
-  getMarkers = () => {
-    Routes.GET_map().then( (markers) => {
-      this.setState({ markers: markers });
+  getLocations = () => {
+    Routes.GET_map().then( (locations) => {
+      this.setState({ locations: locations });
     })
     .catch( (e) => { throw e })
   }
@@ -206,9 +218,7 @@ export default class Map extends Component {
         fetch(searchURL).then((res) => { return res.json() })
         .then((results) => {
           // if status is OK
-          if (results.status == "OK") {
-            resolve( results.predictions );
-          }
+          if (results.status == "OK") resolve( results.predictions );
           else resolve( [] );
         })
         .catch((e) => { throw e });
@@ -222,7 +232,7 @@ export default class Map extends Component {
   ** Called once the display/view has been rendered to the screen.
   */
   componentDidMount() {
-    if (this.state.markers.length == 0) this.getMarkers();
+    if (this.state.locations.length == 0) this.getLocations();
     this.updateUserRegion();
 
     announceForAccessibility('announce location here for screen readers. There are 3 buttons at the top of the screen and 2 buttons at the bottom of the screen.');
@@ -260,18 +270,38 @@ export default class Map extends Component {
         onPress={() => this.toggleCallout(0)}
         >
 
-          {/* MARKERS */}
+          {/* LOCATIONS */}
 
-          {this.state.markers.map( entrance => { return (
+          {this.state.locations.map( location => { return (
+
             <MapMarker
-            key={entrance.id.toString()}
-            id={entrance.id.toString()}
-            accessibilityLabel={entrance.name}
-            latitude={entrance.coordinates._latitude}
-            longitude={entrance.coordinates._longitude}
+            key={location.id.toString()}
+            id={location.id.toString()}
+            accessibilityLabel={location.name}
+            latitude={location.coordinates._latitude}
+            longitude={location.coordinates._longitude}
             icon='map-marker'
+            entrances={location.entrances}
             onPress={() => this.toggleCallout(1)}>
             </MapMarker>
+
+          )})}
+
+          {this.state.locations.map( location => { return (
+            location.entrances.map( entrance => { return (
+
+              <MapView.Circle
+              key={entrance.locationID}
+              center={{
+                latitude:entrance.coordinates._latitude,
+                longitude:entrance.coordinates._longitude
+              }}
+              radius={1}
+              fillColor="#000"
+              >
+              </MapView.Circle>
+
+            )})
           )})}
 
         </MapView>
@@ -304,7 +334,7 @@ export default class Map extends Component {
             <Text style={{fontWeight: 'bold'}}>5 accessible entrances</Text>
 
             <Text>This is a really cool place to be so here's a great description.</Text>
-{/* accessibility should say "swipe to view entrances" */}
+
             <View style={{ position: 'absolute', right: 0, bottom: 0, padding: 10 }}>
               <Text style={{fontSize: 12}}>Swipe to view entrances</Text>
             </View>
@@ -465,8 +495,57 @@ export default class Map extends Component {
               let results = this.getSearchResults(searchBarText);
 
               results.then((results) => {
-                this.setState({searchResults: results});
-                alert(results.length);
+
+                let suggestions = [];
+
+                for (let i = 0; i < results.length; i++) {
+                  suggestions.push(
+                    <TouchableOpacity
+                    key={results[i].id}
+                    accessibilityLabel={results[i].description}
+                    onPress={() => {
+
+                      let geocodeURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" +
+                      results[i].description + "&key=" + API_KEY_MAP;
+
+                      fetch(geocodeURL).then((res) => { return res.json() })
+                      .then((results) => {
+
+                        if (results.status == "OK") {
+                          let coords = results.results[0].geometry.location;
+                          // move to location
+                          this.map.animateToRegion({
+                            latitude: coords.lat,
+                            longitude: coords.long,
+                            latitudeDelta: LATITUDE_DELTA,
+                            longitudeDelta: LONGITUDE_DELTA
+                          }, ANIMATE_TIME);
+                        }
+
+                      })
+                      .catch( (e) => { throw e });
+                    }}>
+                      <Text
+                      numberOfLines={1}
+                      style={[
+                        {
+                          flex: 1,
+                          elevation: 1,
+                          backgroundColor: Theme.BackgroundColorContent,
+                          padding: 10,
+                          paddingLeft: 10,
+                          paddingRight: 10,
+                          marginTop: 1,
+                        }
+                      ]}>
+                        {results[i].description}
+                      </Text>
+                    </TouchableOpacity>
+                  )
+                }
+
+                this.setState({searchResults: suggestions});
+
               })
 
             }}
@@ -476,14 +555,7 @@ export default class Map extends Component {
             }}
             />
 
-            {this.state.searchResults.map( result => {
-              /*<Text>{result.description}</Text>*/
-              <Text>hi</Text>
-            })}
-
-            <Text>search results or somethin</Text>
-            <Text>search results or somethin</Text>
-            <Text>search results or somethin</Text>
+            {this.state.searchResults}
 
           </View>
 
@@ -495,6 +567,8 @@ export default class Map extends Component {
             onPress={() => {
               // clear search
               this.searchTextInput.clear();
+              // clear suggestions
+              this.setState({searchResults: []});
               // toggle search bar visibillity
               this.toggleSearch(0);
               // hide soft keyboard
