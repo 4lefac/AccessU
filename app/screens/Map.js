@@ -16,6 +16,7 @@ import Base from '../styles/Base';
 import { announceForAccessibility } from 'react-native-accessibility';
 import { Routes } from '../api/Routes';
 import Theme from '../styles/Theme';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   MapButton,
   MapMarker,
@@ -48,6 +49,7 @@ let userRegion = {
   latitudeDelta: LATITUDE_DELTA,
   longitudeDelta: LONGITUDE_DELTA
 }
+let keyboardDelay = null;
 
 // Custom map styling can be generated using
 // https://mapstyle.withgoogle.com
@@ -64,6 +66,7 @@ const styles = EStyleSheet.create({
     justifyContent: 'space-evenly',
   },
   bottomBar: { bottom: 40 },
+  bottomBarNoPadding: { bottom: 20 },
   topBar: { top: 20 },
 
   // iPhone X top notch
@@ -87,6 +90,9 @@ export default class Map extends Component {
 
       searchBarTop: new Animated.Value(-1 * height),
       searchResults: [],
+
+      addTopBarPos: new Animated.Value(-1 * height),
+      addBottomBarPos: new Animated.Value(-1 * height),
 
       cardScrollPos: new Animated.Value(-1 * height),
 
@@ -193,6 +199,30 @@ export default class Map extends Component {
     this.toggleBottomBar(state ? 0 : 1);
   }
 
+  toggleAdd = (state) => {
+    let addTopBarPos = state ? 0 : -1 * height;
+    let addBottomBarPos = state ? styles.bottomBarNoPadding.bottom : -1 * height;
+    // animate top
+    Animated.timing(this.state.addTopBarPos, {
+      toValue: addTopBarPos,
+      easing: Easing.linear(),
+      duration: ANIMATE_TIME,
+    }).start();
+    // animate bottom
+    Animated.timing(this.state.addBottomBarPos, {
+      toValue: addBottomBarPos,
+      easing: Easing.linear(),
+      duration: ANIMATE_TIME,
+    }).start();
+    // toggle pin visibility
+    this.pin.setNativeProps({
+      style: { zIndex: state ? 1 : -1 },
+    })
+    // animate top and bottom bar
+    this.toggleTopBar(state ? 0 : 1);
+    this.toggleBottomBar(state ? 0 : 1);
+  }
+
   /*
   ** Retrieves and returns entrance/building json asynchronously.
   */
@@ -233,10 +263,23 @@ export default class Map extends Component {
   ** Called once the display/view has been rendered to the screen.
   */
   componentDidMount() {
+
     if (this.state.locations.length == 0) this.getLocations();
     this.updateUserRegion();
 
-    announceForAccessibility('announce location here for screen readers. There are 3 buttons at the top of the screen and 2 buttons at the bottom of the screen.');
+    // announce approximated user location
+    fetch("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + userRegion.latitude + "," + userRegion.longitude + "&key=" + API_KEY_MAP)
+    .then(data => data.json())
+    .then(result => {
+      if (result.status == "OK") {
+        announceForAccessibility('You are nearby '
+        + result.results[0].formatted_address
+        + ' There are 3 buttons at the top of the screen and 2 buttons at the bottom of the screen.');
+      } else {
+        announceForAccessibility('There are 3 buttons at the top of the screen and 2 buttons at the bottom of the screen.');
+      }
+    })
+    .catch((e) => { throw e });
   }
 
   /*
@@ -246,7 +289,7 @@ export default class Map extends Component {
 
     return (
 
-      <View onLayout={ (e) => {
+      <View onLayout={(e) => {
       var {height} = e.nativeEvent.layout; this.setState({height})
       }} style={[{position: 'absolute', top: 0, right: 0, bottom: -26, left: 0,
       height: this.state.height}]}>
@@ -460,17 +503,7 @@ export default class Map extends Component {
           <MapButton
           accessibilityLabel="Add information or entrance"
           icon='plus'
-          onPress={() => {
-            // request
-            let req = {
-              coordinate: {
-                // user location
-              },
-            };
-            // call the Add route
-            //Routes.GET_Add(req);
-            this.props.navigation.navigate('Add');
-          }}
+          onPress={() => this.toggleAdd(1)}
           />
 
         </Animated.View>
@@ -505,61 +538,68 @@ export default class Map extends Component {
             }}
             onChangeText={(searchBarText) => {
 
-              let results = this.getSearchResults(searchBarText);
+              // delay keyboard query calls
+              clearTimeout(keyboardDelay);
+              keyboardDelay = setTimeout(() => {
 
-              results.then((results) => {
+                this.getSearchResults(searchBarText)
+                .then((results) => {
 
-                let suggestions = [];
+                  let suggestions = [];
 
-                for (let i = 0; i < results.length; i++) {
-                  suggestions.push(
-                    <TouchableOpacity
-                    key={results[i].id}
-                    accessibilityLabel={results[i].description}
-                    onPress={() => {
+                  for (let i = 0; i < results.length; i++) {
+                    suggestions.push(
 
-                      let geocodeURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" +
-                      results[i].description + "&key=" + API_KEY_MAP;
+                      <TouchableOpacity
+                      key={results[i].id}
+                      accessibilityLabel={results[i].description}
+                      onPress={() => {
 
-                      fetch(geocodeURL).then((res) => { return res.json() })
-                      .then((results) => {
+                        let geocodeURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" +
+                        results[i].description + "&key=" + API_KEY_MAP;
 
-                        if (results.status == "OK") {
-                          let coords = results.results[0].geometry.location;
-                          // move to location
-                          this.map.animateToRegion({
-                            latitude: coords.lat,
-                            longitude: coords.long,
-                            latitudeDelta: LATITUDE_DELTA,
-                            longitudeDelta: LONGITUDE_DELTA
-                          }, ANIMATE_TIME);
-                        }
+                        fetch(geocodeURL).then((res) => { return res.json() })
+                        .then((results) => {
 
-                      })
-                      .catch( (e) => { throw e });
-                    }}>
-                      <Text
-                      numberOfLines={1}
-                      style={[
-                        {
-                          flex: 1,
-                          elevation: 1,
-                          backgroundColor: Theme.BackgroundColorContent,
-                          padding: 10,
-                          paddingLeft: 10,
-                          paddingRight: 10,
-                          marginTop: 1,
-                        }
-                      ]}>
-                        {results[i].description}
-                      </Text>
-                    </TouchableOpacity>
-                  )
-                }
+                          if (results.status == "OK") {
+                            let coords = results.results[0].geometry.location;
+                            // move to location
+                            this.map.animateToRegion({
+                              latitude: parseFloat(coords.lat),
+                              longitude: parseFloat(coords.lng),
+                              latitudeDelta: LATITUDE_DELTA,
+                              longitudeDelta: LONGITUDE_DELTA
+                            }, ANIMATE_TIME);
+                          }
 
-                this.setState({searchResults: suggestions});
+                        })
+                        .catch( (e) => { throw e });
 
-              })
+                      }}>
+                        <Text
+                        numberOfLines={1}
+                        style={[
+                          {
+                            flex: 1,
+                            elevation: 1,
+                            backgroundColor: Theme.BackgroundColorContent,
+                            padding: 10,
+                            paddingLeft: 10,
+                            paddingRight: 10,
+                            marginTop: 1,
+                          }
+                        ]}>
+                          {results[i].description}
+                        </Text>
+                      </TouchableOpacity>
+                    )
+                  }
+
+                  this.setState({searchResults: suggestions});
+
+                })
+
+              }, 500);
 
             }}
             onSubmitEditing={() => {
@@ -580,12 +620,97 @@ export default class Map extends Component {
             onPress={() => {
               // clear search
               this.searchTextInput.clear();
-              // clear suggestions
-              this.setState({searchResults: []});
               // toggle search bar visibillity
               this.toggleSearch(0);
               // hide soft keyboard
               Keyboard.dismiss();
+            }}/>
+          </View>
+
+        </Animated.View>
+
+        {/* ADD PIN */}
+
+        <View
+        style={{
+        position: 'absolute',
+        flex: 1,
+        zIndex: -1,
+        top: height / 2,
+        left: width / 2,
+        alignItems: 'center',
+        justifyContent: 'center',
+        }}
+        ref={ref => {this.pin = ref}}
+        >
+          <Icon
+          style={{left: -1 * Theme.IconSize / 3}}
+          name="map-pin"
+          color={Theme.IconColorHighlight}
+          size={Theme.IconSize}
+          />
+        </View>
+
+
+        {/* ADD TOP BAR */}
+
+        <Animated.View
+        style={{
+          position: 'absolute',
+          zIndex: 11,
+          top: this.state.addTopBarPos,
+          left: 0,
+          width: width,
+          padding: 10,
+          flexDirection: 'row',
+          backgroundColor: Theme.BackgroundColorContent
+        }}>
+
+          <View style={{flex: 0.9}}>
+            <Text style={{padding: 15}}>
+              Drag the map to position the marker where you would like to add a location.
+            </Text>
+          </View>
+
+          <View style={{flex: 0.1, justifyContent: 'center'}}>
+            <IconButton
+            accessibilityLabel="Close add info window"
+            icon='close'
+            onPress={() => this.toggleAdd(0)}/>
+          </View>
+
+        </Animated.View>
+
+        {/* ADD BOTTOM BAR */}
+
+        <Animated.View
+        style={{
+          position: 'absolute',
+          zIndex: 11,
+          bottom: this.state.addBottomBarPos,
+          left: 0,
+          width: width,
+          padding: 10,
+          flexDirection: 'row',
+          backgroundColor: Theme.BackgroundColorContent
+        }}>
+
+          <View style={{flex: 0.9}}>
+            <Text style={{padding: 30}}>Confirm this location</Text>
+          </View>
+
+          <View style={{flex: 0.13, justifyContent: 'center'}}>
+            <IconButton
+            accessibilityLabel="Continue with the chosen location"
+            icon='check'
+            onPress={() => {
+              // return coordinates
+
+              this.map.coordinateForPoint({x: width / 2, y: height / 2})
+              .then( result => {
+                this.props.navigation.navigate('Add', {coordinates: result});
+              })
+
             }}/>
           </View>
 
