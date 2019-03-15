@@ -65,6 +65,7 @@ const styles = EStyleSheet.create({
     justifyContent: 'space-evenly',
   },
   bottomBar: { bottom: 40 },
+  bottomBarNoPadding: { bottom: 20 },
   topBar: { top: 20 },
 
   // iPhone X top notch
@@ -89,7 +90,8 @@ export default class Map extends Component {
       searchBarTop: new Animated.Value(-1 * height),
       searchResults: [],
 
-      addBarPos: new Animated.Value(-1 * height),
+      addTopBarPos: new Animated.Value(-1 * height),
+      addBottomBarPos: new Animated.Value(-1 * height),
 
       cardScrollPos: new Animated.Value(-1 * height),
 
@@ -197,13 +199,24 @@ export default class Map extends Component {
   }
 
   toggleAdd = (state) => {
-    let addBarPos = state ? 0 : -1 * height;
-    // animate card
-    Animated.timing(this.state.addBarPos, {
-      toValue: addBarPos,
+    let addTopBarPos = state ? 0 : -1 * height;
+    let addBottomBarPos = state ? styles.bottomBarNoPadding.bottom : -1 * height;
+    // animate top
+    Animated.timing(this.state.addTopBarPos, {
+      toValue: addTopBarPos,
       easing: Easing.linear(),
       duration: ANIMATE_TIME,
     }).start();
+    // animate bottom
+    Animated.timing(this.state.addBottomBarPos, {
+      toValue: addBottomBarPos,
+      easing: Easing.linear(),
+      duration: ANIMATE_TIME,
+    }).start();
+    // toggle pin visibility
+    this.pin.setNativeProps({
+      style: { zIndex: state ? 1 : -1 },
+    })
     // animate top and bottom bar
     this.toggleTopBar(state ? 0 : 1);
     this.toggleBottomBar(state ? 0 : 1);
@@ -262,7 +275,7 @@ export default class Map extends Component {
 
     return (
 
-      <View onLayout={ (e) => {
+      <View onLayout={(e) => {
       var {height} = e.nativeEvent.layout; this.setState({height})
       }} style={[{position: 'absolute', top: 0, right: 0, bottom: -26, left: 0,
       height: this.state.height}]}>
@@ -464,18 +477,7 @@ export default class Map extends Component {
           <MapButton
           accessibilityLabel="Add information or entrance"
           icon='plus'
-          onPress={() => {
-            // request
-            let req = {
-              coordinate: {
-                // user location
-              },
-            };
-            // call the Add route
-            //Routes.GET_Add(req);
-            this.toggleAdd(1);
-            //this.props.navigation.navigate('Add');
-          }}
+          onPress={() => this.toggleAdd(1)}
           />
 
         </Animated.View>
@@ -514,9 +516,8 @@ export default class Map extends Component {
               clearTimeout(keyboardDelay);
               keyboardDelay = setTimeout(() => {
 
-                let results = this.getSearchResults(searchBarText);
-
-                results.then((results) => {
+                this.getSearchResults(searchBarText)
+                .then((results) => {
 
                   let suggestions = [];
 
@@ -604,32 +605,34 @@ export default class Map extends Component {
 
         {/* ADD PIN */}
 
-        <Icon
-        style={[
-        {
-          position: 'absolute',
-          flex: 1,
-          zIndex: 0,
-          top: height / 2,
-          left: width / 2,
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: 'orange'
-        }
-        ]}
-        name="map-pin"
-        color={Theme.IconColorHighlight}
-        size={Theme.IconSize}
-        />
+        <View
+        style={{
+        position: 'absolute',
+        flex: 1,
+        zIndex: -1,
+        top: height / 2,
+        left: width / 2,
+        alignItems: 'center',
+        justifyContent: 'center',
+        }}
+        ref={ref => {this.pin = ref}}
+        >
+          <Icon
+          style={{left: -1 * Theme.IconSize / 3}}
+          name="map-pin"
+          color={Theme.IconColorHighlight}
+          size={Theme.IconSize}
+          />
+        </View>
 
 
-        {/* ADD SCREEN */}
+        {/* ADD TOP BAR */}
 
         <Animated.View
         style={{
           position: 'absolute',
           zIndex: 11,
-          top: this.state.addBarPos,
+          top: this.state.addTopBarPos,
           left: 0,
           width: width,
           padding: 10,
@@ -648,6 +651,41 @@ export default class Map extends Component {
             accessibilityLabel="Close add info window"
             icon='close'
             onPress={() => this.toggleAdd(0)}/>
+          </View>
+
+        </Animated.View>
+
+        {/* ADD BOTTOM BAR */}
+
+        <Animated.View
+        style={{
+          position: 'absolute',
+          zIndex: 11,
+          bottom: this.state.addBottomBarPos,
+          left: 0,
+          width: width,
+          padding: 10,
+          flexDirection: 'row',
+          backgroundColor: Theme.BackgroundColorContent
+        }}>
+
+          <View style={{flex: 0.9}}>
+            <Text style={{padding: 30}}>Confirm this location</Text>
+          </View>
+
+          <View style={{flex: 0.13, justifyContent: 'center'}}>
+            <IconButton
+            accessibilityLabel="Continue with the chosen location"
+            icon='check'
+            onPress={() => {
+              // return coordinates
+
+              this.map.coordinateForPoint({x: width / 2, y: height / 2})
+              .then( result => {
+                this.props.navigation.navigate('Add', {coordinates: result});
+              })
+
+            }}/>
           </View>
 
         </Animated.View>

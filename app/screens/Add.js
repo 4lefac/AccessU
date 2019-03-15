@@ -18,7 +18,7 @@ export default class Add extends Component {
 
     const {navigate} = this.props.navigation;
 
-    let data = this.props.navigation.getParam("data", "fallback if unavailable");
+    let coordinates = this.props.navigation.getParam("coordinates", {longitude: 0, latitude: 0});
 
     return (
       <View style={[Base.Container]}>
@@ -26,7 +26,13 @@ export default class Add extends Component {
 
         <View style={[Base.Content]}>
           <Text>
-            {data}
+            You have chosen this location:
+          </Text>
+          <Text>
+            longitude: {coordinates.longitude}
+          </Text>
+          <Text>
+            latitude: {coordinates.latitude}
           </Text>
         </View>
 
