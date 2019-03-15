@@ -47,6 +47,7 @@ let userRegion = {
   latitudeDelta: LATITUDE_DELTA,
   longitudeDelta: LONGITUDE_DELTA
 }
+let keyboardDelay = null;
 
 // Custom map styling can be generated using
 // https://mapstyle.withgoogle.com
@@ -492,61 +493,69 @@ export default class Map extends Component {
             }}
             onChangeText={(searchBarText) => {
 
-              let results = this.getSearchResults(searchBarText);
+              // delay keyboard query calls
+              clearTimeout(keyboardDelay);
+              keyboardDelay = setTimeout(() => {
 
-              results.then((results) => {
+                let results = this.getSearchResults(searchBarText);
 
-                let suggestions = [];
+                results.then((results) => {
 
-                for (let i = 0; i < results.length; i++) {
-                  suggestions.push(
-                    <TouchableOpacity
-                    key={results[i].id}
-                    accessibilityLabel={results[i].description}
-                    onPress={() => {
+                  let suggestions = [];
 
-                      let geocodeURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" +
-                      results[i].description + "&key=" + API_KEY_MAP;
+                  for (let i = 0; i < results.length; i++) {
+                    suggestions.push(
 
-                      fetch(geocodeURL).then((res) => { return res.json() })
-                      .then((results) => {
+                      <TouchableOpacity
+                      key={results[i].id}
+                      accessibilityLabel={results[i].description}
+                      onPress={() => {
 
-                        if (results.status == "OK") {
-                          let coords = results.results[0].geometry.location;
-                          // move to location
-                          this.map.animateToRegion({
-                            latitude: coords.lat,
-                            longitude: coords.long,
-                            latitudeDelta: LATITUDE_DELTA,
-                            longitudeDelta: LONGITUDE_DELTA
-                          }, ANIMATE_TIME);
-                        }
+                        let geocodeURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" +
+                        results[i].description + "&key=" + API_KEY_MAP;
 
-                      })
-                      .catch( (e) => { throw e });
-                    }}>
-                      <Text
-                      numberOfLines={1}
-                      style={[
-                        {
-                          flex: 1,
-                          elevation: 1,
-                          backgroundColor: Theme.BackgroundColorContent,
-                          padding: 10,
-                          paddingLeft: 10,
-                          paddingRight: 10,
-                          marginTop: 1,
-                        }
-                      ]}>
-                        {results[i].description}
-                      </Text>
-                    </TouchableOpacity>
-                  )
-                }
+                        fetch(geocodeURL).then((res) => { return res.json() })
+                        .then((results) => {
 
-                this.setState({searchResults: suggestions});
+                          if (results.status == "OK") {
+                            let coords = results.results[0].geometry.location;
+                            // move to location
+                            this.map.animateToRegion({
+                              latitude: parseFloat(coords.lat),
+                              longitude: parseFloat(coords.lng),
+                              latitudeDelta: LATITUDE_DELTA,
+                              longitudeDelta: LONGITUDE_DELTA
+                            }, ANIMATE_TIME);
+                          }
 
-              })
+                        })
+                        .catch( (e) => { throw e });
+
+                      }}>
+                        <Text
+                        numberOfLines={1}
+                        style={[
+                          {
+                            flex: 1,
+                            elevation: 1,
+                            backgroundColor: Theme.BackgroundColorContent,
+                            padding: 10,
+                            paddingLeft: 10,
+                            paddingRight: 10,
+                            marginTop: 1,
+                          }
+                        ]}>
+                          {results[i].description}
+                        </Text>
+                      </TouchableOpacity>
+                    )
+                  }
+
+                  this.setState({searchResults: suggestions});
+
+                })
+
+              }, 500);
 
             }}
             onSubmitEditing={() => {
@@ -567,8 +576,6 @@ export default class Map extends Component {
             onPress={() => {
               // clear search
               this.searchTextInput.clear();
-              // clear suggestions
-              this.setState({searchResults: []});
               // toggle search bar visibillity
               this.toggleSearch(0);
               // hide soft keyboard
