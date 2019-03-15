@@ -15,6 +15,7 @@ import Base from '../styles/Base';
 import { announceForAccessibility } from 'react-native-accessibility';
 import { Routes } from '../api/Routes';
 import Theme from '../styles/Theme';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   MapButton,
   MapMarker,
@@ -87,6 +88,8 @@ export default class Map extends Component {
 
       searchBarTop: new Animated.Value(-1 * height),
       searchResults: [],
+
+      addBarPos: new Animated.Value(-1 * height),
 
       cardScrollPos: new Animated.Value(-1 * height),
 
@@ -190,6 +193,19 @@ export default class Map extends Component {
       duration: ANIMATE_TIME,
     }).start();
     // animate bottom bar
+    this.toggleBottomBar(state ? 0 : 1);
+  }
+
+  toggleAdd = (state) => {
+    let addBarPos = state ? 0 : -1 * height;
+    // animate card
+    Animated.timing(this.state.addBarPos, {
+      toValue: addBarPos,
+      easing: Easing.linear(),
+      duration: ANIMATE_TIME,
+    }).start();
+    // animate top and bottom bar
+    this.toggleTopBar(state ? 0 : 1);
     this.toggleBottomBar(state ? 0 : 1);
   }
 
@@ -457,7 +473,8 @@ export default class Map extends Component {
             };
             // call the Add route
             //Routes.GET_Add(req);
-            this.props.navigation.navigate('Add');
+            this.toggleAdd(1);
+            //this.props.navigation.navigate('Add');
           }}
           />
 
@@ -581,6 +598,56 @@ export default class Map extends Component {
               // hide soft keyboard
               Keyboard.dismiss();
             }}/>
+          </View>
+
+        </Animated.View>
+
+        {/* ADD PIN */}
+
+        <Icon
+        style={[
+        {
+          position: 'absolute',
+          flex: 1,
+          zIndex: 0,
+          top: height / 2,
+          left: width / 2,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'orange'
+        }
+        ]}
+        name="map-pin"
+        color={Theme.IconColorHighlight}
+        size={Theme.IconSize}
+        />
+
+
+        {/* ADD SCREEN */}
+
+        <Animated.View
+        style={{
+          position: 'absolute',
+          zIndex: 11,
+          top: this.state.addBarPos,
+          left: 0,
+          width: width,
+          padding: 10,
+          flexDirection: 'row',
+          backgroundColor: Theme.BackgroundColorContent
+        }}>
+
+          <View style={{flex: 0.9}}>
+            <Text style={{padding: 15}}>
+              Drag the map to position the marker where you would like to add a location.
+            </Text>
+          </View>
+
+          <View style={{flex: 0.1, justifyContent: 'center'}}>
+            <IconButton
+            accessibilityLabel="Close add info window"
+            icon='close'
+            onPress={() => this.toggleAdd(0)}/>
           </View>
 
         </Animated.View>
