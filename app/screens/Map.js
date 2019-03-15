@@ -262,10 +262,23 @@ export default class Map extends Component {
   ** Called once the display/view has been rendered to the screen.
   */
   componentDidMount() {
+
     if (this.state.locations.length == 0) this.getLocations();
     this.updateUserRegion();
 
-    announceForAccessibility('announce location here for screen readers. There are 3 buttons at the top of the screen and 2 buttons at the bottom of the screen.');
+    // announce approximated user location
+    fetch("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + userRegion.latitude + "," + userRegion.longitude + "&key=" + API_KEY_MAP)
+    .then(data => data.json())
+    .then(result => {
+      if (result.status == "OK") {
+        announceForAccessibility('You are nearby '
+        + result.results[0].formatted_address
+        + ' There are 3 buttons at the top of the screen and 2 buttons at the bottom of the screen.');
+      } else {
+        announceForAccessibility('There are 3 buttons at the top of the screen and 2 buttons at the bottom of the screen.');
+      }
+    })
+    .catch((e) => { throw e });
   }
 
   /*
