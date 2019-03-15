@@ -8,7 +8,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Keyboard
+  Keyboard,
+  Platform
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Base from '../styles/Base';
@@ -282,7 +283,19 @@ export default class Map extends Component {
             longitude={location.coordinates._longitude}
             icon='map-marker'
             entrances={location.entrances}
-            onPress={() => this.toggleCallout(1)}>
+            onPress={(event) => {
+              /*
+               ** This is added for ios because whenever the onPress function is called it also calles the map onPress function
+               ** only available work around for this is to call event.stopPropagation();
+              */
+            if (Platform.OS === 'ios'){
+              event.stopPropagation();
+              this.toggleCallout(1);
+            } else {
+              this.toggleCallout(1);
+            }
+            //this.props.navigation.navigate('MarkerInfo', {data: this.state.userRegion});
+          }}>
             </MapMarker>
 
           )})}
