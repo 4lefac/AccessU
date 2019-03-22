@@ -44,7 +44,7 @@ export default class Settings extends Component {
           <Header style={{textAlign: 'center'}}>Settings</Header>
 
           <Section padding={true} margin={true} visible={true}>
-            <Text>All setting can go here.</Text>
+            <Text>Settings will go here</Text>
           </Section>
 
         </Section>

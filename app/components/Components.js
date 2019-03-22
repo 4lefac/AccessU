@@ -13,6 +13,12 @@ module.exports.Section = Section;
 import CardScroll from './CardScroll';
 module.exports.CardScroll = CardScroll;
 
+import CardTitle from './CardTitle';
+module.exports.CardTitle = CardTitle;
+
+import CardEntrance from './CardEntrance';
+module.exports.CardEntrance = CardEntrance;
+
 import Card from './Card';
 module.exports.Card = Card;
 

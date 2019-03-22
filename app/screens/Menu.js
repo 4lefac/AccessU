@@ -44,12 +44,14 @@ export default class Menu extends Component {
 
           <Header style={{textAlign: 'center'}}>AccessU v0.0.1</Header>
 
+          {/*
           <Section padding={true} margin={true} visible={true}>
             <Text style={{color: 'black',height: 20}}>Test text</Text>
           </Section>
           <Section padding={true} margin={true} visible={true}>
             <Text style={{color: 'black',height: 20}}>Test text 2</Text>
           </Section>
+          */}
 
         </Section>
 
