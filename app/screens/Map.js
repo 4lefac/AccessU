@@ -9,7 +9,8 @@ import {
   TextInput,
   TouchableOpacity,
   Keyboard,
-  AsyncStorage
+  AsyncStorage,
+  Platform
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Base from '../styles/Base';
@@ -389,7 +390,7 @@ export default class Map extends Component {
             longitude={location.coordinates._longitude}
             icon='map-marker'
             entrances={location.entrances}
-            onPress={() => {
+            onPress={(event) => {
               // dynamically set information
               this.cardTitle.setProps({
                 imageUri: location.imageUri,
@@ -397,8 +398,17 @@ export default class Map extends Component {
                 numEntrances: location.entrances.length,
                 desc: location.description,
               });
-
-              this.toggleCallout(1);
+              //this has to be here for ios to be able to open the custom callout view!!
+              if(Platform.OS == 'ios'){
+                  /*
+                   ** This is added for ios because whenever the onPress function is called it also calles the map onPress function
+                   ** only available work around for this is to call event.stopPropagation();
+                  */
+                event.stopPropagation(); 
+                this.toggleCallout(1);
+              } else {
+                this.toggleCallout(1);
+              }
             }}>
             </MapMarker>
 
