@@ -8,7 +8,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Keyboard
+  Keyboard,
+  AsyncStorage
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Base from '../styles/Base';
@@ -20,7 +21,8 @@ import {
   MapButton,
   MapMarker,
   CardScroll,
-  Card,
+  CardTitle,
+  CardEntrance,
   IconText,
   IconButton,
   Container,
@@ -41,7 +43,7 @@ const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.009;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const ANIMATE_TIME = 500;
-// initial position
+// initial user position
 let userRegion = {
   latitude : 39.998361,
   longitude: -83.00776,
@@ -49,6 +51,12 @@ let userRegion = {
   longitudeDelta: LONGITUDE_DELTA
 }
 let keyboardDelay = null;
+// title card information
+let cardTitle = {
+  title: "default title",
+}
+// extraneous modifier to make cached keys more specific
+const CACHE_KEY_MODIFIER = "AccessUData_";
 
 // Custom map styling can be generated using
 // https://mapstyle.withgoogle.com
@@ -82,6 +90,10 @@ export default class Map extends Component {
     super(props);
 
     this.state = {
+
+      // state is used only for the inital render of the position.
+      userRegion: userRegion,
+
       locations: [],
 
       topBarPos: new Animated.Value(styles.topBar.top),
@@ -100,6 +112,30 @@ export default class Map extends Component {
   }
 
   static navigationOptions = { header: null };
+
+  /*
+  ** Stores persistent data in local memory
+  */
+  async cacheData(key, item) {
+    try {
+      return await AsyncStorage.setItem(CACHE_KEY_MODIFIER + key, JSON.stringify(item));
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  /*
+  ** Get persistent data in local memory
+  */
+  async getCacheData(key) {
+    try {
+      return JSON.parse(
+        await AsyncStorage.getItem(CACHE_KEY_MODIFIER + key)
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
   /*
   ** Returns the last recorded user position
@@ -139,7 +175,8 @@ export default class Map extends Component {
   */
   goToUserRegion = (time) => {
     this.updateUserRegion();
-    this.map.animateToRegion(userRegion,time);
+    this.cacheData('userRegion', userRegion);
+    this.map.animateToRegion(userRegion, time);
   }
 
   /*
@@ -187,8 +224,8 @@ export default class Map extends Component {
   ** Toggles callout visibility based on a provided state value of 0 or 1.
   */
   toggleCallout = (state) => {
-    let cardScrollBottom = state ? 0 : -1 * height;
     // animate card
+    let cardScrollBottom = state ? 0 : -1 * height;
     Animated.timing(this.state.cardScrollPos, {
       toValue: cardScrollBottom,
       easing: Easing.linear(),
@@ -199,9 +236,9 @@ export default class Map extends Component {
   }
 
   toggleAdd = (state) => {
+    // animate top
     let addTopBarPos = state ? 0 : -1 * height;
     let addBottomBarPos = state ? styles.bottomBarNoPadding.bottom : -1 * height;
-    // animate top
     Animated.timing(this.state.addTopBarPos, {
       toValue: addTopBarPos,
       easing: Easing.linear(),
@@ -259,12 +296,30 @@ export default class Map extends Component {
   }
 
   /*
+  ** Called before the component has mounted.
+  */
+  componentWillMount() {
+    this.getLocations();
+
+    // use cached user region if available
+    this.getCacheData('userRegion').then(newUserRegion => {
+      if (newUserRegion) {
+        userRegion = newUserRegion;
+        this.setState({userRegion: newUserRegion});
+      } else {
+        this.setState({userRegion: userRegion});
+      }
+    })
+
+  }
+
+  /*
   ** Called once the display/view has been rendered to the screen.
   */
   componentDidMount() {
-
     if (this.state.locations.length == 0) this.getLocations();
     this.updateUserRegion();
+
 
     // announce approximated user location
     fetch("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + userRegion.latitude + "," + userRegion.longitude + "&key=" + API_KEY_MAP)
@@ -279,6 +334,15 @@ export default class Map extends Component {
       }
     })
     .catch((e) => { throw e });
+  }
+
+  /*
+  ** Called before the state is set to determine if an update is necessary.
+  */
+  shouldComponentUpdate(nextProps, nextState) {
+    //if (this.state.userRegion === nextState.userRegion) return false;
+    //else return true;
+    return true;
   }
 
   /*
@@ -298,7 +362,7 @@ export default class Map extends Component {
         <MapView
         provider={PROVIDER_GOOGLE}
         style={{flex: 1}}
-        region={userRegion}
+        region={this.state.userRegion}
         showsUserLocation={true}
         showsMyLocationButton={false}
         showsCompass={false}
@@ -325,7 +389,17 @@ export default class Map extends Component {
             longitude={location.coordinates._longitude}
             icon='map-marker'
             entrances={location.entrances}
-            onPress={() => this.toggleCallout(1)}>
+            onPress={() => {
+              // dynamically set information
+              this.cardTitle.setProps({
+                imageUri: location.imageUri,
+                title: location.name,
+                numEntrances: location.entrances.length,
+                desc: location.description,
+              });
+
+              this.toggleCallout(1);
+            }}>
             </MapMarker>
 
           )})}
@@ -336,13 +410,13 @@ export default class Map extends Component {
               <MapView.Circle
               key={entrance.locationID}
               center={{
-                latitude:entrance.coordinates._latitude,
-                longitude:entrance.coordinates._longitude
+              latitude:entrance.coordinates._latitude,
+              longitude:entrance.coordinates._longitude
               }}
-              radius={1}
-              fillColor="#000"
-              >
-              </MapView.Circle>
+              radius={2}
+              strokeColor={Theme.Color}
+              fillColor={Theme.Clear}
+              ></MapView.Circle>
 
             )})
           )})}
@@ -365,28 +439,23 @@ export default class Map extends Component {
           bottom: this.state.cardScrollPos,
           left: 0,
         }
-        ]}>
+        ]}
+        >
 
-          {/* title card */}
-          <Card
-          height={(height / 3)} width={(width) - 20} margin={10}
-          imageUri='https://www.laurenillumination.com/wp-content/uploads/2017/10/osu-campus-compressor.jpg'
-          title='Somewhere on campus'
+          <CardTitle
+          height={(height / 3)}
+          width={(width) - 20}
+          margin={10}
           style={{ marginBottom: 40 }}
-          >
-            <Text style={{fontWeight: 'bold'}}>5 accessible entrances</Text>
-
-            <Text>This is a really cool place to be so here's a great description.</Text>
-
-            <View style={{ position: 'absolute', right: 0, bottom: 0, padding: 10 }}>
-              <Text style={{fontSize: 12}}>Swipe to view entrances</Text>
-            </View>
-          </Card>
-
-
+          imageUri='thisShouldNeverDisplay.jpg'
+          title='entrance'
+          numEntrances={1}
+          desc='entrance description'
+          ref={ref => { this.cardTitle = ref }}
+          />
 
 {/* change key to iterative number */}
-            <Card
+            <CardEntrance
             key={1}
             height={(height / 3)} width={(width) - 20} margin={10}
             imageUri='https://media.gettyimages.com/photos/beautiful-wooden-door-picture-id137142928?s=612x612'
@@ -439,7 +508,7 @@ export default class Map extends Component {
 
                 </View>
               </View>
-            </Card>
+            </CardEntrance>
 
         </CardScroll>
 
@@ -463,7 +532,7 @@ export default class Map extends Component {
           <MapButton
           accessibilityLabel="Find Route"
           icon='road'
-          onPress={() => this.props.navigation.navigate('Route')}
+          onPress={() => {this.props.navigation.navigate('Route')}}
           />
 
         </Animated.View>
@@ -705,6 +774,12 @@ export default class Map extends Component {
 
       </View>
     );
+  }
+
+  /*
+  ** Called when the component is about to be destroyed
+  */
+  componentWillUnmount() {
   }
 
 }

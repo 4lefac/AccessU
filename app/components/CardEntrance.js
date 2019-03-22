@@ -31,18 +31,17 @@ const styles = {
   }
 };
 
-export default class Card extends Component {
+class CardEntrance extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      imageUri: this.props.imageUri,
       title: this.props.title,
     }
 
   }
 
-  setProps = (obj) => {
+  setProp = (obj) => {
     this.setState(obj);
   }
 
@@ -54,7 +53,7 @@ export default class Card extends Component {
       this.props.style]}
       >
 
-        <Image source={{uri: this.state.imageUri}}
+        <Image source={{uri: this.props.imageUri}}
         style={{ height: this.props.height * 0.4, width: this.props.width }}/>
 
         <View style={{ padding: 5, paddingTop: 0, flex: 1 }}>
@@ -70,3 +69,5 @@ export default class Card extends Component {
   }
 
 }
+
+export default CardEntrance;
