@@ -16,10 +16,10 @@
 
 
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Theme from '../styles/Theme';
-import {announceForAccessibility} from 'react-native-accessibility';
+import { announceForAccessibility } from 'react-native-accessibility';
 
 
 
@@ -34,9 +34,6 @@ class RadioButton extends Component {
     this.offIcon = this.props.offIcon || 'circle-thin';
     this.onIcon = this.props.onIcon || 'check-circle';
 
-    // call onToggle() based on defaut state
-    //this.props.onToggle(this.currentState);
-
     // set icon
     this.state = {
       icon: this.currentState ? this.onIcon : this.offIcon,
@@ -46,7 +43,6 @@ class RadioButton extends Component {
   }
 
   toggle = () => {
-
     /* set state */
     if (this.currentState) { // turn off
       this.currentState = 0;
@@ -69,24 +65,21 @@ class RadioButton extends Component {
 
     /* call onToggle prop function */
     this.props.onToggle(this.currentState);
-
   };
-
 
   render() {
     return (
-
       <View>
         <TouchableOpacity
         accessibilityLabel={this.props.accessibilityLabel}
-        style={[{flexDirection: 'row', alignItems: 'center'}, this.props.style]}
+        style={[{ flexDirection: 'row', alignItems: 'center' }, this.props.style]}
         onPress={this.toggle}
         >
-          <Icon style={{color: this.state.iconColor}} size={Theme.IconSize-10} name={this.state.icon} />
-          <View style={{marginLeft: 10}}>{this.props.children}</View>
+          <Icon name={this.state.icon} size={Theme.IconSize - 10}
+          style={{ color: this.state.iconColor }} />
+          <View style={{ marginLeft: 10 }}>{this.props.children}</View>
         </TouchableOpacity>
       </View>
-
     );
   }
 

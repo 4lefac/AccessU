@@ -12,12 +12,10 @@
 
 
 
-import React, { Component } from 'react';
+import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Theme from '../styles/Theme';
-
-
 
 const styles = {
   Button: {
@@ -32,30 +30,18 @@ const styles = {
   }
 };
 
-class MapButton extends Component {
 
-  constructor(props) {
-    super(props);
-  }
 
-  render() {
-    return (
-
-      <TouchableOpacity
-      style={[styles.Button, this.props.style]}
-      accessibilityLabel={this.props.accessibilityLabel}
-      onPress={this.props.onPress}
-      >
-        <Icon
-        style={[{textAlign: 'center'}, this.props.iconStyle]}
-        name={this.props.icon}
-        size={Theme.IconSize + 15}
-        />
-      </TouchableOpacity>
-
-    );
-  }
-
+const MapButton = (props) => {
+  return (
+    <TouchableOpacity
+    style={[styles.Button, props.style]}
+    accessibilityLabel={props.accessibilityLabel}
+    onPress={props.onPress}>
+      <Icon name={props.icon} size={Theme.IconSize + 15}
+      style={[{ textAlign: 'center' }, props.iconStyle]} />
+    </TouchableOpacity>
+  );
 }
 
 export default MapButton;

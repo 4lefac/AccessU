@@ -12,7 +12,6 @@ import {
   AsyncStorage
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
-import Base from '../styles/Base';
 import { announceForAccessibility } from 'react-native-accessibility';
 import { Routes } from '../api/Routes';
 import Theme from '../styles/Theme';
@@ -21,13 +20,11 @@ import {
   MapButton,
   MapMarker,
   CardScroll,
-  CardTitle,
-  CardEntrance,
   IconText,
   IconButton,
   Container,
   Section
-} from '../components/Components';
+} from '../components';
 // map
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 // location enable
@@ -86,32 +83,23 @@ const styles = EStyleSheet.create({
 
 
 export default class Map extends Component {
-  constructor(props) {
-    super(props);
+  state = {
+    // state is used only for the inital render of the position.
+    userRegion: userRegion,
 
-    this.state = {
+    locations: [],
 
-      // state is used only for the inital render of the position.
-      userRegion: userRegion,
+    topBarPos: new Animated.Value(styles.topBar.top),
+    bottomBarPos: new Animated.Value(styles.bottomBar.bottom),
 
-      locations: [],
+    searchBarTop: new Animated.Value(-1 * height),
+    searchResults: [],
 
-      topBarPos: new Animated.Value(styles.topBar.top),
-      bottomBarPos: new Animated.Value(styles.bottomBar.bottom),
+    addTopBarPos: new Animated.Value(-1 * height),
+    addBottomBarPos: new Animated.Value(-1 * height),
 
-      searchBarTop: new Animated.Value(-1 * height),
-      searchResults: [],
-
-      addTopBarPos: new Animated.Value(-1 * height),
-      addBottomBarPos: new Animated.Value(-1 * height),
-
-      cardScrollPos: new Animated.Value(-1 * height),
-
-    };
-
+    cardScrollPos: new Animated.Value(-1 * height),
   }
-
-  static navigationOptions = { header: null };
 
   /*
   ** Stores persistent data in local memory
@@ -224,6 +212,8 @@ export default class Map extends Component {
   ** Toggles callout visibility based on a provided state value of 0 or 1.
   */
   toggleCallout = (state) => {
+    // reset scroll
+    if (state) this.cardScroll.resetScroll();
     // animate card
     let cardScrollBottom = state ? 0 : -1 * height;
     Animated.timing(this.state.cardScrollPos, {
@@ -252,7 +242,7 @@ export default class Map extends Component {
     }).start();
     // toggle pin visibility
     this.pin.setNativeProps({
-      style: { zIndex: state ? 1 : -1 },
+      style: { zIndex: state ? 1 : -10 },
     })
     // animate top and bottom bar
     this.toggleTopBar(state ? 0 : 1);
@@ -352,6 +342,7 @@ export default class Map extends Component {
 
     return (
 
+      /* prevents soft keyboard from moving layout */
       <View onLayout={(e) => {
       var {height} = e.nativeEvent.layout; this.setState({height})
       }} style={[{position: 'absolute', top: 0, right: 0, bottom: -26, left: 0,
@@ -381,26 +372,25 @@ export default class Map extends Component {
 
           {this.state.locations.map( location => { return (
 
-            <MapMarker
+            <MapMarker icon='map-marker'
             key={location.id.toString()}
             id={location.id.toString()}
             accessibilityLabel={location.name}
             latitude={location.coordinates._latitude}
             longitude={location.coordinates._longitude}
-            icon='map-marker'
             entrances={location.entrances}
             onPress={() => {
-              // dynamically set information
-              this.cardTitle.setProps({
-                imageUri: location.imageUri,
-                title: location.name,
-                numEntrances: location.entrances.length,
-                desc: location.description,
+              // dynamically set CardScroll information
+              this.cardScroll.setupLocation({
+                cardTitleImageUri: location.imageUri,
+                cardTitleTitle: location.name,
+                cardTitleNumEntrances: location.entrances.length,
+                cardTitleDesc: location.description,
+                cardEntrances: location.entrances,
               });
-
+              // display CardScroll
               this.toggleCallout(1);
-            }}>
-            </MapMarker>
+            }} />
 
           )})}
 
@@ -408,10 +398,10 @@ export default class Map extends Component {
             location.entrances.map( entrance => { return (
 
               <MapView.Circle
-              key={entrance.locationID}
+              key={entrance.id}
               center={{
-              latitude:entrance.coordinates._latitude,
-              longitude:entrance.coordinates._longitude
+              latitude: entrance.coordinates._latitude,
+              longitude: entrance.coordinates._longitude
               }}
               radius={2}
               strokeColor={Theme.Color}
@@ -427,11 +417,9 @@ export default class Map extends Component {
 
         <CardScroll
         snapToInterval={width}
-        onScroll={Animated.event(
-        [{nativeEvent: { contentOffset: {
-          x: this.animation,
-        }}}], { useNativeDriver: true }
-        )}
+        cardHeight={(height / 3)}
+        cardWidth={(width) - 20}
+        cardMargin={10}
         style={[
         {
           position: 'absolute',
@@ -440,77 +428,9 @@ export default class Map extends Component {
           left: 0,
         }
         ]}
-        >
-
-          <CardTitle
-          height={(height / 3)}
-          width={(width) - 20}
-          margin={10}
-          style={{ marginBottom: 40 }}
-          imageUri='thisShouldNeverDisplay.jpg'
-          title='entrance'
-          numEntrances={1}
-          desc='entrance description'
-          ref={ref => { this.cardTitle = ref }}
-          />
-
-{/* change key to iterative number */}
-            <CardEntrance
-            key={1}
-            height={(height / 3)} width={(width) - 20} margin={10}
-            imageUri='https://media.gettyimages.com/photos/beautiful-wooden-door-picture-id137142928?s=612x612'
-            title='SW entrance'
-            style={{ marginBottom: 40}}
-            >
-              <Text>ramp accessible, electric door, all accessibility types</Text>
-              <View style={{
-                flex: 1,
-                flexDirection: 'column',
-                justifyContent: 'center',
-              }}>
-                <View style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-evenly',
-                }}>
-
-                  <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate('Route')
-                  }}>
-                    <IconText icon='map-signs' size={-1}
-                    style={{
-                      paddingTop: 5,
-                      paddingBottom: 5,
-                      paddingRight: 15,
-                      paddingLeft: 15,
-                      borderRadius: 6,
-                      borderWidth: 2,
-                      borderColor: Theme.Color,
-                    }}>Get Directions</IconText>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate('MarkerInfo')
-                  }}>
-                    <IconText icon='question-circle-o' size={-1}
-                    style={{
-                      paddingTop: 5,
-                      paddingBottom: 5,
-                      paddingRight: 15,
-                      paddingLeft: 15,
-                      borderRadius: 6,
-                      borderWidth: 2,
-                      borderColor: Theme.Color,
-                    }}
-                    >More Info</IconText>
-                  </TouchableOpacity>
-
-                </View>
-              </View>
-            </CardEntrance>
-
-        </CardScroll>
+        navigation={this.props.navigation}
+        ref={ref => { this.cardScroll = ref }}
+        />
 
         {/* TOP NAVIGATION BAR */}
 
@@ -691,7 +611,7 @@ export default class Map extends Component {
         style={{
         position: 'absolute',
         flex: 1,
-        zIndex: -1,
+        zIndex: -10,
         top: height / 2,
         left: width / 2,
         alignItems: 'center',
@@ -724,7 +644,7 @@ export default class Map extends Component {
 
           <View style={{flex: 0.9}}>
             <Text style={{padding: 15}}>
-              Drag the map to position the marker where you would like to add a location.
+              Drag the map to position the marker where you would like to add a location, or tap on an existing location to edit it.
             </Text>
           </View>
 
@@ -779,7 +699,6 @@ export default class Map extends Component {
   /*
   ** Called when the component is about to be destroyed
   */
-  componentWillUnmount() {
-  }
+  componentWillUnmount() {}
 
 }

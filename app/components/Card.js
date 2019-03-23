@@ -13,14 +13,8 @@
 
 import React, { Component } from 'react';
 import Header from './Header';
-import {
-  View,
-  Image,
-  Text
-} from 'react-native';
+import { View, Image } from 'react-native';
 import Theme from '../styles/Theme';
-
-
 
 const styles = {
   Card: {
@@ -31,15 +25,13 @@ const styles = {
   }
 };
 
+
+
 export default class Card extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      imageUri: this.props.imageUri,
-      title: this.props.title,
-    }
-
+  state = {
+    imageUri: this.props.imageUri,
+    title: this.props.title,
   }
 
   setProps = (obj) => {
@@ -51,18 +43,15 @@ export default class Card extends Component {
 
       <View style={[styles.Card, {height: this.props.height,
       width: this.props.width, margin: this.props.margin},
-      this.props.style]}
-      >
+      this.props.style]}>
 
         <Image source={{uri: this.state.imageUri}}
-        style={{ height: this.props.height * 0.4, width: this.props.width }}/>
+        style={{ height: this.props.height * 0.45, width: this.props.width }}/>
 
         <View style={{ padding: 5, paddingTop: 0, flex: 1 }}>
-
           <Header size={2} marginTopBottom={2}>{this.state.title}</Header>
           {this.props.children}
-
-          </View>
+        </View>
 
       </View>
 

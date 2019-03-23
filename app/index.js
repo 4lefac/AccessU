@@ -1,29 +1,52 @@
-
-
 import React, { Component } from 'react';
+import { Animated, Easing } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 
 // screens
 
 import Add from './screens/Add';
-import Filter from './screens/Filter';
 import Map from './screens/Map';
 import MarkerInfo from './screens/MarkerInfo';
 import Menu from './screens/Menu';
 import Route from './screens/Route';
 import Settings from './screens/Settings';
 
+// screen transition configuration
+
+const transitionConfig = () => {
+  return {
+    transitionSpec: {
+      duration: 450,
+      easing: Easing.out(Easing.poly(4)),
+      timing: Animated.timing,
+      useNativeDriver: true,
+    },
+    screenInterpolator: sceneProps => {
+      const { layout, position, scene } = sceneProps
+
+      const thisSceneIndex = scene.index
+      const width = layout.initWidth
+
+      const translateX = position.interpolate({
+        inputRange: [thisSceneIndex - 1, thisSceneIndex],
+        outputRange: [-1 * width, 0],
+      })
+
+      return { transform: [ { translateX } ] }
+    },
+  }
+}
 
 // Global style variables
+
 EStyleSheet.build();
 
-// screen navigator
+// stack navigator(s)
 
 const AppNavigator = createStackNavigator(
   {
     Add: Add,
-    Filter: Filter,
     Map: Map,
     MarkerInfo: MarkerInfo,
     Menu: Menu,
@@ -32,11 +55,17 @@ const AppNavigator = createStackNavigator(
   },
   {
     initialRouteName: 'Map',
+    transitionConfig,
+    defaultNavigationOptions: {
+      header: null,
+    },
   }
 )
 
 const AppContainer = createAppContainer(AppNavigator);
 
-export default class App extends Component {
+class App extends Component {
   render() { return <AppContainer /> }
 }
+
+export default App;

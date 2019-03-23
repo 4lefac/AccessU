@@ -9,34 +9,21 @@
 
 
 
-import React, { Component } from 'react';
+import React from 'react';
 import { View, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Theme from '../styles/Theme';
 
 
 
-class IconText extends Component {
-  constructor(props) {
-    super(props);
-
-    this.iconSize = this.props.size ?
-                    (Theme.IconSize + 10 * this.props.size) :
-                    Theme.IconSize;
-
-  }
-
-  render() {
-    return (
-
-      <View style={[{alignItems: 'center', flexDirection: 'row'}, this.props.style]}>
-        <Icon name={this.props.icon} size={this.iconSize} />
-        <Text style={{marginLeft: 10}}>{this.props.children}</Text>
-      </View>
-
-    );
-  }
-
+const IconText = (props) => {
+  let iconSize = props.size ? (Theme.IconSize+10*props.size) : Theme.IconSize;
+  return (
+    <View style={[{ alignItems: 'center', flexDirection: 'row' }, props.style]}>
+      <Icon name={props.icon} size={iconSize} />
+      <Text style={{ marginLeft: 10 }}>{props.children}</Text>
+    </View>
+  );
 }
 
 export default IconText;

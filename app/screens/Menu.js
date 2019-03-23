@@ -1,75 +1,55 @@
 import React, { Component } from 'react';
-import {
-  Text
-} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Base from '../styles/Base';
-import Theme from '../styles/Theme';
+import { Text } from 'react-native';
 import {
   Container,
   Section,
   Header,
   IconButton
-} from '../components/Components';
-import {announceForAccessibility} from 'react-native-accessibility';
-
-
+} from '../components';
+import Theme from '../styles/Theme';
+import { announceForAccessibility } from 'react-native-accessibility';
 
 const styles = {
-  Column: {
-    flex: 1,
-    alignItems: 'center',
-  },
-};
+  text: {
+    color: Theme.Color,
+    height: 20
+  }
+}
 
-export default class Menu extends Component {
 
-  constructor(props) {
-    super(props);
+
+class Menu extends Component {
+
+  state = {
+    // menu states
   }
 
-  static navigationOptions = { header: null };
-
   render() {
+    announceForAccessibility('Main menu');
 
     return (
 
       <Container grid='row'>
 
-        <Section
-        flex={0.7}
-        padding={true}
-        margin={true}
-        >
+        <Section flex={0.7} padding={true} margin={true}>
+          <Header style={{ textAlign: 'center' }}>AccessU v0.0.1</Header>
 
-          <Header style={{textAlign: 'center'}}>AccessU v0.0.1</Header>
-
-          {/*
           <Section padding={true} margin={true} visible={true}>
-            <Text style={{color: 'black',height: 20}}>Test text</Text>
+            <Text style={styles.text}>Welcome to the menu</Text>
           </Section>
-          <Section padding={true} margin={true} visible={true}>
-            <Text style={{color: 'black',height: 20}}>Test text 2</Text>
-          </Section>
-          */}
 
         </Section>
 
-        <Section
-        flex={0.3}
-        style={{justifyContent: 'space-between'}}
-        >
+        <Section flex={0.3} style={{ justifyContent: 'space-between' }}>
 
-          <IconButton
+          <IconButton icon='close'
           accessibilityLabel="Back to map"
           onPress={() => this.props.navigation.goBack()}
-          icon='close'
           />
 
-          <IconButton
+          <IconButton icon='gear'
           accessibilityLabel="Settings"
           onPress={() => this.props.navigation.navigate('Settings')}
-          icon='gear'
           />
 
         </Section>
@@ -80,3 +60,5 @@ export default class Menu extends Component {
   }
 
 }
+
+export default Menu;

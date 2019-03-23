@@ -1,29 +1,17 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity
-} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { Text } from 'react-native';
 import {
   Container,
   Section,
   IconButton
-} from '../components/Components';
-import Base from '../styles/Base';
-import {announceForAccessibility} from 'react-native-accessibility';
-import Theme from '../styles/Theme';
+} from '../components';
+import { announceForAccessibility } from 'react-native-accessibility';
 
-export default class Route extends Component {
 
-  constructor(props) {
-    super(props);
-  }
 
-  static navigationOptions = { header: null };
+class Route extends Component {
 
   render() {
-    const {navigate} = this.props.navigation;
 
     return (
 
@@ -33,11 +21,9 @@ export default class Route extends Component {
           <Text>this will include two search bars</Text>
         </Section>
 
-        <IconButton
+        <IconButton icon='close'
         accessibilityLabel="Back to map"
-        onPress={() => navigate('Map')}
-        icon='close'
-        />
+        onPress={() => this.props.navigation.goBack()} />
 
       </Container>
 
@@ -45,3 +31,5 @@ export default class Route extends Component {
   }
 
 }
+
+export default Route;

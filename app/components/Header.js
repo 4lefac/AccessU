@@ -9,10 +9,8 @@
 
 
 
-import React, { Component } from 'react';
+import React from 'react';
 import { Text } from 'react-native';
-
-
 
 const sizeFactor = {
   1: 10,
@@ -22,22 +20,17 @@ const sizeFactor = {
   5: 50,
 }
 
-export default class Header extends Component {
-  constructor(props) {
-    super(props);
 
-    this.size = this.props.size ? sizeFactor[this.props.size] : sizeFactor[3];
-    this.margin = this.props.marginTopBottom ?
-                  this.props.marginTopBottom : 10;
-   }
 
-  render() {
-    return (
-      <Text style={[{fontSize: this.size, fontWeight: 'bold',
-      marginTop: this.margin, marginBottom: this.margin }, this.props.style]}>
-        {this.props.children}
-      </Text>
-    );
-  }
-
+const Header = (props) => {
+  let size = props.size ? sizeFactor[props.size] : sizeFactor[3];
+  let margin = props.marginTopBottom ? props.marginTopBottom : 10;
+  return (
+    <Text style={[{ fontSize: size, fontWeight: 'bold', marginTop: margin,
+    marginBottom: margin }, props.style]}>
+      {props.children}
+    </Text>
+  );
 }
+
+export default Header;

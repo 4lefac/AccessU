@@ -29,22 +29,10 @@ module.exports.Routes = {
       .catch((error) => {
         console.error(error);
       });
-      // return {
-
-      //   // kept in JSON format in case we need to return future data
-      //   entrances:
-      //     db.ref('Entrances').once('value').then( snap => {
-      //       // returns a Promise
-      //       return snap.val()
-      //     }),
-
-      // };
-
     },
 
     //add an entrance data to the database. data has to be a json object or string doens't matter
   POST_Add: (data) => {
-    //console.log(JSON.stringify(opts));
     fetch(baseURL, {
       method: 'POST',
       body: JSON.stringify(data), // data can be `string` or {object}!

@@ -15,10 +15,7 @@
 
 
 import React, { Component } from 'react';
-import {
-  View,
-  Text
-} from 'react-native';
+import { View, Text } from 'react-native';
 import {
   Marker,
   Callout,
@@ -30,14 +27,8 @@ import Theme from '../styles/Theme';
 
 
 
-
-export default class MapMarker extends Component {
-  constructor(props) {
-    super(props);
-  }
-
+class MapMarker extends Component {
   render() {
-
     return (
       <Marker
       identifier={this.props.id}
@@ -55,18 +46,17 @@ export default class MapMarker extends Component {
         color={Theme.IconColorHighlight} />
 
         <Callout tooltip={true}>
-
           <View style={{width: 50, justifyContent: 'center',
           alignItems: 'center'}}>
-            <Icon name={this.props.icon} size={Theme.IconSize+5}
+            <Icon name={this.props.icon} size={Theme.IconSize + 5}
             color={Theme.IconColorHighlight2} />
           </View>
-
         </Callout>
 
       </Marker>
 
     );
   }
-
 }
+
+export default MapMarker;

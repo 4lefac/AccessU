@@ -13,11 +13,9 @@
 
 
 
-import React, { Component } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import Theme from '../styles/Theme';
-
-
 
 const styles = {
   Section: {
@@ -26,29 +24,18 @@ const styles = {
   }
 };
 
-class Section extends Component {
-  constructor(props) {
-    super(props);
 
-    this.padding = this.props.padding ? '2%' : 0;
-    this.margin = this.props.margin ? '2%' : 0;
-    this.flex = this.props.flex ? this.props.flex : 0;
-  }
 
-  render() {
-    return (
-
-      <View style={[
-      this.props.visible ? styles.Section : {},
-      { padding: this.padding, margin: this.margin, flex: this.flex },
-      this.props.style
-      ]}>
-        {this.props.children}
-      </View>
-
-    );
-  }
-
+const Section = (props) => {
+  let padding = props.padding ? '2%' : 0;
+  let margin = props.margin ? '2%' : 0;
+  let flex = props.flex ? props.flex : 0;
+  return (
+    <View style={[props.visible ? styles.Section : {},
+    { padding: padding, margin: margin, flex: flex }, props.style]}>
+      {props.children}
+    </View>
+  );
 }
 
 export default Section;
