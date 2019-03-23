@@ -9,7 +9,8 @@ import {
   TextInput,
   TouchableOpacity,
   Keyboard,
-  AsyncStorage
+  AsyncStorage,
+  Platform
 } from 'react-native';
 import EStyleSheet from 'react-native-extended-stylesheet';
 import { announceForAccessibility } from 'react-native-accessibility';
@@ -380,6 +381,12 @@ export default class Map extends Component {
             longitude={location.coordinates._longitude}
             entrances={location.entrances}
             onPress={() => {
+
+              if(Platform.OS == 'ios') event.stopPropagation();
+                  /*
+                   ** This is added for ios because whenever the onPress function is called it also calles the map onPress function
+                   ** only available work around for this is to call event.stopPropagation();
+                  */
               // dynamically set CardScroll information
               this.cardScroll.setupLocation({
                 cardTitleImageUri: location.imageUri,
