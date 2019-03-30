@@ -1,43 +1,33 @@
-/*
-** An IconButton is an icon component that acts as a button.
-**
-** Properties:
-**
-** accessibilityLabel - string. The label read by a screen reader.
-** icon - string. The name of the icon to be displayed. Required.
-** onPress - function. Called on press of button.
-*/
-
-
-
 import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import Theme from '../styles/Theme';
+import { TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Theme } from '../global';
 
 const styles = {
-  IconButtonTouch: {
+  IconButtonTouchableOpacity: {
     justifyContent: 'center',
     alignItems: 'center',
     padding: 5,
     aspectRatio: 1,
   },
+  IconButtonIcon: {
+    textAlign: 'center',
+    color: Theme.IconColor,
+  }
 };
 
-
-
 const IconButton = (props) => {
+  let iconColor = props.color ? props.color : Theme.Color;
   return (
     <TouchableOpacity
-    style={[styles.IconButtonTouch, props.style]}
+    style={[styles.IconButtonTouchableOpacity, props.style]}
     accessibilityLabel={props.accessibilityLabel}
     onPress={props.onPress}>
-      <Text>
-        <Icon name={props.icon} size={Theme.IconSize}
-        style={[{ textAlign: 'center', color: Theme.Color }, props.iconStyle]} />
-      </Text>
+      <Icon name={props.icon}
+      size={props.size ? props.size : Theme.IconSize}
+      style={[styles.IconButtonIcon, props.iconStyle, { color: iconColor }]} />
     </TouchableOpacity>
-  );
+  )
 }
 
 export default IconButton;

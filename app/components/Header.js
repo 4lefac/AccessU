@@ -1,14 +1,3 @@
-/*
-** A Header component is used to display title content.
-**
-** Properties:
-**
-** size - {1, 2, 3, 4, 5}. The size of the text. Default is 3.
-** marginTopBottom - integer. Amount of margin space above and below the text.
-*/
-
-
-
 import React from 'react';
 import { Text } from 'react-native';
 
@@ -19,8 +8,6 @@ const sizeFactor = {
   4: 40,
   5: 50,
 }
-
-
 
 const Header = (props) => {
   let size = props.size ? sizeFactor[props.size] : sizeFactor[3];

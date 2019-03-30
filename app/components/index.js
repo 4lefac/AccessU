@@ -1,41 +1,33 @@
 /*
-** A simple storage module containing all custom React-Native components.
+** A simple storage module containing all custom components
 */
 
-// layout components
+// map
 
-import Container from './Container';
-module.exports.Container = Container;
+export MapButton from './MapButton';
 
-import Section from './Section';
-module.exports.Section = Section;
+export MapCardScroll from './MapCardScroll';
 
-import CardScroll from './CardScroll';
-module.exports.CardScroll = CardScroll;
+export MapComponent from './MapComponent';
 
-import Card from './Card';
-module.exports.Card = Card;
+export MapMarker from './MapMarker';
 
-// text components
+export MapSearchBar from './MapSearchBar';
 
-import Header from './Header';
-module.exports.Header = Header;
+// layout
 
-import IconText from './IconText';
-module.exports.IconText = IconText;
+export Card from './Card';
 
-// interactive components
+export Header from './Header';
 
-import IconButton from './IconButton';
-module.exports.IconButton = IconButton;
+export Menu from './Menu';
 
-import RadioButton from './RadioButton';
-module.exports.RadioButton = RadioButton;
+export SideMenu from './SideMenu';
 
-// map components
+export TopBar from './TopBar';
 
-import MapButton from './MapButton';
-module.exports.MapButton = MapButton;
+// interactive
 
-import MapMarker from './MapMarker';
-module.exports.MapMarker = MapMarker;
+export IconButton from './IconButton';
+
+export IconTextButton from './IconTextButton';

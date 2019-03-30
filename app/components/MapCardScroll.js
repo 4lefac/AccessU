@@ -1,13 +1,3 @@
-/*
-** A CardScroll is a ScrollView containing the map's card elements.
-**
-** Properties:
-**
-** snapToInterval - inherited from ScrollView.
-*/
-
-
-
 import React, { Component } from 'react';
 import {
   Animated,
@@ -18,19 +8,19 @@ import {
 } from 'react-native';
 import {
   Card,
-  CardEntrance,
-  CardTitle,
-  IconText,
+  IconButton,
+  IconTextButton,
 } from './';
-import { Circle } from 'react-native-maps';
-import Theme from '../styles/Theme';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Theme } from '../global';
 
 const styles = {
+  card: { marginBottom: 60 },
   cardTitleTag: {
     position: 'absolute',
     right: 0,
     bottom: 0,
-    padding: 10
+    padding: 10,
   },
   entranceContainer: {
     flex: 1,
@@ -46,13 +36,11 @@ const styles = {
     paddingBottom: 5,
     paddingRight: 15,
     paddingLeft: 15,
-    borderRadius: 6,
+    borderRadius: 4,
     borderWidth: 2,
     borderColor: Theme.Color,
   }
 }
-
-
 
 class CardScroll extends Component {
   state = {
@@ -72,18 +60,16 @@ class CardScroll extends Component {
 
   /*
   ** Sets the state of each card within
-  ** the CardScroll based on an inputed state.
+  ** the MapCardScroll based on an inputed state.
   */
-  setupLocation = (state) => {
+  setupLocation = (newState) => {
     // set state
-    this.setState(state, () => {
-
+    this.setState(newState, () => {
       // title card
       this.cardTitle.setProps({
         title: this.state.cardTitleTitle,
         imageUri: this.state.cardTitleImageUri,
       });
-
     });
 
   }
@@ -101,74 +87,78 @@ class CardScroll extends Component {
         x: this.animation,
       }}}], { useNativeDriver: true }
       )}
-      style={[this.props.style]}
+      style={this.props.style}
       ref={ref => { this.scrollView = ref }}
       >
 
         {/* TITLE CARD */}
 
-        <Card
+        <Card style={styles.card}
         height={this.props.cardHeight}
         width={this.props.cardWidth}
         margin={this.props.cardMargin}
-        style={{ marginBottom: 40 }}
         imageUri={this.state.cardTitleImageUri}
         title={this.state.cardTitleTitle}
-        ref={ref => { this.cardTitle = ref }}
-        >
+        ref={ref => { this.cardTitle = ref }}>
           <Text style={{ fontWeight: 'bold' }}>
-          {this.state.cardTitleNumEntrances} accessible entrances
-          </Text>
+          {this.state.cardTitleNumEntrances} accessible entrances</Text>
           <Text>{this.state.cardTitleDesc}</Text>
-
+          <Text>Rating: (add rating here)</Text>
           <View style={styles.cardTitleTag}>
-            <Text style={{ fontSize: 12 }}>Swipe to view entrances</Text>
+            <Text style={{ fontSize: 12 }}>Swipe right to view entrances</Text>
           </View>
         </Card>
 
         {/* ENTRANCE CARD(S) */}
 
         {this.state.cardEntrances.map(entrance => { return (
-        <Card
-        key={entrance.id}
+        <Card key={entrance.id}
         height={this.props.cardHeight}
         width={this.props.cardWidth}
         margin={this.props.cardMargin}
         imageUri={entrance.imageUri}
         title={entrance.direction.toUpperCase() + ' entrance'}
-        style={{ marginBottom: 40}}
-        >
-          <Text>{entrance.keywords}</Text>
+        style={styles.card}>
+          <Text>Accessibility tags: {(() => {
+            let str = '';
+            for (let i in entrance.accessibilityTypes)
+              str = str + entrance.accessibilityTypes[i] + ', ';
+            return str.length > 0 ? str.slice(0, -2) : 'N/A';
+          })()}</Text>
           <View style={styles.entranceContainer}>
             <View style={styles.entranceContent}>
 
-              <TouchableOpacity
+              <IconTextButton icon='map'
+              fill={true}
+              backgroundColor={Theme.IconColorBackground}
+              accessibilityLabel='get directions'
               onPress={() => {
-                this.props.navigation.navigate('Route')
-              }}>
-                <IconText icon='map-signs' size={-1}
-                style={styles.entranceIcon}>Get Directions</IconText>
-              </TouchableOpacity>
+                alert('directions');
+              }}>Get directions</IconTextButton>
 
-              <TouchableOpacity
+              <IconButton icon='directions'
+              color={Theme.IconColorHighlight}
+              accessibilityLabel='open in Google Maps'
               onPress={() => {
-                this.props.navigation.navigate('MarkerInfo', {
-                  imageUri: entrance.imageUri,
-                })
-              }}>
-                <IconText icon='question-circle-o' size={-1}
-                style={styles.entranceIcon}>More Info</IconText>
-              </TouchableOpacity>
+                alert('google maps');
+              }} />
+
+              <IconTextButton icon='info'
+              fill={true}
+              backgroundColor={Theme.BackgroundColor}
+              color={Theme.Color}
+              accessibilityLabel='more info'
+              onPress={() => {
+                alert('more info');
+              }}>More info</IconTextButton>
 
             </View>
           </View>
         </Card>
         )})}
-
       </Animated.ScrollView>
-    );
+    )
   }
-
 }
 
 export default CardScroll;
