@@ -52,7 +52,7 @@ class TopBar extends Component {
 
         {/* SEARCH BAR */}
 
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1}}>
           <MapSearchBar />
         </View>
 

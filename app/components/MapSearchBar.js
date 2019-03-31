@@ -13,7 +13,7 @@ class MapSearchBar extends Component {
   render() {
     return (
       <TextInput
-      style={[{ fontSize: Theme.FontSize }, this.props.style]}
+      style={[{ fontSize: Theme.FontSize, marginTop: 13 }, this.props.style]}
       placeholder='Search'
       onChangeText={(text) => {
         this.setState({ text });
