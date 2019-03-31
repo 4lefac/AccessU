@@ -3,20 +3,10 @@ import {
   Animated,
   Dimensions,
   Keyboard,
-  //
-    PanResponder,
-    ScrollView,
-    Image,
-    Text,
-  //
   StatusBar,
   View,
 } from 'react-native';
 import {
-  //
-  Card,
-  DraggableView,
-  //
   MapButton,
   MapCardScroll,
   MapComponent,
@@ -32,9 +22,6 @@ import {
   Theme,
 } from '../global';
 import LocationSwitch from 'react-native-location-switch';
-//
-//import ViewOverflow from 'react-native-view-overflow';
-//
 import { Routes } from '../api/Routes';
 
 /*
@@ -256,7 +243,8 @@ class Map extends Component {
 
         {/* SIDE MENU */}
 
-        <SideMenu height={height} width={width} size={0.7}
+        <SideMenu userInfo={this.state.userInfo}
+        height={height} width={width} size={0.7}
         ref={ref => { this.SideMenu = ref }} />
 
 

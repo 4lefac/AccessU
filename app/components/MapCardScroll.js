@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {
   Animated,
+  Linking,
+  Platform,
   ScrollView,
   Text,
   TouchableOpacity,
@@ -15,7 +17,9 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Theme } from '../global';
 
 const styles = {
-  card: { marginBottom: 60 },
+  ScrollView: {
+    marginBottom: 30,
+  },
   cardTitleTag: {
     position: 'absolute',
     right: 0,
@@ -31,18 +35,9 @@ const styles = {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
   },
-  entranceIcon: {
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingRight: 15,
-    paddingLeft: 15,
-    borderRadius: 4,
-    borderWidth: 2,
-    borderColor: Theme.Color,
-  }
 }
 
-class CardScroll extends Component {
+class MapCardScroll extends Component {
   state = {
     cardTitleImageUri: 'placeholder.jpg',
     cardTitleTitle: 'location',
@@ -87,13 +82,13 @@ class CardScroll extends Component {
         x: this.animation,
       }}}], { useNativeDriver: true }
       )}
-      style={this.props.style}
+      style={[this.props.style, styles.ScrollView]}
       ref={ref => { this.scrollView = ref }}
       >
 
         {/* TITLE CARD */}
 
-        <Card style={styles.card}
+        <Card
         height={this.props.cardHeight}
         width={this.props.cardWidth}
         margin={this.props.cardMargin}
@@ -117,8 +112,7 @@ class CardScroll extends Component {
         width={this.props.cardWidth}
         margin={this.props.cardMargin}
         imageUri={entrance.imageUri}
-        title={entrance.direction.toUpperCase() + ' entrance'}
-        style={styles.card}>
+        title={entrance.direction.toUpperCase() + ' entrance'}>
           <Text>Accessibility tags: {(() => {
             let str = '';
             for (let i in entrance.accessibilityTypes)
@@ -140,7 +134,25 @@ class CardScroll extends Component {
               color={Theme.IconColorHighlight}
               accessibilityLabel='open in Google Maps'
               onPress={() => {
-                alert('google maps');
+                // from https://stackoverflow.com/questions/43214062/open-maps-google-maps-in-react-native
+                const scheme = Platform.select({
+                  ios: 'maps:0,0?q=',
+                  android: 'geo:0,0?q='
+                });
+
+                let lat = entrance.coordinates._latitude;
+                let lng = entrance.coordinates._longitude;
+                const latLng = `${lat},${lng}`;
+
+                const label = this.state.cardTitleTitle + ' '
+                + entrance.direction.toUpperCase() + ' entrance';
+
+                const url = Platform.select({
+                  ios: `${scheme}${label}@${latLng}`,
+                  android: `${scheme}${latLng}(${label})`
+                });
+
+                Linking.openURL(url);
               }} />
 
               <IconTextButton icon='info'
@@ -161,4 +173,4 @@ class CardScroll extends Component {
   }
 }
 
-export default CardScroll;
+export default MapCardScroll;

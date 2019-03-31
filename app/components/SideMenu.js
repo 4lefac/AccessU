@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import {
+  Text,
+  View
+} from 'react-native';
 import { Menu } from './';
 import { Theme } from '../global';
 
@@ -7,6 +10,7 @@ const styles = {
   ViewContainer: {
     flex: 1,
     backgroundColor: Theme.BackgroundColorContent,
+    padding: 10,
   },
 }
 
@@ -23,9 +27,12 @@ class SideMenu extends Component {
       width={this.props.width}
       size={this.props.size}
       ref={ref => { this.Menu = ref }}>
-        <View
-        style={styles.ViewContainer}>
-
+        <View style={styles.ViewContainer}>
+        {this.props.userInfo ? (
+          <Text>All logged in!</Text>
+        ) : (
+          <Text>Sorry, gotta log in.</Text>
+        )}
         </View>
       </Menu>
     )
