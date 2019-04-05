@@ -10,6 +10,8 @@ export MapCardScroll from './MapCardScroll';
 
 export MapComponent from './MapComponent';
 
+export MapEntrances from './MapEntrances';
+
 export MapMarker from './MapMarker';
 
 export MapSearchBar from './MapSearchBar';

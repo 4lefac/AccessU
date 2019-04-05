@@ -4,6 +4,7 @@ import {
   Linking,
   Platform,
   ScrollView,
+  StatusBar,
   Text,
   TouchableOpacity,
   View,
@@ -18,13 +19,19 @@ import { Theme } from '../global';
 
 const styles = {
   ScrollView: {
-    marginBottom: 30,
+    marginBottom: StatusBar.currentHeight ?
+                  30 + StatusBar.currentHeight : 30,
   },
   cardTitleTag: {
     position: 'absolute',
     right: 0,
     bottom: 0,
     padding: 10,
+  },
+  cardTitleTagText: {
+    fontWeight: 'bold',
+    fontSize: Theme.fontSize * 1.2,
+    color: Theme.IconColorHighlight,
   },
   entranceContainer: {
     flex: 1,
@@ -47,6 +54,11 @@ class MapCardScroll extends Component {
   }
 
   /*
+  ** Keeps track of which card is on display.
+  */
+  cardIndex = 0;
+
+  /*
   ** Resets the scroll position back to the start.
   */
   resetScroll = () => {
@@ -64,27 +76,29 @@ class MapCardScroll extends Component {
       this.cardTitle.setProps({
         title: this.state.cardTitleTitle,
         imageUri: this.state.cardTitleImageUri,
-      });
-    });
+      })
+    })
+  }
 
+  handleScroll = (e) => {
+    let index = Math.floor(e.nativeEvent.contentOffset.x / this.props.cardWidth);
+    if (index != this.cardIndex) {
+      this.cardIndex = index;
+      this.props.thisRef.MapComponent.MapEntrances.setActiveEntrance(this.cardIndex);
+    }
   }
 
   render() {
     return (
-      <Animated.ScrollView horizontal scrollEventThrottle={1}
+      <Animated.ScrollView horizontal scrollEventThrottle={100}
       showsHorizontalScrollIndicator={false}
       snapToInterval={this.props.snapToInterval}
       snapToAlignment='center'
       decelerationRate={0.75}
       contentContainerStyle={{ justifyContent: 'center', alignItems: 'center' }}
-      onScroll={Animated.event(
-      [{nativeEvent: { contentOffset: {
-        x: this.animation,
-      }}}], { useNativeDriver: true }
-      )}
+      onScroll={this.handleScroll}
       style={[this.props.style, styles.ScrollView]}
-      ref={ref => { this.scrollView = ref }}
-      >
+      ref={ref => { this.scrollView = ref }}>
 
         {/* TITLE CARD */}
 
@@ -100,7 +114,8 @@ class MapCardScroll extends Component {
           <Text>{this.state.cardTitleDesc}</Text>
           <Text>Rating: (add rating here)</Text>
           <View style={styles.cardTitleTag}>
-            <Text style={{ fontSize: 12 }}>Swipe right to view entrances</Text>
+            <Text style={styles.cardTitleTagText}>
+              Swipe right to view entrances</Text>
           </View>
         </Card>
 
@@ -134,7 +149,6 @@ class MapCardScroll extends Component {
               color={Theme.IconColorHighlight}
               accessibilityLabel='open in Google Maps'
               onPress={() => {
-                // from https://stackoverflow.com/questions/43214062/open-maps-google-maps-in-react-native
                 const scheme = Platform.select({
                   ios: 'maps:0,0?q=',
                   android: 'geo:0,0?q='

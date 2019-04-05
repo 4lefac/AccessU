@@ -131,7 +131,7 @@ class Map extends Component {
     });
     // cache user region
     CacheData('userRegion', userRegion);
-    this.MapComponent.animateToRegion(userRegion, duration);
+    this.MapView.animateToRegion(userRegion, duration);
   }
 
   /*
@@ -142,6 +142,8 @@ class Map extends Component {
     Keyboard.dismiss();
     // toggle card scroll
     this.toggleCardScroll(0);
+    // clear entrances
+    this.MapComponent.MapEntrances.setEntrances([]);
   }
 
   /*
@@ -195,8 +197,10 @@ class Map extends Component {
         this.updateUserRegion(e.nativeEvent.coordinate)}
         locations={this.state.locations}
         onPress={this.mapPress}
+        cardWidth={width}
         thisRef={this}
-        _ref={ref => { this.MapComponent = ref }} />
+        ref={ref => { this.MapComponent = ref }}
+        _ref={_ref => { this.MapView = _ref }} />
 
         {/* TOP BAR */}
 
@@ -204,8 +208,7 @@ class Map extends Component {
         { top: this.state.barTopPos }]}>
           <TopBar userInfo={this.state.userInfo}
           _ref={ref => { this.TopBar = ref }}
-          thisRef={this}
-          />
+          thisRef={this} />
         </Animated.View>
 
         {/* BOTTOM BAR */}
@@ -239,7 +242,8 @@ class Map extends Component {
         cardWidth={width - 20}
         cardMargin={10}
         navigation={this.props.navigation}
-        ref={ref => { this.MapCardScroll = ref }} />
+        ref={ref => { this.MapCardScroll = ref }}
+        thisRef={this} />
 
         {/* SIDE MENU */}
 

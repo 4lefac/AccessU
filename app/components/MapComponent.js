@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
 import {
+  Animated,
+  View,
+} from 'react-native';
+import {
+  MapEntrances,
   MapMarker,
 } from './';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
@@ -28,6 +32,9 @@ class MapComponent extends Component {
       onUserLocationChange={this.props.onUserLocationChange}
       onPress={this.props.onPress}
       ref={this.props._ref}>
+
+      {/* MARKERS */}
+
       {this.props.locations.map(location => { return (
         <MapMarker icon='place'
         key={location.id.toString()}
@@ -48,11 +55,18 @@ class MapComponent extends Component {
             cardTitleDesc: location.description,
             cardEntrances: location.entrances,
           });
+          // set map entrances
+          this.MapEntrances.setEntrances(location.entrances);
           // toggle card scroll
           map.toggleCardScroll(1);
-        }}
-        />
+        }} />
       )})}
+
+      {/* ENTRANCES */}
+
+      <MapEntrances cardWidth={this.props.cardWidth} thisRef={this}
+      ref={ref => { this.MapEntrances = ref }} />
+
       </MapView>
     )
   }

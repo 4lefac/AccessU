@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
 import {
   Keyboard,
+  Platform,
   TextInput
 } from 'react-native';
 import { Theme } from '../global';
+
+const styles = {
+  TextInput: {
+    fontSize: Theme.FontSize,
+    marginTop: Platform.OS === 'ios' ? 13 : 0,
+  },
+}
 
 class MapSearchBar extends Component {
   state = {
@@ -13,7 +21,7 @@ class MapSearchBar extends Component {
   render() {
     return (
       <TextInput
-      style={[{ fontSize: Theme.FontSize, marginTop: 13 }, this.props.style]}
+      style={[styles.TextInput, this.props.style]}
       placeholder='Search'
       onChangeText={(text) => {
         this.setState({ text });
