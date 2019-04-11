@@ -57,8 +57,11 @@ class MapComponent extends Component {
           });
           // set map entrances
           this.MapEntrances.setEntrances(location.entrances);
+
           // toggle card scroll
-          map.toggleCardScroll(1);
+          if (!map.AddPanels.state.bIsOpen) map.toggleCardScroll(1);
+          else map.AddPanels.setState({ location: location });
+
         }} />
       )})}
 

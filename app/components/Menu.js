@@ -65,6 +65,7 @@ class Menu extends Component {
       style={[styles.AnimatedView, { backgroundColor: color }]}>
         <Animated.ScrollView horizontal pointerEvents='box-none'
         scrollEventThrottle={100}
+        decelerationRate='fast'
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         snapToInterval={this.props.width * this.props.size}

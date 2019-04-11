@@ -21,21 +21,21 @@ const styles = {
 }
 
 const IconTextButton = (props) => {
-  let textColor = props.fill ?
-    Theme.BackgroundColorContent : Theme.Color;
-  if (props.color) textColor = props.color;
+  let bgColor = props.backgroundColor ? props.backgroundColor :
+  Theme.BackgroundColorContent;
   return (
     <TouchableOpacity
     style={[styles.IconButtonTouchableOpacity, props.style,
-    props.fill ? { backgroundColor: props.backgroundColor } : {}]}
+    props.fill ? { backgroundColor: props.color } : {
+    borderWidth: 1, borderColor: props.color, borderStyle: 'solid' }]}
     accessibilityLabel={props.accessibilityLabel}
     onPress={props.onPress}>
 
       <Icon name={props.icon} size={Theme.IconSize}
       style={[styles.IconButtonIcon, props.iconStyle,
-      { color: textColor }]} />
+      { color: props.fill ? bgColor : props.color }]} />
 
-      <Text style={{ color: textColor }}>
+      <Text style={{ color: props.fill ? bgColor : props.color }}>
       {props.children}</Text>
 
     </TouchableOpacity>

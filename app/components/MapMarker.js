@@ -41,11 +41,11 @@ class MapMarker extends Component {
 
         {/* icon highlight */}
         <Callout tooltip={true}>
-          <View style={styles.CalloutView}>
+          <View pointerEvents='none' style={styles.CalloutView}>
 
             <Icon name={this.props.icon} size={Theme.IconSize + 10}
             color={Theme.IconColorHighlight2} />
-            
+
           </View>
         </Callout>
 

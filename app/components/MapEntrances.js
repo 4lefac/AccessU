@@ -35,7 +35,7 @@ class MapEntrances extends Component {
             latitude:entrance.coordinates._latitude,
             longitude:entrance.coordinates._longitude
           }}
-          radius={bIsActive ? 4 : 2}
+          radius={bIsActive ? 6 : 2}
           strokeColor={bIsActive ? Theme.IconColorBackground :
           Theme.IconColorHighlight} strokeWidth={2}
           fillColor={bIsActive ? Theme.IconColorBackground : Theme.Clear} />

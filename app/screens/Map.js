@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import {
+  AddPanels,
   MapButton,
   MapCardScroll,
   MapComponent,
@@ -84,7 +85,6 @@ const styles = {
 */
 
 class Map extends Component {
-
   state = {
     // used for initial component mount
     userRegion: userRegion,
@@ -144,6 +144,10 @@ class Map extends Component {
     this.toggleCardScroll(0);
     // clear entrances
     this.MapComponent.MapEntrances.setEntrances([]);
+
+    // clear add panel selected location
+    if (this.AddPanels.state.location)
+      this.AddPanels.setState({ location: null });
   }
 
   /*
@@ -221,9 +225,7 @@ class Map extends Component {
               backgroundColor={Theme.IconColorBackground}
               color={Theme.BackgroundColorContent}
               accessibilityLabel='add or edit entrances'
-              onPress={() => {
-                alert('add');
-              }} />
+              onPress={() => this.AddPanels.openPanels()} />
             ) : (<View></View>) }
           </View>
           <View style={styles.mapButtonContainer}>
@@ -251,30 +253,10 @@ class Map extends Component {
         height={height} width={width} size={0.7}
         ref={ref => { this.SideMenu = ref }} />
 
+        {/* ADD MENU */}
 
-{/*
-        Icons to use:
-        <Icon name='add-a-photo'/>
-        <Icon name='add-circle'/>
-        <Icon name='add-location'/>
-        <Icon name='close'/>
-        <Icon name='comment'/>
-        <Icon name='directions'/>
-        <Icon name='directions-walk'/>
-        <Icon name='directions-car'/>
-        <Icon name='edit-location'/>
-        <Icon name='gps-fixed'/>
-        <Icon name='gps-not-fixed'/>
-        <Icon name='location-on'/>
-        <Icon name='mic'/>
-        <Icon name='my-location'/>
-        <Icon name='person-pin-circle'/>
-        <Icon name='pin-drop'/>
-        <Icon name='star'/>
-        <Icon name='star-border'/>
-        <Icon name='star-half'/>
-        <Icon name='stars'/>
-*/}
+        <AddPanels thisRef={this}
+        ref={ref => { this.AddPanels = ref }} />
 
       </View>
     )

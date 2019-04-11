@@ -4,6 +4,10 @@
 
 // map
 
+export AddModal from './AddModal';
+
+export AddPanels from './AddPanels';
+
 export MapButton from './MapButton';
 
 export MapCardScroll from './MapCardScroll';
@@ -29,6 +33,8 @@ export SideMenu from './SideMenu';
 export TopBar from './TopBar';
 
 // interactive
+
+export FormTextInput from './FormTextInput';
 
 export IconButton from './IconButton';
 

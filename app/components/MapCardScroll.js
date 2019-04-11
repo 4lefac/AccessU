@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import {
   Card,
-  IconButton,
   IconTextButton,
 } from './';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -139,13 +138,13 @@ class MapCardScroll extends Component {
 
               <IconTextButton icon='map'
               fill={true}
-              backgroundColor={Theme.IconColorBackground}
+              color={Theme.IconColorBackground}
               accessibilityLabel='get directions'
               onPress={() => {
                 alert('directions');
               }}>Get directions</IconTextButton>
 
-              <IconButton icon='directions'
+              <IconTextButton icon='directions'
               color={Theme.IconColorHighlight}
               accessibilityLabel='open in Google Maps'
               onPress={() => {
@@ -171,8 +170,8 @@ class MapCardScroll extends Component {
 
               <IconTextButton icon='info'
               fill={true}
-              backgroundColor={Theme.BackgroundColor}
-              color={Theme.Color}
+              color={Theme.BackgroundColor}
+              backgroundColor={Theme.Color}
               accessibilityLabel='more info'
               onPress={() => {
                 alert('more info');
