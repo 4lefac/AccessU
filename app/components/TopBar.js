@@ -29,7 +29,6 @@ const styles = {
 
 class TopBar extends Component {
   state = {
-
   }
 
   render() {
@@ -52,8 +51,8 @@ class TopBar extends Component {
 
         {/* SEARCH BAR */}
 
-        <View style={{ flex: 1}}>
-          <MapSearchBar />
+        <View style={{ flex: 1 }}>
+          <MapSearchBar thisRef={this} />
         </View>
 
         {/* SETTINGS */}

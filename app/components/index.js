@@ -20,6 +20,8 @@ export MapMarker from './MapMarker';
 
 export MapSearchBar from './MapSearchBar';
 
+export MapSearchResults from './MapSearchResults';
+
 // layout
 
 export Card from './Card';

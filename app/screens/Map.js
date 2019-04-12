@@ -12,6 +12,7 @@ import {
   MapCardScroll,
   MapComponent,
   MapSearchBar,
+  MapSearchResults,
   SideMenu,
   TopBar,
 } from '../components';
@@ -96,6 +97,7 @@ class Map extends Component {
     userInfo: {},
 
     barTopPos: new Animated.Value(styles.barTopPos.top),
+    searchBarTopPos: new Animated.Value(styles.barTopPos.top + 0.065 * height),
     barBottomPos: new Animated.Value(styles.barBottomPos.bottom),
 
     cardScrollBottomPos: new Animated.Value(-1 * height),
@@ -135,6 +137,19 @@ class Map extends Component {
   }
 
   /*
+  ** animates to a region
+  */
+  goToRegion = (lat, lng, duration) => {
+    let time = duration || ANIMATE_TIME;
+    this.MapView.animateToRegion({
+      latitude: lat,
+      longitude: lng,
+      latitudeDelta: LATITUDE_DELTA,
+      longitudeDelta: LONGITUDE_DELTA
+    }, time);
+  }
+
+  /*
   ** event when map is pressed
   */
   mapPress = () => {
@@ -155,6 +170,10 @@ class Map extends Component {
   */
   toggleBars = (state) => {
     Animate(this.state.barTopPos, state ? styles.barTopPos.top : -1 * height);
+
+    Animate(this.state.searchBarTopPos, state ? styles.barTopPos.top + 0.065
+    * height : -1 * height);
+
     Animate(this.state.barBottomPos,
     state ? styles.barBottomPos.bottom : -1 * height);
   }
@@ -213,6 +232,14 @@ class Map extends Component {
           <TopBar userInfo={this.state.userInfo}
           _ref={ref => { this.TopBar = ref }}
           thisRef={this} />
+        </Animated.View>
+
+        {/* SEARCH RESULTS */}
+
+        <Animated.View pointerEvents='box-none' style={[styles.bar,
+        { height: height, top: this.state.searchBarTopPos }]}>
+          <MapSearchResults thisRef={this}
+          ref={ref => { this.MapSearchResults = ref }} />
         </Animated.View>
 
         {/* BOTTOM BAR */}
