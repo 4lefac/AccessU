@@ -19,8 +19,7 @@ const styles = {
 }
 
 class MapMarker extends Component {
-  state = {
-  }
+  state = {}
 
   render() {
     return (

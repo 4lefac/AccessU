@@ -30,6 +30,8 @@ export Header from './Header';
 
 export Menu from './Menu';
 
+export Settings from './Settings';
+
 export SideMenu from './SideMenu';
 
 export TopBar from './TopBar';

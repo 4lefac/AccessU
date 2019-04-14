@@ -35,25 +35,69 @@ const styles = {
 
 class Menu extends Component {
   state = {
-    menuLeftPos: new Animated.Value(-1 * this.props.width),
+    menuLRPos: new Animated.Value(-1 * this.props.width),
+    menuTBPos: new Animated.Value(-1 * this.props.height),
     menuBGOpacity: new Animated.Value(0),
   }
 
   scrollEnd = event => {
     let xPos = event.nativeEvent.contentOffset.x;
-    if (xPos > this.props.width * this.props.size * 0.4) this.close();
+    let yPos = event.nativeEvent.contentOffset.y;
+
+    if (this.props.from == 'left') {
+      if (xPos > this.props.width * this.props.size * 0.4) this.close();
+    }
+    else if (this.props.from == 'right') {
+      if (xPos < this.props.width * this.props.size * 0.4) this.close();
+    }
+    else if (this.props.from == 'top') {
+      if (yPos > this.props.height * this.props.size * 0.4) this.close();
+    }
+    else {
+      if (yPos < this.props.height * this.props.size * 0.4) this.close();
+    }
   }
 
   open = () => {
-    this.ScrollView.getNode().scrollTo({ x: 0, y: 0, animated: false });
-    Animate(this.state.menuLeftPos, 0, ANIMATE_TIME / 2);
+
+    if (this.props.from == 'left' || this.props.from == 'top') {
+      this.ScrollView.getNode().scrollTo({ x: 0, y: 0, animated: false });
+    } else {
+      this.ScrollView.getNode().scrollToEnd({ animated: false });
+    }
+
+    Animate(this.state.menuLRPos, 0, ANIMATE_TIME / 2);
+    Animate(this.state.menuTBPos, 0, ANIMATE_TIME / 2);
     Animate(this.state.menuBGOpacity, 1, ANIMATE_TIME / 2);
   }
 
   close = () => {
-    Animate(this.state.menuLeftPos, -1 * this.props.width, ANIMATE_TIME / 2);
+    Animate(this.state.menuLRPos, -1 * this.props.width, ANIMATE_TIME / 2);
+    Animate(this.state.menuTBPos, -1 * this.props.height, ANIMATE_TIME / 2);
     Animate(this.state.menuBGOpacity, 0, ANIMATE_TIME / 2);
   }
+
+  MenuView = (
+    <View style={
+      this.props.from == 'left' || this.props.from == 'right' ? {
+        height: this.props.height,
+        width: this.props.width * this.props.size,
+        elevation: 5,
+      } : {
+        height: this.props.height * this.props.size,
+        width: this.props.width,
+        elevation: 5,
+      }}>{this.props.children}</View>
+  )
+
+  HiddenHandler = (
+    <TouchableWithoutFeedback onPress={() => this.close()}>
+      <View style={{
+        height: this.props.height,
+        width: this.props.width,
+      }}></View>
+    </TouchableWithoutFeedback>
+  )
 
   render() {
     let color = this.state.menuBGOpacity.interpolate({
@@ -63,12 +107,19 @@ class Menu extends Component {
     return (
       <Animated.View pointerEvents='box-none'
       style={[styles.AnimatedView, { backgroundColor: color }]}>
-        <Animated.ScrollView horizontal pointerEvents='box-none'
+        <Animated.ScrollView
+        pointerEvents='box-none'
+        horizontal={this.props.from == 'left' || this.props.from == 'right'}
+        vertical={this.props.from == 'top' || this.props.from == 'bottom'}
         scrollEventThrottle={100}
         decelerationRate='fast'
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
-        snapToInterval={this.props.width * this.props.size}
+        snapToInterval={
+          (this.props.from == 'left' || this.props.from == 'right') ?
+          (this.props.width * this.props.size) :
+          (this.props.height * this.props.size)
+        }
         snapToAlignment='center'
         contentContainerStyle={styles.ScrollViewContentContainerStyle}
         onScroll={this.scrollEnd}
@@ -77,27 +128,19 @@ class Menu extends Component {
         style={[styles.ScrollView, {
           height: this.props.height,
           width: this.props.width,
-          left: this.state.menuLeftPos
+        }, {
+          left: this.props.from == 'left' ? this.state.menuLRPos : null,
+          right: this.props.from == 'right' ? this.state.menuLRPos : null,
+          top: this.props.from == 'top' ? this.state.menuTBPos : null,
+          bottom: this.props.from == 'bottom' ? this.state.menuTBPos : null,
         }]}
         ref={ref => { this.ScrollView = ref }}>
 
-          {/* menu view */}
+          {this.props.from == 'left' || this.props.from == 'top' ?
+          this.MenuView : this.HiddenHandler}
 
-          <View style={{
-            height: this.props.height,
-            width: this.props.width * this.props.size,
-            elevation: 5,
-          }}>{this.props.children}</View>
-
-          {/* hidden menu close handler */}
-
-          <TouchableWithoutFeedback onPress={() => this.close()}>
-            <View style={{
-              height: this.props.height,
-              width: this.props.width,
-            }}></View>
-          </TouchableWithoutFeedback>
-
+          {this.props.from == 'left' || this.props.from == 'top' ?
+          this.HiddenHandler : this.MenuView}
 
         </Animated.ScrollView>
       </Animated.View>

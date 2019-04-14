@@ -61,7 +61,8 @@ class TopBar extends Component {
           <IconButton icon='settings'
           accessibilityLabel='settings'
           onPress={() => {
-            alert('settings');
+            Keyboard.dismiss();
+            this.props.thisRef.Settings.open();
           }} />
         </View>
 

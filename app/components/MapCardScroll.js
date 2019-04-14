@@ -50,6 +50,8 @@ class MapCardScroll extends Component {
     cardTitleNumEntrances: 1,
     cardTitleDesc: 'location description',
     cardEntrances: [],
+
+    rating: [1,1,1,1,0],
   }
 
   /*
@@ -111,7 +113,13 @@ class MapCardScroll extends Component {
           <Text style={{ fontWeight: 'bold' }}>
           {this.state.cardTitleNumEntrances} accessible entrances</Text>
           <Text>{this.state.cardTitleDesc}</Text>
-          <Text>Rating: (add rating here)</Text>
+          <Text>Rating: {this.state.rating.map((star, index) => { return (
+            <Text key={index}>{star ? (
+              <Icon name='star' size={Theme.FontSize} />
+            ) : (
+              <Icon name='star-border' size={Theme.FontSize} />
+            )}</Text>
+          )})}</Text>
           <View style={styles.cardTitleTag}>
             <Text style={styles.cardTitleTagText}>
               Swipe right to view entrances</Text>
@@ -141,7 +149,9 @@ class MapCardScroll extends Component {
               color={Theme.IconColorBackground}
               accessibilityLabel='get directions'
               onPress={() => {
-                alert('directions');
+                alert('get directions to ' + JSON.stringify(
+                  entrance.coordinates
+                ));
               }}>Get directions</IconTextButton>
 
               <IconTextButton icon='directions'

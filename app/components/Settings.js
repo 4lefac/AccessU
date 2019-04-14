@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
 import {
   Text,
-  View
+  View,
 } from 'react-native';
-import { Menu } from './';
+import {
+  Menu,
+} from './';
 import { Theme } from '../global';
 
 const styles = {
   ViewContainer: {
     flex: 1,
     backgroundColor: Theme.BackgroundColorContent,
-    padding: 10,
+    borderRadius: 10,
   },
 }
 
-class SideMenu extends Component {
-  state = {}
+class Settings extends Component {
 
   open = () => this.Menu.open();
 
@@ -25,7 +26,7 @@ class SideMenu extends Component {
       height={this.props.height}
       width={this.props.width}
       size={this.props.size}
-      from='left'
+      from='bottom'
       ref={ref => { this.Menu = ref }}>
         <View style={styles.ViewContainer}>
         {this.props.userInfo ? (
@@ -39,4 +40,4 @@ class SideMenu extends Component {
   }
 }
 
-export default SideMenu;
+export default Settings;

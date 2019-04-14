@@ -13,6 +13,7 @@ import {
   MapComponent,
   MapSearchBar,
   MapSearchResults,
+  Settings,
   SideMenu,
   TopBar,
 } from '../components';
@@ -279,6 +280,12 @@ class Map extends Component {
         <SideMenu userInfo={this.state.userInfo}
         height={height} width={width} size={0.7}
         ref={ref => { this.SideMenu = ref }} />
+
+        {/* SETTINGS */}
+
+        <Settings userInfo={this.state.userInfo}
+        height={height} width={width} size={0.8}
+        ref={ref => { this.Settings = ref }} />
 
         {/* ADD MENU */}
 
