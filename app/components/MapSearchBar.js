@@ -132,7 +132,10 @@ class MapSearchBar extends Component {
           backgroundColor: Theme.BackgroundColorContent,
         }}
         accessibilityLabel='clear search'
-        onPress={() => this.setState({ text: '' })} />
+        onPress={() => {
+          this.setState({ text: '' });
+          this.setResults([]);          
+        }} />
 
       </View>
     )
