@@ -113,12 +113,12 @@ class MapCardScroll extends Component {
           <Text style={{ fontWeight: 'bold' }}>
           {this.state.cardTitleNumEntrances} accessible entrances</Text>
           <Text>{this.state.cardTitleDesc}</Text>
-          <Text>Rating: {this.state.rating.map((star, index) => { return (
-            <Text key={index}>{star ? (
-              <Icon name='star' size={Theme.FontSize} />
+          <Text style={{ fontWeight: 'bold', fontSize: Theme.FontSize * 0.8 }}>Rating: {this.state.rating.map((star, index) => { return (
+            star ? (
+              <Icon key={index} name='star' color={Theme.IconColorHighlight} />
             ) : (
-              <Icon name='star-border' size={Theme.FontSize} />
-            )}</Text>
+              <Icon key={index} name='star-border' color={Theme.IconColorHighlight} />
+            )
           )})}</Text>
           <View style={styles.cardTitleTag}>
             <Text style={styles.cardTitleTagText}>

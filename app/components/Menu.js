@@ -112,7 +112,7 @@ class Menu extends Component {
         horizontal={this.props.from == 'left' || this.props.from == 'right'}
         vertical={this.props.from == 'top' || this.props.from == 'bottom'}
         scrollEventThrottle={100}
-        decelerationRate='fast'
+        decelerationRate='normal'
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
         snapToInterval={

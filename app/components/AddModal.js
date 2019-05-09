@@ -16,6 +16,7 @@ import {
 import {
   Theme,
 } from '../global';
+import { Routes } from '../api/Routes';
 
 const { width, height } = Dimensions.get('window');
 
@@ -134,7 +135,7 @@ class AddModal extends Component {
           label='Location Name'
           placeholder='e.g. The Union'
           focusColor={Theme.IconColorHighlight}
-          ref={ref => { this.InputLocDesc = ref; }}
+          ref={ref => { this.InputLocName = ref; }}
           />
           ) : (<Text></Text>)}
 
@@ -199,9 +200,27 @@ class AddModal extends Component {
             onPress={() => {
               // location POST
               if (this.state.data.eType == 'location') {
+/*
+                alert(JSON.stringify(
+                  // this.InputLocName.val()
+                  this.state.data.coordinates.latitude
+                ));
+*/
+//todo provide form validation check
 
-                alert('POST location');
-
+                Routes.POST_Add({
+                  name: this.InputLocName.val(),
+                  description: this.InputLocDesc.val(),
+                  coordinates: {
+                    _latitude: this.state.data.coordinates.latitude,
+                    _longitude: this.state.data.coordinates.longitude,
+                  },
+                  imageUri: this.state.imageUri,
+                  keywords: [],
+                  entrances: [],
+                  // id: '',
+                });
+  
               }
               // entrance POST
               else {

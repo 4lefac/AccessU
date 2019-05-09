@@ -284,7 +284,7 @@ class Map extends Component {
         {/* SETTINGS */}
 
         <Settings userInfo={this.state.userInfo}
-        height={height} width={width} size={0.8}
+        height={height} width={width} size={0.5}
         ref={ref => { this.Settings = ref }} />
 
         {/* ADD MENU */}

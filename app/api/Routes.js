@@ -40,7 +40,7 @@ module.exports.Routes = {
         'Content-Type': 'application/json'
       }
     }).then(res => res.json())
-    .then(response => console.log(JSON.stringify(response)))
+    .then(response => alert(JSON.stringify(response)))
     .catch(error => console.error('Error:', error));
   }
 }
