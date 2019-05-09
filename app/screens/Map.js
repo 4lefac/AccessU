@@ -194,8 +194,8 @@ class Map extends Component {
       if (newUserRegion) userRegion = newUserRegion;
       this.setState({ userRegion });
     });
-    StatusBar.setBackgroundColor('rgba(0, 0, 0, 0.2)');
-    StatusBar.setBarStyle('light-content');
+    StatusBar.setBackgroundColor('rgba(0, 0, 0, 0)');
+    StatusBar.setBarStyle('dark-content');
     StatusBar.setTranslucent(true);
   }
 
