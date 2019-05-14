@@ -41,6 +41,17 @@ export async function GetCacheData(key) {
 }
 
 /*
+** Removes peresistent data in local memory
+*/
+export async function RemoveCacheData(key) {
+  try {
+    await AsyncStorage.removeItem(key);
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+/*
 ** animation time
 */
 export const ANIMATE_TIME = 500;

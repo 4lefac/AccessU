@@ -41,16 +41,16 @@ class FormTextInput extends Component {
         {/* TEXT INPUT */}
 
         <TextInput style={[{
-        fontSize: Theme.FontSize,
-        borderBottomWidth: 3,
-        borderBottomColor: this.state.color,
+          fontSize: Theme.FontSize,
+          borderBottomWidth: 3,
+          borderBottomColor: this.state.color,
         }, this.props.styleInput]}
-        onBlur={() => this.setState({ color: Theme.Color })}
-        onFocus={() => this.setState({ color: this.props.focusColor })}
-        placeholder={this.props.placeholder}
-        onChangeText={text => this.setState({ text })}
-        onSubmitEditing={() => {}}
-        value={this.state.text}
+          onBlur={() => this.setState({ color: Theme.Color })}
+          onFocus={() => this.setState({ color: this.props.focusColor })}
+          placeholder={this.props.placeholder}
+          onChangeText={this.props.onChangeText || (text => this.setState({ text }))}
+          onSubmitEditing={() => { }}
+          value={this.props.value || this.state.text}
         />
 
       </View>

@@ -28,10 +28,12 @@ const MapButton = (props) => {
     <TouchableOpacity style={[styles.MapButtonTouchableOpacity,
     { backgroundColor: props.backgroundColor || Theme.BackgroundColorContent },
     props.style]} accessibilityLabel={props.accessibilityLabel}
-    onPress={props.onPress}>
+      onPress={props.onPress}>
       <Icon name={props.icon} size={Theme.IconSize}
-      style={[styles.MapButtonIcon, props.iconStyle, { color: props.color ||
-      Theme.Color }]} />
+        style={[styles.MapButtonIcon, props.iconStyle, {
+          color: props.color ||
+            Theme.Color
+        }]} />
     </TouchableOpacity>
   );
 }

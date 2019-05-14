@@ -8,6 +8,7 @@ import {
 // screens
 
 import Map from './screens/Map';
+import LogIn from './screens/LogIn';
 
 //EStyleSheet.build();
 
@@ -16,6 +17,8 @@ import Map from './screens/Map';
 const AppNavigator = createStackNavigator(
   {
     Map: Map,
+    LoginScreen: LogIn,
+
   },
   {
     initialRouteName: 'Map',
