@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Platform, StatusBar } from "react-native";
 //import EStyleSheet from 'react-native-extended-stylesheet';
 import {
   createAppContainer,
@@ -10,6 +11,11 @@ import {
 import Map from './screens/Map';
 import LogIn from './screens/LogIn';
 import SignUp from './screens/SignUp';
+import Profile from './screens/Profile';
+import AddedItems from './screens/AddedItems';
+import Comments from './screens/Comments';
+import Help from './screens/Help';
+import Settings from './screens/Settings';
 
 //EStyleSheet.build();
 
@@ -20,11 +26,16 @@ const AppNavigator = createStackNavigator(
     Map: Map,
     LoginScreen: LogIn,
     SignUpScreen: SignUp,
+    ProfileScreen: Profile,
+    AddedItemsScreen: AddedItems,
+    CommentsScreen: Comments,
+    HelpScreen: Help,
+    SettingsScreen: Settings,
   },
   {
     initialRouteName: 'Map',
     defaultNavigationOptions: {
-      header: null,
+      header: 0,
     },
   }
 )

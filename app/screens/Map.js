@@ -87,6 +87,10 @@ const styles = {
 */
 
 class Map extends Component {
+  //header is null we dont want it to show
+  static navigationOptions = {
+    header: null
+  };
   state = {
     // used for initial component mount
     userRegion: userRegion,
@@ -190,6 +194,7 @@ class Map extends Component {
   componentWillMount() {
     //check to see if user is logged in and if the user isn't logged in then we will ask them to.
     Auth.isSignedIn().then((response) => {
+      //add the exclamation mark back when done
       if (!response) {
         this.props.navigation.navigate('LoginScreen')
       }
@@ -289,7 +294,7 @@ class Map extends Component {
 
         <SideMenu userInfo={this.state.userInfo}
           height={height} width={width} size={0.7}
-          ref={ref => { this.SideMenu = ref }} />
+          ref={ref => { this.SideMenu = ref }} navigation={this.props.navigation} />
 
         {/* SETTINGS */}
 
