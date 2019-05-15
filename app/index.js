@@ -8,6 +8,8 @@ import {
 // screens
 
 import Map from './screens/Map';
+import LogIn from './screens/LogIn';
+import SignUp from './screens/SignUp';
 
 //EStyleSheet.build();
 
@@ -16,6 +18,8 @@ import Map from './screens/Map';
 const AppNavigator = createStackNavigator(
   {
     Map: Map,
+    LoginScreen: LogIn,
+    SignUpScreen: SignUp,
   },
   {
     initialRouteName: 'Map',

@@ -50,28 +50,30 @@ class MapSearchResults extends Component {
   render() {
     return (
       <View pointerEvents='box-none' style={styles.container}>
-      {this.state.results.map(result => { return (
+        {this.state.results.map(result => {
+          return (
 
-        <TouchableOpacity key={result.id} style={styles.searchResult}
-        accessibilityLabel={result.description}
-        onPress={() => {
+            <TouchableOpacity key={result.id} style={styles.searchResult}
+              accessibilityLabel={result.description}
+              onPress={() => {
 
-          Keyboard.dismiss();
+                Keyboard.dismiss();
 
-          this.props.thisRef.goToRegion(
-            parseFloat(result.coords.lat), parseFloat(result.coords.lng));
+                this.props.thisRef.goToRegion(
+                  parseFloat(result.coords.lat), parseFloat(result.coords.lng));
 
-        }}>
-          <View style={styles.searchResultPadding}></View>
-            <View style={styles.searchResultView}>
-              <Text numberOfLines={1} style={styles.searchResultText}>
-                {result.description}
-              </Text>
-            </View>
-          <View style={styles.searchResultPadding}></View>
-        </TouchableOpacity>
+              }}>
+              <View style={styles.searchResultPadding}></View>
+              <View style={styles.searchResultView}>
+                <Text numberOfLines={1} style={styles.searchResultText}>
+                  {result.description}
+                </Text>
+              </View>
+              <View style={styles.searchResultPadding}></View>
+            </TouchableOpacity>
 
-      )})}
+          )
+        })}
       </View>
     )
   }
