@@ -8,6 +8,7 @@ import {
   MapSearchBar,
 } from './';
 import { Theme } from '../global';
+import { Auth } from '../api/Auth';
 
 const styles = {
   container: {
@@ -39,14 +40,26 @@ class TopBar extends Component {
 
         <View style={styles.menuButton}>
           <IconButton
-          icon={ this.props.userInfo ? 'dehaze' : 'account-circle' }
-          accessibilityLabel='menu'
-          onPress={() => { if (this.props.userInfo) {
-            Keyboard.dismiss();
-            this.props.thisRef.SideMenu.open();
-          } else {
-            alert('log in');
-          }}} />
+            icon={this.props.userInfo ? 'dehaze' : 'account-circle'}
+            accessibilityLabel='menu'
+            onPress={() => {
+              Auth.isSignedIn().then((response) => {
+                if (response) {
+                  Keyboard.dismiss();
+                  this.props.thisRef.SideMenu.open();
+                } else {
+                  alert('You need to log in');
+                  this.props.navigation.navigate('LoginScreen');
+                }
+              });
+              // if (signedInStatus) {
+              //   Keyboard.dismiss();
+              //   this.props.thisRef.SideMenu.open();
+              // } else {
+              //   alert('You need to log in');
+              //   this.props.navigation.navigate('LoginScreen');
+              // }
+            }} />
         </View>
 
         {/* SEARCH BAR */}
@@ -59,11 +72,11 @@ class TopBar extends Component {
 
         <View style={styles.menuButton}>
           <IconButton icon='settings'
-          accessibilityLabel='settings'
-          onPress={() => {
-            Keyboard.dismiss();
-            this.props.thisRef.Settings.open();
-          }} />
+            accessibilityLabel='settings'
+            onPress={() => {
+              Keyboard.dismiss();
+              this.props.thisRef.Settings.open();
+            }} />
         </View>
 
       </View>

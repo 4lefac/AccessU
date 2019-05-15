@@ -240,7 +240,7 @@ class Map extends Component {
 
         <Animated.View pointerEvents='box-none' style={[styles.bar,
         { top: this.state.barTopPos }]}>
-          <TopBar userInfo={this.state.userInfo}
+          <TopBar navigation={this.props.navigation} userInfo={this.state.userInfo}
             _ref={ref => { this.TopBar = ref }}
             thisRef={this} />
         </Animated.View>
