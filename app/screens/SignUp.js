@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import SignUpButton from "../components/SignUpButton";
 import FormTextInput from "../components/FormTextInput";
 import { Auth } from "../api/Auth";
+
 class SignUp extends Component {
+  static navigationOptions = { header: null }
+
     state = {
         email: "",
         password: "",
@@ -11,21 +19,14 @@ class SignUp extends Component {
         lastName: "",
     };
 
-    handleEmailChange = (email) => {
-        this.setState({ email: email });
-    };
+    handleEmailChange = email => this.setState({ email });
 
-    handleFirstNameChange = (firstName) => {
-        this.setState({ firstName: firstName });
-    };
+    handleFirstNameChange = firstName => this.setState({ firstName });
 
-    handleLastNameChange = (lastName) => {
-        this.setState({ lastName: lastName });
-    };
+    handleLastNameChange = lastName => this.setState({ lastName });
 
-    handlePasswordChange = (password) => {
-        this.setState({ password: password });
-    };
+    handlePasswordChange = password => this.setState({ password });
+
     handleSignUpPress = () => {
         alert("You have successfully logged in but for now just use default account to log in");
         Auth.SignUp(
@@ -35,9 +36,7 @@ class SignUp extends Component {
             this.state.password)
         this.props.navigation.goBack();
     }
-    handleCancelpress = () => {
-        this.props.navigation.goBack();
-    }
+    handleCancelPress = () => this.props.navigation.goBack();
 
     render() {
         return (
@@ -66,7 +65,7 @@ class SignUp extends Component {
                     />
                     <SignUpButton onPress={this.handleSignUpPress} />
                 </View>
-                <TouchableOpacity style={styles.cancel} onPress={this.handleCancelpress}>
+                <TouchableOpacity style={styles.cancel} onPress={this.handleCancelPress}>
                     <Text>Cancel</Text>
                 </TouchableOpacity>
             </View>

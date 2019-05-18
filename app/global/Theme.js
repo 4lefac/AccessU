@@ -25,6 +25,9 @@ export default {
     BackgroundColor: '#ddd',
     BackgroundColorContent: '#fff',
 
+    White: '#fff',
+    Black: '#000',
+
     // icons
 
     IconColor: textColor,
