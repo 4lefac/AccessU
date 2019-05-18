@@ -1,0 +1,16 @@
+userInfo {
+    Profile {
+        //this is the basic stuff to define a person in our mobile application
+        name:
+        email:
+    }
+    Comments {
+        all the comments of a user for both entrances and locations
+    }
+    addedItems {
+        all the added items for a user
+    }
+    settings {
+        user set settings
+    }
+}
