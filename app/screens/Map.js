@@ -27,9 +27,6 @@ import {
 import LocationSwitch from 'react-native-location-switch';
 import { Routes } from '../api/Routes';
 import { Auth } from '../api/Auth';
-import {
-  Circle,
-} from 'react-native-maps';
 /*
 ** variables
 */
@@ -102,7 +99,7 @@ class Map extends Component {
 
     //todo - change this to populate with user login information
     // or load as null
-    userInfo: {},
+    userInfo: null,
 
     barTopPos: new Animated.Value(styles.barTopPos.top),
     searchBarTopPos: new Animated.Value(styles.barTopPos.top + 0.065 * height),
@@ -195,19 +192,23 @@ class Map extends Component {
   }
 
   componentWillMount() {
-    //check to see if user is logged in and if the user isn't logged in then we will ask them to.
-    Auth.isSignedIn().then((response) => {
-      //add the exclamation mark back when done
+    // check to see if user is logged in and if the user isn't logged in then we will ask them to.
+    Auth.isSignedIn().then(response => {
       if (!response) {
         this.props.navigation.navigate('LoginScreen')
       }
     });
+
+    // get locations
     this.getLocations();
+
     // get user cache region if available
     GetCacheData('userRegion').then(newUserRegion => {
       if (newUserRegion) userRegion = newUserRegion;
       this.setState({ userRegion });
     });
+
+    // status bar
     StatusBar.setBackgroundColor('rgba(0, 0, 0, 0)');
     StatusBar.setBarStyle('dark-content');
     StatusBar.setTranslucent(true);
@@ -217,8 +218,14 @@ class Map extends Component {
   }
 
   componentDidMount() {
+    // verify if signed in
+    Auth.isSignedIn().then(response => {
+      if (response) this.setState({ userInfo: {} });
+    });
+
     // location fallback
     if (this.state.locations.length == 0) this.getLocations();
+
     // load initial user region
     this.updateUserRegion();
   }
@@ -266,13 +273,16 @@ class Map extends Component {
         <Animated.View pointerEvents='box-none' style={[styles.bar,
         styles.barBottom, { bottom: this.state.barBottomPos }]}>
           <View style={styles.mapButtonContainer}>
-            {this.state.userInfo ? (
-              <MapButton icon='add'
-                backgroundColor={Theme.IconColorBackground}
-                color={Theme.BackgroundColorContent}
-                accessibilityLabel='add or edit entrances'
-                onPress={() => this.AddPanels.openPanels()} />
-            ) : (<View></View>)}
+            <MapButton icon='add'
+            backgroundColor={Theme.IconColorBackground}
+            color={Theme.BackgroundColorContent}
+            accessibilityLabel='add or edit entrances'
+            onPress={() => {
+              if (this.state.userInfo) this.AddPanels.openPanels();
+              else {
+                // tell user to log in
+              }
+            }} />
           </View>
           <View style={styles.mapButtonContainer}>
             <MapButton icon='my-location'

@@ -1,0 +1,21 @@
+userInfo {
+    Profile {
+        name:
+        email:
+        lastLocation:
+    }
+    Comments {
+        // these will be the actual comments
+        entrances: []
+    }
+    addedItems {
+        //these will be the ID's
+        entrances []
+        location []
+    }
+    settings {
+        //will be true or false
+        highContrast: 
+
+    }
+}

@@ -17,9 +17,8 @@ const styles = {
     borderRadius: 4,
   },
   text: {
-      color: '#000000',
-    textAlign: 'center',
-    height: 20
+    color: Theme.Black,
+    fontSize: Theme.FontSize,
   }
 }
 

@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import {
   Animated,
   Dimensions,
-  View,
+  Platform,
   StatusBar,
   Text,
+  View,
 } from 'react-native';
 import {
   AddModal,
@@ -163,6 +164,7 @@ class AddPanels extends Component {
               </View>
             </View>
           ) : (
+<<<<<<< HEAD
               <View style={styles.BottomPanelView}>
                 <MapButton icon='check'
                   accessibilityLabel='proceed with location or entrance'
@@ -193,6 +195,41 @@ class AddPanels extends Component {
                   }} />
               </View>
             )}
+=======
+          <View style={styles.BottomPanelView}>
+            <MapButton icon='check'
+            accessibilityLabel='proceed with location or entrance'
+            color={Theme.IconColorHighlight}
+            onPress={() => {
+              this.props.thisRef.MapView.coordinateForPoint({
+                x: width / 2,
+                y: (Platform.OS == 'android') ?
+                   height / 2 - StatusBar.currentHeight :
+                   height / 2, 
+              }).then( result => {
+                if (this.state.eType == 'location') {
+                  this.AddModal.openModal({
+                    eType: 'location',
+                    coordinates: result,
+
+                  });
+                  //alert('add a location at ' + JSON.stringify(result));
+                } else {
+                  this.AddModal.openModal({
+                    eType: 'entrance',
+                    coordinates: result,
+                    location: this.state.location,
+                  });
+
+                  //alert("add an entrance for location id " +
+                  //this.state.locationID +
+                  //" at " + JSON.stringify(result));
+                }
+              })
+            }} />
+          </View>
+          )}
+>>>>>>> 20e6b1f4b350492368c6138317f2f3219ac64712
 
         </Animated.View>
 
