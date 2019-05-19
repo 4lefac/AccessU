@@ -96,7 +96,7 @@ class SideMenu extends Component {
               <Text style={styles.menuText} type='h5White'>My Added Items</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.menu} onPress={() => this.props.navigation.navigate("HelpScreen")}>
-              <Icon style={styles.icon} name='rocket' color={'#ffffff'} size={30} />
+              <Icon style={styles.icon} name='exclamation' color={'#ffffff'} size={30} />
               <Text style={styles.menuText} type='h5White'>Help</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.menu} onPress={() => this.props.navigation.navigate("SettingsScreen")}>

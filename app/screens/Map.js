@@ -27,6 +27,7 @@ import {
 import LocationSwitch from 'react-native-location-switch';
 import { Routes } from '../api/Routes';
 import { Auth } from '../api/Auth';
+
 /*
 ** variables
 */
@@ -99,7 +100,7 @@ class Map extends Component {
 
     //todo - change this to populate with user login information
     // or load as null
-    userInfo: {},
+    userInfo: null,
 
     barTopPos: new Animated.Value(styles.barTopPos.top),
     searchBarTopPos: new Animated.Value(styles.barTopPos.top + 0.065 * height),
@@ -263,13 +264,16 @@ class Map extends Component {
         <Animated.View pointerEvents='box-none' style={[styles.bar,
         styles.barBottom, { bottom: this.state.barBottomPos }]}>
           <View style={styles.mapButtonContainer}>
-            {this.state.userInfo ? (
-              <MapButton icon='add'
-                backgroundColor={Theme.IconColorBackground}
-                color={Theme.BackgroundColorContent}
-                accessibilityLabel='add or edit entrances'
-                onPress={() => this.AddPanels.openPanels()} />
-            ) : (<View></View>)}
+            <MapButton icon='add'
+            backgroundColor={Theme.IconColorBackground}
+            color={Theme.BackgroundColorContent}
+            accessibilityLabel='add or edit entrances'
+            onPress={() => {
+              if (this.state.userInfo) this.AddPanels.openPanels();
+              else {
+                // tell user to log in
+              }
+            }} />
           </View>
           <View style={styles.mapButtonContainer}>
             <MapButton icon='my-location'
