@@ -5,31 +5,31 @@ module.exports.User = {
     /*
     ** GET full userInfo Json
     */
-    GET_userInfo: () => {
+    GET_user_info: () => {
 
     },
     /*
     ** GET user basic Profile info
     */
-    GET_Profile: () => {
+    GET_profile: () => {
+
+    },
+    /*
+    ** GET user setting
+    */
+    GET_setting: () => {
 
     },
     /*
     ** GET all comments for the user
     */
-    GET_all_Comments: () => {
+    GET_all_comments: () => {
 
     },
     /*
-    ** GET all comments for an entrance
+    ** GET average location rating
     */
-    GET_all_entrance_comments: (entranceID) => {
-
-    },
-    /*
-    ** GET all comments for a location
-    */
-    GET_all_location_comments: (locationID) => {
+    GET_rating: (locationID) => {
 
     },
     /*
@@ -48,6 +48,19 @@ module.exports.User = {
     ** Post an added comment by user to a location
     */
     POST_added_comment_location: (locationID, comment, userID) => {
+
+    },
+    /*
+    ** Post location rating
+    */
+    POST_rating: (locationID, userID) => {
+
+    },
+
+    /*
+    ** Post a new user setting
+    */
+    POST_setting: (locationID, comment, userID) => {
 
     }
 }

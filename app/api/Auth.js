@@ -1,9 +1,7 @@
 import { AsyncStorage } from "react-native";
-import { index } from "../../app/global/index";
 USER_KEY = "default";
 
 module.exports.Auth = {
-    // use LoggedInStatus to see if a user is signed in. will be true if the user is signed in
     /*
     ** Handles what happens when you sign in
     */
@@ -20,13 +18,12 @@ module.exports.Auth = {
                     .catch(err => reject(err));
             } else {
                 AsyncStorage.setItem("LoggedInStatus", "false")
-                    .then(resolve(true))
+                    .then(resolve(false))
                     .catch(err => reject(err));
                 resolve(false);
             }
         }).catch(err => reject(err));
     },
-
     /*
     ** Check if a user is signed in
     */
@@ -55,10 +52,17 @@ module.exports.Auth = {
             }).catch(err => reject(err));
         })
     },
+
     /*
     ** Signs up a user
     */
     SignUp: (firstName, lastName, email, password) => {
+
+    },
+    /*
+    ** Send reset email
+    */
+    resetEmail: (email) => {
 
     }
 }

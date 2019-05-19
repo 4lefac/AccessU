@@ -19,7 +19,9 @@ module.exports.Routes = {
       });
 
   },
-  //getting a specific id and return a json object of that entrance
+  /*
+  ** getting a specific id and return a json object of that entrance
+  */
   GET_map_with_id: (entranceID) => {
     return fetch(baseURL + entranceID)
       .then((response) => response.json())
@@ -30,8 +32,9 @@ module.exports.Routes = {
         console.error(error);
       });
   },
-
-  //add an entrance data to the database. data has to be a json object or string doens't matter
+  /*
+  ** add an entrance data to the database.
+  */
   POST_Add: (data) => {
     fetch(baseURL, {
       method: 'POST',
