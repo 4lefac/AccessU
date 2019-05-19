@@ -193,19 +193,23 @@ class Map extends Component {
   }
 
   componentWillMount() {
-    //check to see if user is logged in and if the user isn't logged in then we will ask them to.
-    Auth.isSignedIn().then((response) => {
-      //add the exclamation mark back when done
+    // check to see if user is logged in and if the user isn't logged in then we will ask them to.
+    Auth.isSignedIn().then(response => {
       if (!response) {
         this.props.navigation.navigate('LoginScreen')
       }
     });
+
+    // get locations
     this.getLocations();
+
     // get user cache region if available
     GetCacheData('userRegion').then(newUserRegion => {
       if (newUserRegion) userRegion = newUserRegion;
       this.setState({ userRegion });
     });
+
+    // status bar
     StatusBar.setBackgroundColor('rgba(0, 0, 0, 0)');
     StatusBar.setBarStyle('dark-content');
     StatusBar.setTranslucent(true);
@@ -215,8 +219,14 @@ class Map extends Component {
   }
 
   componentDidMount() {
+    // verify if signed in
+    Auth.isSignedIn().then(response => {
+      if (response) this.setState({ userInfo: {} });
+    });
+
     // location fallback
     if (this.state.locations.length == 0) this.getLocations();
+
     // load initial user region
     this.updateUserRegion();
   }

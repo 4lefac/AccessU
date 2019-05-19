@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import {
   Animated,
   Dimensions,
-  View,
+  Platform,
   StatusBar,
   Text,
+  View,
 } from 'react-native';
 import {
   AddModal,
@@ -169,7 +170,10 @@ class AddPanels extends Component {
             color={Theme.IconColorHighlight}
             onPress={() => {
               this.props.thisRef.MapView.coordinateForPoint({
-              x: width / 2, y: height / 2 - StatusBar.currentHeight
+                x: width / 2,
+                y: (Platform.OS == 'android') ?
+                   height / 2 - StatusBar.currentHeight :
+                   height / 2, 
               }).then( result => {
                 if (this.state.eType == 'location') {
                   this.AddModal.openModal({
