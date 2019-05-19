@@ -43,3 +43,5 @@ export FormTextInput from './FormTextInput';
 export IconButton from './IconButton';
 
 export IconTextButton from './IconTextButton';
+
+export TextButton from './TextButton';

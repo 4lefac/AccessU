@@ -89,7 +89,6 @@ const styles = {
 class Map extends Component {
   //header is null we dont want it to show
   static navigationOptions = {
-    headerTitle: 'Map',
     header: null
   };
   state = {
