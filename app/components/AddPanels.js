@@ -74,8 +74,8 @@ const styles = {
 
 class AddPanels extends Component {
   state = {
-    topPanelPos: new Animated.Value(-1* height),
-    bottomPanelPos: new Animated.Value(-1* height),
+    topPanelPos: new Animated.Value(-1 * height),
+    bottomPanelPos: new Animated.Value(-1 * height),
     bIsOpen: false,
 
     eType: 'location',
@@ -114,28 +114,28 @@ class AddPanels extends Component {
 
           <View style={styles.TopPanelView}>
             <IconTextButton icon='add-location'
-            fill={this.state.eType == 'location' ? true : false}
-            color={Theme.IconColorHighlight}
-            backgroundColor={null}
-            accessibilityLabel='switch to add location'
-            onPress={() => {
-              if (this.state.eType != 'location')
-                this.setState({ eType: 'location' })
-            }}>Add location</IconTextButton>
+              fill={this.state.eType == 'location' ? true : false}
+              color={Theme.IconColorHighlight}
+              backgroundColor={null}
+              accessibilityLabel='switch to add location'
+              onPress={() => {
+                if (this.state.eType != 'location')
+                  this.setState({ eType: 'location' })
+              }}>Add location</IconTextButton>
           </View>
 
           <Text>or</Text>
 
           <View style={styles.TopPanelView}>
-          <IconTextButton icon='adjust'
-          fill={this.state.eType == 'entrance' ? true : false}
-          color={Theme.IconColorHighlight}
-          bacgroundColor={Theme.IconColorHighlight}
-          accessibilityLabel='switch to add entrance'
-          onPress={() => {
-            if (this.state.eType != 'entrance')
-              this.setState({ eType: 'entrance' })
-          }}>Add entrance</IconTextButton>
+            <IconTextButton icon='adjust'
+              fill={this.state.eType == 'entrance' ? true : false}
+              color={Theme.IconColorHighlight}
+              bacgroundColor={Theme.IconColorHighlight}
+              accessibilityLabel='switch to add entrance'
+              onPress={() => {
+                if (this.state.eType != 'entrance')
+                  this.setState({ eType: 'entrance' })
+              }}>Add entrance</IconTextButton>
           </View>
 
         </Animated.View>
@@ -143,56 +143,56 @@ class AddPanels extends Component {
         {/* BOTTOM BAR */}
 
         <Animated.View pointerEvents='box-none'
-        style={[styles.AnimatedViewPanel, styles.BottomPanel,
-        { bottom: this.state.bottomPanelPos }]}>
+          style={[styles.AnimatedViewPanel, styles.BottomPanel,
+          { bottom: this.state.bottomPanelPos }]}>
 
           <View style={styles.BottomPanelView}>
             <MapButton icon='close'
-            backgroundColor={Theme.IconColorBackground}
-            color={Theme.BackgroundColorContent}
-            accessibilityLabel='close and return to main map'
-            onPress={() => this.closePanels()} />
+              backgroundColor={Theme.IconColorBackground}
+              color={Theme.BackgroundColorContent}
+              accessibilityLabel='close and return to main map'
+              onPress={() => this.closePanels()} />
           </View>
 
           {this.state.eType == 'entrance' && this.state.location == null ? (
-          <View style={[styles.BottomPanelView, styles.BottomPanelAddEntrance]}>
-            <View style={styles.BottomPanelAddEntranceChild}>
-              <Text>
-                Tap on an existing location on the map to add the entrance to it.
+            <View style={[styles.BottomPanelView, styles.BottomPanelAddEntrance]}>
+              <View style={styles.BottomPanelAddEntranceChild}>
+                <Text>
+                  Tap on an existing location on the map to add the entrance to it.
               </Text>
+              </View>
             </View>
-          </View>
           ) : (
-          <View style={styles.BottomPanelView}>
-            <MapButton icon='check'
-            accessibilityLabel='proceed with location or entrance'
-            color={Theme.IconColorHighlight}
-            onPress={() => {
-              this.props.thisRef.MapView.coordinateForPoint({
-              x: width / 2, y: height / 2 - StatusBar.currentHeight
-              }).then( result => {
-                if (this.state.eType == 'location') {
-                  this.AddModal.openModal({
-                    eType: 'location',
-                    coordinates: result,
+              <View style={styles.BottomPanelView}>
+                <MapButton icon='check'
+                  accessibilityLabel='proceed with location or entrance'
+                  color={Theme.IconColorHighlight}
+                  onPress={() => {
+                    this.props.thisRef.MapView.coordinateForPoint({
+                      x: width / 2, y: height / 2 - StatusBar.currentHeight
+                    }).then(result => {
+                      if (this.state.eType == 'location') {
+                        this.AddModal.openModal({
+                          eType: 'location',
+                          coordinates: result,
 
-                  });
-                  //alert('add a location at ' + JSON.stringify(result));
-                } else {
-                  this.AddModal.openModal({
-                    eType: 'entrance',
-                    coordinates: result,
-                    location: this.state.location,
-                  });
+                        });
+                        //alert('add a location at ' + JSON.stringify(result));
+                      } else {
+                        this.AddModal.openModal({
+                          eType: 'entrance',
+                          coordinates: result,
+                          location: this.state.location,
+                        });
 
-                  //alert("add an entrance for location id " +
-                  //this.state.locationID +
-                  //" at " + JSON.stringify(result));
-                }
-              })
-            }} />
-          </View>
-          )}
+                        //alert("add an entrance for location id " +
+                        //this.state.locationID +
+                        //" at " + JSON.stringify(result));
+                      }
+                    })
+                  }} />
+              </View>
+            )}
 
         </Animated.View>
 
@@ -201,8 +201,8 @@ class AddPanels extends Component {
         {this.state.bIsOpen ? (
           <View pointerEvents='none' style={styles.ViewAddPin}>
             <Icon name={this.state.eType == 'location' ? 'add-location' :
-            'adjust'} size={Theme.IconSize + 10}
-            color={Theme.IconColorHighlight2} />
+              'adjust'} size={Theme.IconSize + 10}
+              color={Theme.IconColorHighlight2} />
           </View>
         ) : (<View></View>)}
 

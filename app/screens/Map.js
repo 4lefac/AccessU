@@ -27,6 +27,9 @@ import {
 import LocationSwitch from 'react-native-location-switch';
 import { Routes } from '../api/Routes';
 import { Auth } from '../api/Auth';
+import {
+  Circle,
+} from 'react-native-maps';
 /*
 ** variables
 */
@@ -307,7 +310,7 @@ class Map extends Component {
         <AddPanels thisRef={this}
           ref={ref => { this.AddPanels = ref }} />
 
-      </View>
+      </View >
     )
   }
 }
