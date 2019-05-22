@@ -2,6 +2,10 @@
 # 05/21/19
 .env
 
+# vs code
+# 05/21/19
+.vscode/
+
 # OSX
 #
 .DS_Store
