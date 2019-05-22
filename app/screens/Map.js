@@ -5,6 +5,7 @@ import {
   Keyboard,
   StatusBar,
   View,
+  Platform
 } from 'react-native';
 import {
   AddPanels,
@@ -27,6 +28,7 @@ import {
 import LocationSwitch from 'react-native-location-switch';
 import { Routes } from '../api/Routes';
 import { Auth } from '../api/Auth';
+
 /*
 ** variables
 */
@@ -209,9 +211,11 @@ class Map extends Component {
     });
 
     // status bar
-    StatusBar.setBackgroundColor('rgba(0, 0, 0, 0)');
-    StatusBar.setBarStyle('dark-content');
-    StatusBar.setTranslucent(true);
+    if (Platform.OS == 'android') {
+      StatusBar.setBackgroundColor('rgba(0, 0, 0, 0)');
+      StatusBar.setBarStyle('dark-content');
+      StatusBar.setTranslucent(true);
+    }
 
     //if user is not logged in load the login screen
     //this.props.navigation.navigate('Login')
@@ -274,15 +278,15 @@ class Map extends Component {
         styles.barBottom, { bottom: this.state.barBottomPos }]}>
           <View style={styles.mapButtonContainer}>
             <MapButton icon='add'
-            backgroundColor={Theme.IconColorBackground}
-            color={Theme.BackgroundColorContent}
-            accessibilityLabel='add or edit entrances'
-            onPress={() => {
-              if (this.state.userInfo) this.AddPanels.openPanels();
-              else {
-                // tell user to log in
-              }
-            }} />
+              backgroundColor={Theme.IconColorBackground}
+              color={Theme.BackgroundColorContent}
+              accessibilityLabel='add or edit entrances'
+              onPress={() => {
+                if (this.state.userInfo) this.AddPanels.openPanels();
+                else {
+                  // tell user to log in
+                }
+              }} />
           </View>
           <View style={styles.mapButtonContainer}>
             <MapButton icon='my-location'
@@ -320,7 +324,7 @@ class Map extends Component {
         <AddPanels thisRef={this}
           ref={ref => { this.AddPanels = ref }} />
 
-      </View >
+      </View>
     )
   }
 }

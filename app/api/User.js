@@ -1,6 +1,7 @@
 
 var baseURL = 'https://accessu-c0933.firebaseapp.com/api/v2';
 
+
 module.exports.User = {
     /*
     ** GET full userInfo Json

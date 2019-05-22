@@ -3,6 +3,7 @@ userInfo {
         name:
         email:
         lastLocation:
+        userID:
     }
     Comments {
         // these will be the actual comments

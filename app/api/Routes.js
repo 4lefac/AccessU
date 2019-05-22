@@ -17,7 +17,6 @@ module.exports.Routes = {
       .catch((error) => {
         console.error(error);
       });
-
   },
   /*
   ** getting a specific id and return a json object of that entrance
@@ -33,17 +32,69 @@ module.exports.Routes = {
       });
   },
   /*
-  ** add an entrance data to the database.
+  ** add an location data to the database.
   */
-  POST_Add: (data) => {
-    fetch(baseURL, {
+  POST_Add_Location: (data) => {
+    return fetch(baseURL + '/location', {
       method: 'POST',
       body: JSON.stringify(data), // data can be `string` or {object}!
       headers: {
         'Content-Type': 'application/json'
       }
     }).then(res => res.json())
-      .then(response => alert(JSON.stringify(response)))
-      .catch(error => console.error('Error:', error));
+      .then(response => { return response })
+      .catch(error => alert(JSON.stringify(error)));
+  },
+  /*
+** add an entrance data to the database.
+*/
+  POST_Add_Entrance: (data) => {
+    return fetch(baseURL + '/entrance', {
+      method: 'POST',
+      body: JSON.stringify(data), // data can be `string` or {object}!
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(res => res.json())
+      .then(response => { return response })
+      .catch(error => alert(JSON.stringify(error) + 'error here'));
+  },
+  /*
+  ** add an image for a location to the database
+  */
+  POST_Add_Location_Image: (data, locationID) => {
+    alert(JSON.stringify(data))
+    fetch(baseURL + '/images/location/' + locationID, {
+      method: 'POST',
+      body: data,
+      // headers: {
+      //   Accept: 'application/json',
+      //   'Content-Type': 'multipart/form-data',
+      // },
+    }).then(res => res.json())
+      .then(response => {
+        alert(JSON.stringify(response) + 'from api')
+      })
+      .catch(error => {
+        console.log(JSON.stringify(error))
+        alert(JSON.stringify(error) + "froom error")
+      });
+  },
+
+  /*
+  ** add an image for a entrance to the database
+  */
+  POST_Add_Entrance_Image: (data, entranceID) => {
+    alert(JSON.stringify(data))
+    fetch(baseURL + '/images/entrance/' + entranceID, {
+      method: 'POST',
+      body: data,
+      // headers: {
+      //   Accept: 'application/json',
+      //   'Content-Type': 'multipart/form-data',
+      // },
+    }).then(res => res.json())
+      .then(response => { alert(JSON.stringify(response)) })
+      .catch(error => alert(JSON.stringify(error)));
   }
 }
