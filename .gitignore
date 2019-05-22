@@ -1,3 +1,11 @@
+# configuration file(s)
+# 05/21/19
+.env
+
+# vs code
+# 05/21/19
+.vscode/
+
 # OSX
 #
 .DS_Store
@@ -24,7 +32,7 @@ project.xcworkspace
 
 #hiding the api key for ios 
 #
-ios/AccessU/AppDelegate.m
+#ios/AccessU/AppDelegate.m
 
 # Android/IntelliJ
 #
@@ -36,7 +44,7 @@ local.properties
 
 #hiding api key for android
 #
-android/app/src/main/AndroidManifest.xml
+#android/app/src/main/AndroidManifest.xml
 
 # node.js
 #

@@ -8,7 +8,6 @@ import {
 import {
   Theme,
 } from '../global';
-import { API_KEY_MAP } from '../db';
 
 const styles = {
   container: {
