@@ -8,7 +8,8 @@ import {
 import { IconButton } from './';
 import { Theme } from '../global';
 import uuidv4 from 'uuid/v4'; // uuid v4 generator
-import { API_KEY_MAP } from '../db';
+import Config from 'react-native-config';
+
 let keyboardDelay = null;
 
 const styles = {
@@ -44,7 +45,7 @@ class MapSearchBar extends Component {
       // greater than 3 characters long
       if (str.length > 3) {
         let searchURL = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input="
-        + str + "&key=" + API_KEY_MAP + "&sessiontoken=" + uuidv4();
+        + str + "&key=" + Config.GOOGLE_MAPS_API_KEY + "&sessiontoken=" + uuidv4();
 
         fetch(searchURL).then(res => { return res.json() })
         .then(results => {
@@ -67,7 +68,7 @@ class MapSearchBar extends Component {
     return new Promise( (resolve, reject) => {
 
       let geocodeURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" +
-      desc + "&key=" + API_KEY_MAP;
+      desc + "&key=" + Config.GOOGLE_MAPS_API_KEY;
 
       fetch(geocodeURL).then(res => { return res.json() })
       .then(results => {

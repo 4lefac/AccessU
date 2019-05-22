@@ -41,6 +41,7 @@ class TopBar extends Component {
         <View style={styles.menuButton}>
           <IconButton
             icon={this.props.userInfo ? 'account-circle' : 'dehaze'}
+            color={this.props.userInfo ? Theme.IconColorHighlight : ''}
             accessibilityLabel='menu'
             onPress={() => {
               Auth.isSignedIn().then((response) => {

@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "postinstall": "( (del ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json || rm ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json) && cp ./android/LocationSwitchPackage.java ./node_modules/react-native-location-switch/android/src/main/java/org/pweitz/reactnative/locationswitch/ ) 2> /dev/null || exit 0",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "postinstall": "bash -c rm ./node_modules/react-native/local-cli/core/__fixtures__/files/package.json 2> /dev/null; cp ./android/LocationSwitchPackage.java ./node_modules/react-native-location-switch/android/src/main/java/org/pweitz/reactnative/locationswitch/",
     "test": "jest || exit 0"
   },
   "dependencies": {
@@ -12,6 +14,7 @@
     "react": "16.6.3",
     "react-native": "^0.57.8",
     "react-native-accessibility": "^1.0.7",
+    "react-native-config": "^0.11.7",
     "react-native-extended-stylesheet": "^0.11.1",
     "react-native-gesture-handler": "^1.0.15",
     "react-native-location-switch": "^0.1.0",
