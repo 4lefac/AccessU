@@ -46,11 +46,8 @@ target 'AccessU' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
-<<<<<<< HEAD
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
-=======
   pod 'react-native-config', :path => '../node_modules/react-native-config'
->>>>>>> 46eff20c33edb6d14503c3d80c95016d39eb3bbc
 
 end
 

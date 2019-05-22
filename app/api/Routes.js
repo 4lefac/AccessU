@@ -46,8 +46,8 @@ module.exports.Routes = {
       .catch(error => alert(JSON.stringify(error)));
   },
   /*
-** add an entrance data to the database.
-*/
+  ** add an entrance data to the database.
+  */
   POST_Add_Entrance: (data) => {
     return fetch(baseURL + '/entrance', {
       method: 'POST',

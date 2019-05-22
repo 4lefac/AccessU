@@ -21,14 +21,20 @@ import t from 'tcomb-form-native';
 import ImagePicker from 'react-native-image-picker';
 
 const { width, height } = Dimensions.get('window');
+
+{/* T FORM SETTINGS AND OPTIONS */ }
+
 const Form = t.form.Form;
+
 const Location = t.struct({
   Location: t.String,
   Description: t.String,
 });
+
 const Directions = t.enums.of([
   'N', 'E', 'S', 'W', 'NE', 'NW', 'SE', 'SW'
 ], 'Directions')
+
 const Entrance = t.struct({
   Direction: Directions,
   accessibilityTypes: t.struct({
@@ -38,7 +44,6 @@ const Entrance = t.struct({
   }),
 });
 
-//this is for the forms
 var options = {
   fields: {
     Location: {
@@ -56,6 +61,9 @@ var options = {
     }
   }
 }
+
+{/* MEDIA */ }
+
 const ImagePickerOptions = {
   title: 'Select Image',
   storageOptions: {
@@ -63,9 +71,13 @@ const ImagePickerOptions = {
     path: 'images',
   },
   mediaType: 'photo',
+  //this is the max size of the photo. Smaller sizes = faster upload times
   maxWidth: 250,
   maxHeigh: 250
 };
+
+{/* STYLES */ }
+
 const styles = {
   ViewContainer: {
     position: 'absolute',
@@ -121,12 +133,14 @@ const styles = {
 }
 
 class AddModal extends Component {
+
   state = {
     top: -1 * height,
     data: null,
     imageUri: '',
     imageType: ''
   }
+
   openModal = data => {
     this.setState({
       top: 0,
@@ -137,9 +151,11 @@ class AddModal extends Component {
   closeModal = () => {
     this.setState({ top: -1 * height });
   }
+
   handleLocationAdd = () => {
+    //gets data from the forms
     const value = this.refs.form.getValue();
-    //adding the location
+
     Routes.POST_Add_Location({
       name: value.Location,
       description: value.Description,
@@ -152,6 +168,7 @@ class AddModal extends Component {
       addedBy: 'temp ID',
       rating: [0, 0, 0, 0, 0]
     }).then(response => {
+      //converting the photo into data to make an api call
       var data = new FormData();
       data.append('photo', {
         uri: this.state.imageUri,
@@ -193,7 +210,6 @@ class AddModal extends Component {
       accessibilityType: accessTypes,
       addedBy: 'temp ID'
     }).then(response => {
-      alert(JSON.stringify(response))
       var data = new FormData();
       data.append('photo', {
         uri: this.state.imageUri,
@@ -201,6 +217,8 @@ class AddModal extends Component {
         type: this.state.imageType,
       })
       Routes.POST_Add_Entrance_Image(data, response.id)
+    }).catch(error => {
+
     })
   }
 
@@ -253,18 +271,25 @@ class AddModal extends Component {
             </View>
 
           </View>
-          {/* if location, show location form */}
+
           <View style={[styles.ScrollViewContent, { padding: 20 }]}>
-            {this.state.data && this.state.data.eType == 'location' ? (
-              <Form ref="form" type={Location} options={options} />
-            ) : (<Text></Text>)}
+
+            {/* if location, show location form */}
+            {this.state.data && this.state.data.eType == 'location' ?
+              (<Form ref="form" type={Location} options={options} />) : (<Text></Text>)}
+
             {/* if entrance show entrance form */}
-            {this.state.data && this.state.data.eType == 'entrance' ? (<View>
-              <Text style={{ fontSize: Theme.FontSize, marginBottom: 25, textDecorationLine: 'underline' }}>
-                Location name:&nbsp;
-          <Text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>
-                  {this.state.data.location.name}
-                </Text></Text><Form ref="form" type={Entrance} options={options} /></View>) : (<Text></Text>)}
+            {this.state.data && this.state.data.eType == 'entrance' ? (
+              <View>
+                <Text style={{ fontSize: Theme.FontSize, marginBottom: 25, textDecorationLine: 'underline' }}>
+                  Location name:&nbsp;
+                  <Text style={{ fontWeight: 'bold', textDecorationLine: 'underline' }}>
+                    {this.state.data.location.name}
+                  </Text>
+                </Text>
+                <Form ref="form" type={Entrance} options={options} /></View>
+            ) : (<Text></Text>)}
+
           </View>
 
 

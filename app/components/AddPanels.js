@@ -47,7 +47,7 @@ const styles = {
     height: 0.25 * height,
   },
   TopPanelView: {
-    padding: 10,
+    padding: 15,
   },
   BottomPanelView: {
     flex: 0.15,
@@ -125,7 +125,7 @@ class AddPanels extends Component {
               }}>Add location</IconTextButton>
           </View>
 
-          <Text>or</Text>
+          <Text style={styles.TopPanelView}>or</Text>
 
           <View style={styles.TopPanelView}>
             <IconTextButton icon='adjust'
