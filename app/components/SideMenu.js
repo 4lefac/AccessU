@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
-  ScrollView,
   TouchableOpacity,
   Image,
 } from 'react-native';
@@ -10,7 +9,6 @@ import { Menu } from './';
 import { Theme } from '../global';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { Auth } from '../api/Auth';
-//import colors from './../resources/styles/colors'
 
 const styles = {
   ViewContainer: {
