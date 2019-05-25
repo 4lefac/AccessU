@@ -1,18 +1,26 @@
 import React, { Component } from 'react';
 import {
+<<<<<<< HEAD
   Animated,
   Dimensions,
   Keyboard,
   StatusBar,
   View,
   Platform
+=======
+    Animated,
+    Dimensions,
+    Keyboard,
+    StatusBar,
+    View,
+>>>>>>> 14c2f05745dfd6ab54a569ee7b3e32fe4b96712d
 } from 'react-native';
 import {
   AddPanels,
   MapButton,
   MapCardScroll,
   MapComponent,
-  MapSearchBar,
+  // MapSearchBar,
   MapSearchResults,
   Settings,
   SideMenu,
@@ -45,8 +53,6 @@ let userRegion = {
   latitudeDelta: LATITUDE_DELTA,
   longitudeDelta: LONGITUDE_DELTA
 };
-
-let barState = 1;
 
 const styles = {
   container: {
@@ -90,17 +96,15 @@ const styles = {
 
 class Map extends Component {
   //header is null we dont want it to show
-  static navigationOptions = {
-    header: null
-  };
+  static navigationOptions = { header: null }
+
   state = {
     // used for initial component mount
     userRegion: userRegion,
 
     locations: [],
 
-    //todo - change this to populate with user login information
-    // or load as null
+    // changes to populate with user login information or stays null
     userInfo: null,
 
     barTopPos: new Animated.Value(styles.barTopPos.top),
@@ -162,14 +166,17 @@ class Map extends Component {
   mapPress = () => {
     // hide keyboard
     Keyboard.dismiss();
+
     // toggle card scroll
     this.toggleCardScroll(0);
+
     // clear entrances
     this.MapComponent.MapEntrances.setEntrances([]);
 
     // clear add panel selected location
-    if (this.AddPanels.state.location)
+    if (this.AddPanels.state.location) {
       this.AddPanels.setState({ location: null });
+    }
   }
 
   /*
@@ -177,77 +184,68 @@ class Map extends Component {
   */
   toggleBars = (state) => {
     Animate(this.state.barTopPos, state ? styles.barTopPos.top : -1 * height);
-
-    Animate(this.state.searchBarTopPos, state ? styles.barTopPos.top + 0.065
-      * height : -1 * height);
-
-    Animate(this.state.barBottomPos,
-      state ? styles.barBottomPos.bottom : -1 * height);
+    Animate(this.state.searchBarTopPos, state ? styles.barTopPos.top + 0.065 * height : -1 * height);
+    Animate(this.state.barBottomPos, state ? styles.barBottomPos.bottom : -1 * height);
   }
 
   /*
   ** toggle the visibility state of the card scroll
   */
   toggleCardScroll = (state) => {
-    Animate(this.state.cardScrollBottomPos,
-      state ? styles.mapCardScroll.bottom : -1 * height);
+    Animate(this.state.cardScrollBottomPos, state ? styles.mapCardScroll.bottom : -1 * height);
   }
 
   componentWillMount() {
+    // get user cache region if available
+    GetCacheData('userRegion')
+      .then((newUserRegion) => {
+        if (newUserRegion) {
+          userRegion = newUserRegion;
+        }
+        this.setState({ userRegion });
+      });
+
     // check to see if user is logged in and if the user isn't logged in then we will ask them to.
-    Auth.isSignedIn().then(response => {
-      if (!response) {
-        this.props.navigation.navigate('LoginScreen')
-      }
-    });
+    Auth.isSignedIn()
+      .then((response) => {
+        if (response) {
+          this.setState({ userInfo: {} });
+        } else {
+          this.props.navigation.navigate('LoginScreen');
+        }
+      });
 
     // get locations
     this.getLocations();
 
-    // get user cache region if available
-    GetCacheData('userRegion').then(newUserRegion => {
-      if (newUserRegion) userRegion = newUserRegion;
-      this.setState({ userRegion });
-    });
-
     // status bar
-    if (Platform.OS == 'android') {
-      StatusBar.setBackgroundColor('rgba(0, 0, 0, 0)');
-      StatusBar.setBarStyle('dark-content');
-      StatusBar.setTranslucent(true);
-    }
-
-    //if user is not logged in load the login screen
-    //this.props.navigation.navigate('Login')
+    StatusBar.setBackgroundColor('rgba(0, 0, 0, 0)');
+    StatusBar.setBarStyle('dark-content');
+    StatusBar.setTranslucent(true);
   }
 
   componentDidMount() {
-    // verify if signed in
-    Auth.isSignedIn().then(response => {
-      if (response) this.setState({ userInfo: {} });
-    });
-
     // location fallback
-    if (this.state.locations.length == 0) this.getLocations();
+    if (this.state.locations.length == 0) {
+      this.getLocations();
+    }
 
     // load initial user region
     this.updateUserRegion();
   }
 
   render() {
+    const userInfo = this.state.userInfo || this.props.navigation.getParam('userInfo', null);
     return (
-      <View onLayout={(e) => {
-        // prevents soft keyboard from moving layout
-        this.setState({ height: e.nativeEvent.layout.height })
-      }}
+      // prevents soft keyboard from moving layout
+      <View onLayout={(e) => this.setState({ height: e.nativeEvent.layout.height })}
         style={[styles.container, { height: this.state.height }]}>
 
         {/* MAP */}
 
         <MapComponent
           region={this.state.userRegion}
-          onUserLocationChange={(e) =>
-            this.updateUserRegion(e.nativeEvent.coordinate)}
+          onUserLocationChange={(e) => this.updateUserRegion(e.nativeEvent.coordinate)}
           locations={this.state.locations}
           onPress={this.mapPress}
           cardWidth={width}
@@ -257,9 +255,10 @@ class Map extends Component {
 
         {/* TOP BAR */}
 
-        <Animated.View pointerEvents='box-none' style={[styles.bar,
-        { top: this.state.barTopPos }]}>
-          <TopBar navigation={this.props.navigation} userInfo={this.state.userInfo}
+        <Animated.View pointerEvents='box-none' style={[styles.bar, { top: this.state.barTopPos }]}>
+          <TopBar
+            navigation={this.props.navigation}
+            userInfo={userInfo}
             _ref={ref => { this.TopBar = ref }}
             thisRef={this} />
         </Animated.View>
@@ -282,9 +281,11 @@ class Map extends Component {
               color={Theme.BackgroundColorContent}
               accessibilityLabel='add or edit entrances'
               onPress={() => {
-                if (this.state.userInfo) this.AddPanels.openPanels();
+                if (userInfo) {
+                  this.AddPanels.openPanels();
+                }
                 else {
-                  // tell user to log in
+                  this.props.navigation.navigate('LoginScreen');
                 }
               }} />
           </View>
@@ -309,15 +310,25 @@ class Map extends Component {
 
         {/* SIDE MENU */}
 
-        <SideMenu userInfo={this.state.userInfo}
-          height={height} width={width} size={0.7}
-          ref={ref => { this.SideMenu = ref }} navigation={this.props.navigation} />
+        <SideMenu
+          navigation={this.props.navigation}
+          userInfo={userInfo}
+          height={height}
+          width={width}
+          size={0.7}
+          ref={ref => { this.SideMenu = ref }}
+          _ref={this}
+        />
 
         {/* SETTINGS */}
 
-        <Settings userInfo={this.state.userInfo}
-          height={height} width={width} size={0.5}
-          ref={ref => { this.Settings = ref }} />
+        <Settings
+          userInfo={userInfo}
+          height={height}
+          width={width}
+          size={0.5}
+          ref={ref => { this.Settings = ref }}
+        />
 
         {/* ADD MENU */}
 

@@ -1,75 +1,29 @@
-# AccessU
+# Pylon
 
-NOTE: This guide is still a work in progress. Follow at your own risk.
+[![Node version](https://img.shields.io/node/v/react-native.svg?style=flat)](http://nodejs.org/download/)
+[![HitCount](http://hits.dwyl.io/4lefac/accessu.svg)](http://hits.dwyl.io/4lefac/accessu)
 
+Pylon is a cross-platform React-Native mobile app designed to locate ADA accessible entrances on campus.
 
-## Project Installation and setup:
+### Installation and setup (for developers):
 
-Clone the repository to any desired location.
+Clone this repository to any desired location.
 
-Download and place the following dependency files in the specified locations:
+Download the _.env_ environment configuration file (provided by owners) and place the dependency file in the ROOT directory
 
-- _AppDelegate.m_ in PROJECT_DIRECTORY/ios/AccessU/
-- _AndroidManifest.xml_ in PROJECT_DIRECTORY/android/app/src/main/
-- _db.js_ in PROJECT_DIRECTORY/app/
+In the ROOT directory, run the following commands:
 
-In the project directory, run the following command:
+```bash
+npm install
 
-    npm install
+react-native link
+```
 
-Then make sure all dependencies are linked:
+From there, instructions will be differ depending on the type of mobile device you own. See the following documentation pages for more information.
 
-    react-native link
+[iOS installation instructions](docs/ios.md)
+[android installation instructions](docs/android.md)
 
-From there, instructions will be different depending on the type of mobile device you own.
+### Suggestions
 
-### iOS:
-
-#### STEP 1
-
-Install Xcode
-
-You will need a developer account and it should be free so do not pay for one!
-
-#### STEP 2
-
-Generate your provision profile. So basically sign into Xcode and set your self as the Team developer.
-
-Go to this link:
-
-https://ioscodesigning.com/generating-code-signing-files/
-
-Then run your program on a simulator or you can run it in your phone.
-
-Instructions to run your app on your phone:
-
-https://www.twilio.com/blog/2018/07/how-to-test-your-ios-application-on-a-real-device.html
-
-Now you can actually run from the command line if you would like. CD into the AccessU directory in the terminal. Then run:
-
-    react-native run-ios
-
-Run the command to install and run the app on a connected device:
-
-    react-native run-android
-
-### Android:
-
-First, install Android Debug Bridge (ADB) which allows the computer to communicate with a mobile device via cord.
-To do this, go to [Android Studio's website](https://developer.android.com/studio/#downloads) to download and install the SDK.
-If you don't need the full Android Studio IDE you can just download the "Command line tools only" option.
-
-On your mobile device, navigate to _Settings > About Phone > Software Information_ and tap "Build Number" 7 times to enable Developer Mode (this process may vary depending on the specific device).
-Make sure _Developer Options > USB Debugging_ is enabled.
-
-You can verify the mobile device is detected by your computer with this command:
-
-  adb devices
-
-which will list the device.
-
-...
-
-Run the command to install and run the app on a connected device:
-
-    react-native run-android
+If you have suggestions please let us know! We are always looking to better this app.
