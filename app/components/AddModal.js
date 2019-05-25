@@ -310,20 +310,19 @@ class AddModal extends Component {
               color={Theme.IconColorHighlight}
               accessibilityLabel='close and return to main map'
               onPress={() => {
+                // close modal only if form is correct
                 if (this.state.imageUri == '') {
-                  alert("you must upload an image")
+                  alert("You must upload an image.")
                 } else if (this.refs.form.getValue()) {
                   // location POST
                   if (this.state.data.eType == 'location') {
-                    //todo provide form validation check
                     this.handleLocationAdd();
-
                   }
                   // entrance POST
                   else {
                     this.handleEntranceAdd()
                   }
-                  // close modal only if form is correct
+
                   this.closeModal();
                   this.props.thisRef.closePanels();
                 }
