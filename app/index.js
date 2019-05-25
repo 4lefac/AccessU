@@ -14,7 +14,7 @@ import SignUp from './screens/SignUp';
 import Profile from './screens/Profile';
 import AddedItems from './screens/AddedItems';
 import Comments from './screens/Comments';
-import Help from './screens/Help';
+import MoreInfo from './screens/MoreInfo';
 import Settings from './screens/Settings';
 
 //EStyleSheet.build();
@@ -29,7 +29,7 @@ const AppNavigator = createStackNavigator(
     ProfileScreen: Profile,
     AddedItemsScreen: AddedItems,
     CommentsScreen: Comments,
-    HelpScreen: Help,
+    MoreInfo: MoreInfo,
     SettingsScreen: Settings,
   },
   {
