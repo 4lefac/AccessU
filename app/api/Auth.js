@@ -47,7 +47,6 @@ module.exports.Auth = {
     SignOut: () => {
         return new Promise((resolve, reject) => {
             AsyncStorage.setItem("LoggedInStatus", "false").then(res => {
-                alert("you're signed out I havent figured out how to hide the side menu yet lol");
                 resolve(true);
             }).catch(err => reject(err));
         })

@@ -9,9 +9,12 @@ import {
 } from 'react-native';
 
 /*
-** application name
+** application info
 */
-export const NAME = 'AccessU';
+export {
+  name as NAME,
+  version as VERSION,
+} from '../../app.json';
 
 /*
 ** theme
@@ -19,7 +22,7 @@ export const NAME = 'AccessU';
 export Theme from './Theme';
 
 /*
-** stores persistent data in local memory
+** stores persistent data in local memory (returns Promise)
 */
 export async function CacheData(key, item) {
   try {
@@ -30,7 +33,7 @@ export async function CacheData(key, item) {
 }
 
 /*
-** get persistent data in local memory
+** get persistent data in local memory (returns Promise)
 */
 export async function GetCacheData(key) {
   try {
@@ -41,7 +44,7 @@ export async function GetCacheData(key) {
 }
 
 /*
-** Removes peresistent data in local memory
+** Removes peresistent data in local memory (returns Promise)
 */
 export async function RemoveCacheData(key) {
   try {

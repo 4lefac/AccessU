@@ -49,7 +49,7 @@ class TopBar extends Component {
                   Keyboard.dismiss();
                   this.props.thisRef.SideMenu.open();
                 } else {
-                  alert('You need to log in');
+                  // alert('You need to log in');
                   this.props.navigation.navigate('LoginScreen');
                 }
               });

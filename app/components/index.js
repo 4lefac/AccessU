@@ -44,4 +44,6 @@ export IconButton from './IconButton';
 
 export IconTextButton from './IconTextButton';
 
+export SideMenuButton from './SideMenuButton';
+
 export TextButton from './TextButton';
