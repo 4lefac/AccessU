@@ -11,10 +11,10 @@ import {
 /*
 ** application info
 */
-export {
-  name as NAME,
-  version as VERSION,
-} from '../../app.json';
+import { name } from '../../app.json';
+export const NAME = name; 
+
+export { version as VERSION } from '../../app.json';
 
 /*
 ** theme

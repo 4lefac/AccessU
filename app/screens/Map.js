@@ -187,25 +187,27 @@ class Map extends Component {
     }
 
     componentWillMount() {
+        // get user cache region if available
+        GetCacheData('userRegion')
+            .then((newUserRegion) => {
+                if (newUserRegion) {
+                    userRegion = newUserRegion;
+                }
+                this.setState({ userRegion });
+            });
+    
         // check to see if user is logged in and if the user isn't logged in then we will ask them to.
-        Auth.isSignedIn().then((response) => {
-            if (response) {
-                this.setState({ userInfo: {} });
-            } else {
-                this.props.navigation.navigate('LoginScreen');
-            }
-        });
+        Auth.isSignedIn()
+            .then((response) => {
+                if (response) {
+                    this.setState({ userInfo: {} });
+                } else {
+                    this.props.navigation.navigate('LoginScreen');
+                }
+            });
 
         // get locations
         this.getLocations();
-
-        // get user cache region if available
-        GetCacheData('userRegion').then((newUserRegion) => {
-            if (newUserRegion) {
-                userRegion = newUserRegion;
-            }
-            this.setState({ userRegion });
-        });
 
         // status bar
         StatusBar.setBackgroundColor('rgba(0, 0, 0, 0)');
@@ -224,9 +226,7 @@ class Map extends Component {
     }
 
     render() {
-
         const userInfo = this.state.userInfo || this.props.navigation.getParam('userInfo', null);
-
         return (
             // prevents soft keyboard from moving layout
             <View onLayout={(e) => this.setState({ height: e.nativeEvent.layout.height })}
