@@ -67,7 +67,7 @@ class LogIn extends Component {
         Auth.signIn(this.state.email, this.state.password).then((response) => {
             if (response) {
                 // alert("great job you're signed in, we are working on this feature so we will let you know when we are done");
-                this.props.navigation.goBack();
+                this.props.navigation.navigate('Map', { userInfo: {} });
             } else {
                 alert("incorrect password or email");
             }
@@ -84,7 +84,7 @@ class LogIn extends Component {
             style={styles.cancel}
             iconStyle={styles.cancelIcon}
             icon='close'
-            onPress={() => this.props.navigation.goBack()} />
+            onPress={() => this.props.navigation.navigate('Map', { userInfo: null })} />
 
             {/* image */}
 

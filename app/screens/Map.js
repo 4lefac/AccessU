@@ -45,8 +45,6 @@ let userRegion = {
     longitudeDelta: LONGITUDE_DELTA
 };
 
-// let barState = 1;
-
 const styles = {
     container: {
         position: 'absolute',
@@ -191,8 +189,10 @@ class Map extends Component {
     componentWillMount() {
         // check to see if user is logged in and if the user isn't logged in then we will ask them to.
         Auth.isSignedIn().then((response) => {
-            if (!response) {
-                this.props.navigation.navigate('LoginScreen')
+            if (response) {
+                this.setState({ userInfo: {} });
+            } else {
+                this.props.navigation.navigate('LoginScreen');
             }
         });
 
@@ -211,19 +211,9 @@ class Map extends Component {
         StatusBar.setBackgroundColor('rgba(0, 0, 0, 0)');
         StatusBar.setBarStyle('dark-content');
         StatusBar.setTranslucent(true);
-
-        //if user is not logged in load the login screen
-        //this.props.navigation.navigate('Login')
     }
 
     componentDidMount() {
-        // verify if signed in
-        Auth.isSignedIn().then((response) => {
-            if (response) {
-                this.setState({ userInfo: {} });
-            }
-        });
-
         // location fallback
         if (this.state.locations.length == 0) {
             this.getLocations();
@@ -234,6 +224,9 @@ class Map extends Component {
     }
 
     render() {
+
+        const userInfo = this.state.userInfo || this.props.navigation.getParam('userInfo', null);
+
         return (
             // prevents soft keyboard from moving layout
             <View onLayout={(e) => this.setState({ height: e.nativeEvent.layout.height })}
@@ -256,7 +249,7 @@ class Map extends Component {
                 <Animated.View pointerEvents='box-none' style={[styles.bar, { top: this.state.barTopPos }]}>
                     <TopBar
                     navigation={this.props.navigation}
-                    userInfo={this.state.userInfo}
+                    userInfo={userInfo}
                     _ref={ref => { this.TopBar = ref }}
                     thisRef={this} />
                 </Animated.View>
@@ -279,7 +272,7 @@ class Map extends Component {
                         color={Theme.BackgroundColorContent}
                         accessibilityLabel='add or edit entrances'
                         onPress={() => {
-                            if (this.state.userInfo) {
+                            if (userInfo) {
                                 this.AddPanels.openPanels();
                             }
                             else {
@@ -310,17 +303,18 @@ class Map extends Component {
 
                 <SideMenu
                 navigation={this.props.navigation}
-                userInfo={this.state.userInfo}
+                userInfo={userInfo}
                 height={height}
                 width={width}
                 size={0.7}
                 ref={ref => { this.SideMenu = ref }}
+                _ref={this}
                 />
 
                 {/* SETTINGS */}
 
                 <Settings
-                userInfo={this.state.userInfo}
+                userInfo={userInfo}
                 height={height}
                 width={width}
                 size={0.5}
