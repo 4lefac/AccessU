@@ -357,7 +357,7 @@ class AddModal extends Component {
                     // entrance POST
                     this.handleEntranceAdd()
                   }
-                  alert('Uploading...Do not leave the app or some stuff maye uploading incompletely. Uploading will take a while till you get an alert saying its done. Loading screen coming soon.')
+                  alert('Uploading...Do not leave the app or some stuff maye uploading incompletely. Uploading will take a while till you get an alert saying its done. You have to manually refresh the app for now. Loading screen coming soon.')
                   this.closeModal();
                   this
                     .props
