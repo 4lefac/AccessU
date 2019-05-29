@@ -9,7 +9,7 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-#import <Firebase.h>
+//#import <Firebase.h>
 #import "ReactNativeConfig.h"
 @import GoogleMaps;
 
@@ -19,11 +19,9 @@
 {
     NSURL *jsCodeLocation;
   
-  NSString *apiUrl = [ReactNativeConfig envFor:@"GOOGLE_MAPS_API_KEY"];
- 
-  [GMSServices provideAPIKey:apiUrl];
-  
-  
+ NSString *apiUrl = [ReactNativeConfig envFor:@"GOOGLE_MAPS_API_KEY"];
+  NSString *hi = @"hello";
+ [GMSServices provideAPIKey:apiUrl];
  
   #ifdef DEBUG
     jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
@@ -31,7 +29,7 @@
     jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
   #endif
  
-  [FIRApp configure];
+  //[FIRApp configure];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"AccessU"
                                                initialProperties:nil

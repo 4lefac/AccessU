@@ -1,19 +1,12 @@
 import React, { Component } from 'react';
 import {
-<<<<<<< HEAD
   Animated,
   Dimensions,
   Keyboard,
   StatusBar,
   View,
-  Platform
-=======
-    Animated,
-    Dimensions,
-    Keyboard,
-    StatusBar,
-    View,
->>>>>>> 14c2f05745dfd6ab54a569ee7b3e32fe4b96712d
+  Platform,
+  ActivityIndicator
 } from 'react-native';
 import {
   AddPanels,
@@ -219,9 +212,12 @@ class Map extends Component {
     this.getLocations();
 
     // status bar
-    StatusBar.setBackgroundColor('rgba(0, 0, 0, 0)');
-    StatusBar.setBarStyle('dark-content');
-    StatusBar.setTranslucent(true);
+    // this is needed to remove a warning in ios
+    if (Platform.os == "android") {
+      StatusBar.setBackgroundColor('rgba(0, 0, 0, 0)');
+      StatusBar.setBarStyle('dark-content');
+      StatusBar.setTranslucent(true);
+    }
   }
 
   componentDidMount() {
@@ -240,7 +236,6 @@ class Map extends Component {
       // prevents soft keyboard from moving layout
       <View onLayout={(e) => this.setState({ height: e.nativeEvent.layout.height })}
         style={[styles.container, { height: this.state.height }]}>
-
         {/* MAP */}
 
         <MapComponent

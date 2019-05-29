@@ -1,13 +1,10 @@
-
 var baseURL = 'https://accessu-c0933.firebaseapp.com/api/v2';
-
-
 
 module.exports.Routes = {
 
   /*
-  ** GET request for the main map screen.
-  */
+** GET request for the main map screen.
+*/
   GET_map: () => {
     return fetch(baseURL + '/locations')
       .then((response) => response.json())
@@ -18,9 +15,10 @@ module.exports.Routes = {
         console.error(error);
       });
   },
+
   /*
-  ** getting a specific id and return a json object of that entrance
-  */
+** getting a specific id and return a json object of that entrance
+*/
   GET_map_with_id: (entranceID) => {
     return fetch(baseURL + entranceID)
       .then((response) => response.json())
@@ -31,9 +29,10 @@ module.exports.Routes = {
         console.error(error);
       });
   },
+
   /*
-  ** add an location data to the database.
-  */
+** add an location data to the database.
+*/
   POST_Add_Location: (data) => {
     return fetch(baseURL + '/location', {
       method: 'POST',
@@ -41,13 +40,17 @@ module.exports.Routes = {
       headers: {
         'Content-Type': 'application/json'
       }
-    }).then(res => res.json())
-      .then(response => { return response })
+    })
+      .then(res => res.json())
+      .then(response => {
+        return response
+      })
       .catch(error => alert(JSON.stringify(error)));
   },
+
   /*
-  ** add an entrance data to the database.
-  */
+** add an entrance data to the database.
+*/
   POST_Add_Entrance: (data) => {
     return fetch(baseURL + '/entrance', {
       method: 'POST',
@@ -55,46 +58,46 @@ module.exports.Routes = {
       headers: {
         'Content-Type': 'application/json'
       }
-    }).then(res => res.json())
-      .then(response => { return response })
+    })
+      .then(res => res.json())
+      .then(response => {
+        return response
+      })
       .catch(error => alert(JSON.stringify(error) + 'error here'));
   },
+
   /*
-  ** add an image for a location to the database
-  */
+** add an image for a location to the database
+*/
   POST_Add_Location_Image: (data, locationID) => {
     alert(JSON.stringify(data))
     fetch(baseURL + '/images/location/' + locationID, {
       method: 'POST',
-      body: data,
-      // headers: {
-      //   Accept: 'application/json',
-      //   'Content-Type': 'multipart/form-data',
-      // },
-    }).then(res => res.json())
+      body: data
+    })
+      .then(res => res.json())
       .then(response => {
-        alert(JSON.stringify(response) + 'from api')
+        alert(JSON.stringify(response) + ' location added successfully')
       })
       .catch(error => {
-        console.log(JSON.stringify(error))
-        alert(JSON.stringify(error) + "froom error")
+        alert(JSON.stringify(error) + " error adding location")
       });
   },
 
   /*
-  ** add an image for a entrance to the database
-  */
+** add an image for a entrance to the database
+*/
   POST_Add_Entrance_Image: (data, entranceID) => {
     alert(JSON.stringify(data))
     fetch(baseURL + '/images/entrance/' + entranceID, {
       method: 'POST',
-      body: data,
-      // headers: {
-      //   Accept: 'application/json',
-      //   'Content-Type': 'multipart/form-data',
-      // },
-    }).then(res => res.json())
-      .then(response => { alert(JSON.stringify(response)) })
+      body: data
+    })
+      .then(res => res.json())
+      .then(response => {
+        alert(JSON.stringify(response) + ' image added successfully')
+      })
       .catch(error => alert(JSON.stringify(error)));
   }
+
 }

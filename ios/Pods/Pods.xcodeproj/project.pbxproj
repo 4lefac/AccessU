@@ -3420,6 +3420,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8F05259D325D4B3198BA16FC4D0D50D3 /* Build configuration list for PBXNativeTarget "react-native-config" */;
 			buildPhases = (
+				5AF2B0EDF04781544CCAFD18645BEDD8 /* ShellScript */,
 				D9B91931545A971AD58F36A844E8DE33 /* Sources */,
 				023B7295B4A5169A8C16EBD297D78A12 /* Frameworks */,
 				095C8B45948D036FA93DEC28333DEB77 /* Headers */,
@@ -3558,6 +3559,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5AF2B0EDF04781544CCAFD18645BEDD8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd ../../ && RNC_ROOT=./node_modules/react-native-config/ && export SYMROOT=$RNC_ROOT/ios/ReactNativeConfig && export BUILD_DIR=$RNC_ROOT/ios/ReactNativeConfig && ruby $RNC_ROOT/ios/ReactNativeConfig/BuildDotenvConfig.ruby";
+			showEnvVarsInLog = 1;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1EC31BF2F220C44F6B5B240F54AFB859 /* Sources */ = {
