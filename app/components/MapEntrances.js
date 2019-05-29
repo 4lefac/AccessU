@@ -27,20 +27,20 @@ class MapEntrances extends Component {
   render() {
     return (
       <Animated.View>
-      {this.state.entrances.map((entrance, index) => {
-        const bIsActive = index + 1 == this.state.activeIndex;
-        return (
-          <Circle key={entrance.id}
-          center={{
-            latitude:entrance.coordinates._latitude,
-            longitude:entrance.coordinates._longitude
-          }}
-          radius={bIsActive ? 4 : 2}
-          strokeColor={bIsActive ? Theme.IconColorBackground :
-          Theme.IconColorHighlight} strokeWidth={2}
-          fillColor={bIsActive ? Theme.IconColorBackground : Theme.Clear} />
-        )
-      })}
+        {this.state.entrances.map((entrance, index) => {
+          const bIsActive = index + 1 == this.state.activeIndex;
+          return (
+            <Circle key={entrance.id}
+              center={{
+                latitude: entrance.coordinates._latitude,
+                longitude: entrance.coordinates._longitude
+              }}
+              radius={bIsActive ? 4 : 2}
+              strokeColor={bIsActive ? Theme.IconColorBackground :
+                Theme.IconColorHighlight} strokeWidth={2}
+              fillColor={bIsActive ? Theme.IconColorBackground : Theme.Clear} />
+          )
+        })}
       </Animated.View>
     )
   }
