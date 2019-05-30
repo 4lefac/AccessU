@@ -12,7 +12,6 @@ import {
   MapButton,
   MapCardScroll,
   MapComponent,
-  // MapSearchBar,
   MapSearchResults,
   Settings,
   SideMenu,
@@ -61,7 +60,7 @@ const styles = {
     justifyContent: 'space-evenly',
     height: '6%',
   },
-  barTopPos: { top: 50 },
+  barTopPos: (Platform.OS == 'android') ? { top: 40 } : { top: 50 },
   barBottom: {
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -109,8 +108,13 @@ class Map extends Component {
   ** retrieves locations
   */
   getLocations = () => {
-    Routes.GET_map().then(locations => this.setState({ locations }))
-      .catch((e) => { throw e })
+    Routes.GET_map()
+        .then((locations) => {
+            if (Array.isArray(locations)) {
+                this.setState({ locations });
+            }
+        })
+        .catch((e) => { throw e });
   }
 
   /*
@@ -211,7 +215,7 @@ class Map extends Component {
 
     // status bar
     // this is needed to remove a warning in ios
-    if (Platform.os == "android") {
+    if (Platform.OS == "android") {
       StatusBar.setBackgroundColor('rgba(0, 0, 0, 0)');
       StatusBar.setBarStyle('dark-content');
       StatusBar.setTranslucent(true);
@@ -221,7 +225,7 @@ class Map extends Component {
   componentDidMount() {
     // location fallback
     if (this.state.locations.length == 0) {
-      this.getLocations();
+        this.getLocations();
     }
 
     // load initial user region
@@ -237,14 +241,14 @@ class Map extends Component {
         {/* MAP */}
 
         <MapComponent
-          region={this.state.userRegion}
-          onUserLocationChange={(e) => this.updateUserRegion(e.nativeEvent.coordinate)}
-          locations={this.state.locations}
-          onPress={this.mapPress}
-          cardWidth={width}
-          thisRef={this}
-          ref={ref => { this.MapComponent = ref }}
-          _ref={_ref => { this.MapView = _ref }} />
+        region={this.state.userRegion}
+        onUserLocationChange={(e) => this.updateUserRegion(e.nativeEvent.coordinate)}
+        locations={this.state.locations}
+        onPress={this.mapPress}
+        cardWidth={width}
+        thisRef={this}
+        ref={ref => { this.MapComponent = ref }}
+        _ref={_ref => { this.MapView = _ref }} />
 
         {/* TOP BAR */}
 
