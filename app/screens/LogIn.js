@@ -1,10 +1,11 @@
-import React, { Component } from "react";
-import { Image, View, TouchableOpacity, Text } from "react-native";
-import { FormTextInput, IconButton, TextButton } from "../components";
-import imageLogo from "../assets/images/logo.jpeg";
-import { Auth } from "../api/Auth";
-import { Theme } from "../global";
-import t from "tcomb-form-native";
+import React, { Component } from 'react';
+import { Image, View, TouchableOpacity, Text, Platform } from 'react-native';
+import { IconButton, TextButton } from '../components';
+import imageLogo from '../assets/images/logo.jpeg';
+import { Auth } from '../api/Auth';
+import { User } from '../api/User';
+import { Theme } from '../global';
+import t from 'tcomb-form-native';
 
 {
   /* T FORM  */
@@ -16,7 +17,7 @@ const Form = t.form.Form;
   /* email validation */
 }
 var email = t.refinement(t.String, function(e) {
-  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(e)) {
+  if (e) {
     return true;
   } else {
     return false;
@@ -24,15 +25,14 @@ var email = t.refinement(t.String, function(e) {
 });
 
 email.getValidationErrorMessage = function(value, path, context) {
-  return "Invalid email.";
+  return 'You must enter an email.';
 };
 
 {
   /* password validation */
 }
 var pass = t.refinement(t.String, function(p) {
-  var paswd = /^[0-9a-zA-Z]{8,}$/;
-  if (p.match(paswd)) {
+  if (p) {
     return true;
   } else {
     return false;
@@ -41,9 +41,9 @@ var pass = t.refinement(t.String, function(p) {
 
 pass.getValidationErrorMessage = function(value, path, context) {
   if (!value) {
-    return "You have to enter a password.";
+    return 'You have to enter a password.';
   } else {
-    return "Must be atleast 8 letters or digits and must start with a letter.";
+    return 'Must be atleast 8 letters or digits and must start with a letter.';
   }
 };
 
@@ -68,14 +68,14 @@ const styles = {
   container: {
     flex: 1,
     backgroundColor: Theme.BackgroundColorContent,
-    alignItems: "center"
+    alignItems: 'center'
   },
   cancel: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
-    paddingTop: "15%",
-    paddingLeft: "5%",
+    paddingTop: '15%',
+    paddingLeft: '5%',
     zIndex: 2
   },
   cancelIcon: {
@@ -83,14 +83,14 @@ const styles = {
   },
   logo: {
     flex: 1,
-    width: "90%",
-    resizeMode: "contain"
+    width: '90%',
+    resizeMode: 'contain'
   },
   form: {
     flex: 1,
-    width: "90%",
-    paddingBottom: "5%",
-    justifyContent: "space-between"
+    width: '90%',
+    paddingBottom: '5%',
+    justifyContent: 'space-between'
   },
   formInputLabel: {
     height: 0
@@ -100,18 +100,40 @@ const styles = {
   }
 };
 
-class LogIn extends Component {
-  static navigationOptions = {
-    header: null
-  };
+//If android do not show header because ios users like headers
+const navigationSettings = navigation =>
+  Platform.OS == 'android'
+    ? {
+        header: null
+      }
+    : {
+        headerTitle: 'Log In',
+        headerLeft: (
+          <IconButton
+            icon='close'
+            size={30}
+            onPress={() => {
+              var userInfo = User.GET_user_info();
+              navigation.navigate('Map', { userInfo: userInfo });
+            }}
+          />
+        )
+      };
 
-  state = {};
+class LogIn extends Component {
+  static navigationOptions = ({ navigation }) => navigationSettings(navigation);
+
+  state = {
+    invalidSignIn: false,
+    userEmail: '',
+    userPass: ''
+  };
 
   handleForgotPassword = () => {
-    this.props.navigation.navigate("ForgotPassword", { userInfo: null });
+    this.props.navigation.navigate('ForgotPassword');
   };
 
-  handleSignUpPress = () => this.props.navigation.navigate("SignUpScreen");
+  handleSignUpPress = () => this.props.navigation.navigate('SignUpScreen');
 
   handleLogInPress = () => {
     const formValue = this.refs.form.getValue();
@@ -119,9 +141,14 @@ class LogIn extends Component {
     if (formValue) {
       Auth.signIn(formValue.Email, formValue.Password).then(response => {
         if (response) {
-          this.props.navigation.navigate("Map", { userInfo: {} });
+          this.setState({ invalidSignIn: false });
+          this.props.navigation.navigate('Map', { userInfo: {} });
         } else {
-          alert("Email or Password is wrong.");
+          this.setState({
+            invalidSignIn: true,
+            userEmail: formValue.Email,
+            userPass: formValue.Password
+          });
         }
       });
     }
@@ -130,28 +157,37 @@ class LogIn extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {/* close button */}
-
-        <IconButton
-          style={styles.cancel}
-          iconStyle={styles.cancelIcon}
-          icon="close"
-          onPress={() =>
-            this.props.navigation.navigate("Map", { userInfo: null })
-          }
-        />
-
+        {/* close button if it is android */}
+        {Platform.OS == 'android' ? (
+          <IconButton
+            style={styles.cancel}
+            iconStyle={styles.cancelIcon}
+            icon='clear'
+            onPress={() => {
+              var userInfo = User.GET_user_info();
+              this.props.navigation.navigate('Map', { userInfo: userInfo });
+            }}
+          />
+        ) : (
+          <Text />
+        )}
         {/* image */}
-
         <Image source={imageLogo} style={styles.logo} />
-
         {/* form */}
-
+        {this.state.invalidSignIn ? (
+          <Text style={{ color: '#FF0000' }}>Incorrect password or email.</Text>
+        ) : (
+          <Text />
+        )}
         <View style={styles.form}>
           <Form
-            ref="form"
+            ref='form'
             type={Log}
             options={options}
+            value={{
+              Email: this.state.userEmail,
+              Password: this.state.userPass
+            }}
             onChange={() => {
               this.refs.form.getValue();
             }}
@@ -160,12 +196,15 @@ class LogIn extends Component {
           <View>
             {/* Log in */}
 
-            <TextButton text="Log In" onPress={this.handleLogInPress} />
+            <TextButton
+              text='Log In'
+              onPress={this.handleLogInPress.bind(this)}
+            />
 
             {/* sign up */}
 
             <TextButton
-              text="Sign Up"
+              text='Sign Up'
               color={Theme.White}
               backgroundColor={Theme.IconColorHighlight}
               onPress={this.handleSignUpPress}
@@ -174,7 +213,7 @@ class LogIn extends Component {
           {/* Forgot Password */}
 
           <TouchableOpacity
-            style={{ alignItems: "center" }}
+            style={{ alignItems: 'center' }}
             onPress={this.handleForgotPassword}
           >
             <Text style={styles.forgotPassword}>Forgot Password</Text>
