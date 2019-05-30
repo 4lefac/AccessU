@@ -42,8 +42,6 @@ const Entrance = t.struct({
   )
 });
 
-{/* other */ }
-
 var options = {
   fields: {
     Location: {
@@ -61,7 +59,7 @@ var options = {
     }
   }
 }
-
+{/* other */ }
 const ImagePickerOptions = {
   title: 'Select Image',
   storageOptions: {

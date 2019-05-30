@@ -1,138 +1,188 @@
-import React, { Component } from 'react';
-import {
-    Image,
-    View,
-} from 'react-native';
-import {
-    FormTextInput,
-    IconButton,
-    TextButton
-} from '../components';
+import React, { Component } from "react";
+import { Image, View, TouchableOpacity, Text } from "react-native";
+import { FormTextInput, IconButton, TextButton } from "../components";
 import imageLogo from "../assets/images/logo.jpeg";
 import { Auth } from "../api/Auth";
-import { Theme } from '../global';
+import { Theme } from "../global";
+import t from "tcomb-form-native";
 
-const styles = {
-    container: {
-        flex: 1,
-        backgroundColor: Theme.BackgroundColorContent,
-        alignItems: 'center',
-    },
-    cancel: {
-        position: 'absolute',
-        top: 0, left: 0,
-        paddingTop: '15%',
-        paddingLeft: '5%',
-        zIndex: 2,
-    },
-    cancelIcon: {
-        fontSize: Theme.FontSize * 2,
-    },
-    logo: {
-        flex: 1,
-        width: '90%',
-        resizeMode: 'contain',
-    },
-    form: {
-        flex: 1,
-        width: '90%',
-        paddingBottom: '5%',
-    },
-    formInput: {
-        paddingTop: 0,
-        paddingBottom: 0,
-    },
-    formInputLabel: {
-        height: 0,
-    }
+{
+  /* T FORM  */
 }
 
+const Form = t.form.Form;
 
+{
+  /* email validation */
+}
+var email = t.refinement(t.String, function(e) {
+  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(e)) {
+    return true;
+  } else {
+    return false;
+  }
+});
+
+email.getValidationErrorMessage = function(value, path, context) {
+  return "Invalid email.";
+};
+
+{
+  /* password validation */
+}
+var pass = t.refinement(t.String, function(p) {
+  var paswd = /^[0-9a-zA-Z]{8,}$/;
+  if (p.match(paswd)) {
+    return true;
+  } else {
+    return false;
+  }
+});
+
+pass.getValidationErrorMessage = function(value, path, context) {
+  if (!value) {
+    return "You have to enter a password.";
+  } else {
+    return "Must be atleast 8 letters or digits and must start with a letter.";
+  }
+};
+
+{
+  /* t form options and settings */
+}
+const Log = t.struct({ Email: email, Password: pass });
+
+var options = {
+  fields: {
+    Password: {
+      password: true,
+      secureTextEntry: true
+    }
+  }
+};
+
+{
+  /* other */
+}
+const styles = {
+  container: {
+    flex: 1,
+    backgroundColor: Theme.BackgroundColorContent,
+    alignItems: "center"
+  },
+  cancel: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    paddingTop: "15%",
+    paddingLeft: "5%",
+    zIndex: 2
+  },
+  cancelIcon: {
+    fontSize: Theme.FontSize * 2
+  },
+  logo: {
+    flex: 1,
+    width: "90%",
+    resizeMode: "contain"
+  },
+  form: {
+    flex: 1,
+    width: "90%",
+    paddingBottom: "5%",
+    justifyContent: "space-between"
+  },
+  formInputLabel: {
+    height: 0
+  },
+  forgotPassword: {
+    fontSize: 15
+  }
+};
 
 class LogIn extends Component {
-    static navigationOptions = { header: null }
+  static navigationOptions = {
+    header: null
+  };
 
-    state = {
-        email: '',
-        password: ''
+  state = {};
+
+  handleForgotPassword = () => {
+    this.props.navigation.navigate("ForgotPassword", { userInfo: null });
+  };
+
+  handleSignUpPress = () => this.props.navigation.navigate("SignUpScreen");
+
+  handleLogInPress = () => {
+    const formValue = this.refs.form.getValue();
+
+    if (formValue) {
+      Auth.signIn(formValue.Email, formValue.Password).then(response => {
+        if (response) {
+          this.props.navigation.navigate("Map", { userInfo: {} });
+        } else {
+          alert("Email or Password is wrong.");
+        }
+      });
     }
+  };
 
-    handleEmailChange = (email) => this.setState({ email });
+  render() {
+    return (
+      <View style={styles.container}>
+        {/* close button */}
 
-    handlePasswordChange = (password) => this.setState({ password });
+        <IconButton
+          style={styles.cancel}
+          iconStyle={styles.cancelIcon}
+          icon="close"
+          onPress={() =>
+            this.props.navigation.navigate("Map", { userInfo: null })
+          }
+        />
 
-    handleSignUpPress = () => this.props.navigation.navigate("SignUpScreen");
+        {/* image */}
 
-    handleLogInPress = () => {
-        Auth.signIn(this.state.email, this.state.password).then((response) => {
-            if (response) {
-                // alert("great job you're signed in, we are working on this feature so we will let you know when we are done");
-                this.props.navigation.navigate('Map', { userInfo: {} });
-            } else {
-                alert("incorrect password or email");
-            }
-        });
-    }
+        <Image source={imageLogo} style={styles.logo} />
 
-    render() {
-        return (
-        <View style={styles.container}>
+        {/* form */}
 
-            {/* close button */}
+        <View style={styles.form}>
+          <Form
+            ref="form"
+            type={Log}
+            options={options}
+            onChange={() => {
+              this.refs.form.getValue();
+            }}
+          />
 
-            <IconButton
-            style={styles.cancel}
-            iconStyle={styles.cancelIcon}
-            icon='close'
-            onPress={() => this.props.navigation.navigate('Map', { userInfo: null })} />
+          <View>
+            {/* Log in */}
 
-            {/* image */}
+            <TextButton text="Log In" onPress={this.handleLogInPress} />
 
-            <Image source={imageLogo} style={styles.logo} />
+            {/* sign up */}
 
-            {/* form */}
+            <TextButton
+              text="Sign Up"
+              color={Theme.White}
+              backgroundColor={Theme.IconColorHighlight}
+              onPress={this.handleSignUpPress}
+            />
+          </View>
+          {/* Forgot Password */}
 
-            <View style={styles.form}>
-                
-                {/* email */}
-                
-                <FormTextInput
-                style={styles.formInput}
-                styleLabel={styles.formInputLabel}
-                value={this.state.email}
-                onChangeText={this.handleEmailChange}
-                placeholder='Email'
-                />
-                
-                {/* password */}
-                
-                <FormTextInput
-                style={styles.formInput}
-                styleLabel={styles.formInputLabel}
-                value={this.state.password}
-                onChangeText={this.handlePasswordChange}
-                placeholder='Password'
-                />
-                
-                {/* log in */}
-                
-                <TextButton text='Log In'
-                onPress={this.handleLogInPress}
-                />
-                
-                {/* sign up */}
-                
-                <TextButton text='Sign Up'
-                color={Theme.White}
-                backgroundColor={Theme.IconColorHighlight}
-                onPress={this.handleSignUpPress}
-                />
-                
-            </View>
-
+          <TouchableOpacity
+            style={{ alignItems: "center" }}
+            onPress={this.handleForgotPassword}
+          >
+            <Text style={styles.forgotPassword}>Forgot Password</Text>
+          </TouchableOpacity>
         </View>
-        );
-    }
+      </View>
+    );
+  }
 }
 
 export default LogIn;
