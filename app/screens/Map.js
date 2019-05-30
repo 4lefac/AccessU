@@ -27,7 +27,6 @@ import {
 import LocationSwitch from 'react-native-location-switch';
 import { Routes } from '../api/Routes';
 import { Auth } from '../api/Auth';
-
 /*
 ** variables
 */
