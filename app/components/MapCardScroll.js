@@ -3,10 +3,8 @@ import {
   Animated,
   Linking,
   Platform,
-  ScrollView,
   StatusBar,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import {
