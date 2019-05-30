@@ -6,7 +6,6 @@ import {
   StatusBar,
   View,
   Platform,
-  ActivityIndicator
 } from 'react-native';
 import {
   AddPanels,
@@ -29,7 +28,6 @@ import {
 import LocationSwitch from 'react-native-location-switch';
 import { Routes } from '../api/Routes';
 import { Auth } from '../api/Auth';
-
 /*
 ** variables
 */
