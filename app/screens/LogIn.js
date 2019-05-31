@@ -5,7 +5,8 @@ import {
   TouchableOpacity,
   Text,
   Platform,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Keyboard
 } from 'react-native';
 import { IconButton, TextButton } from '../components';
 import imageLogo from '../assets/images/logo.jpeg';
@@ -58,22 +59,6 @@ pass.getValidationErrorMessage = function(value, path, context) {
   /* t form options and settings */
 }
 const Log = t.struct({ Email: email, Password: pass });
-
-var options = {
-  fields: {
-    Email: {
-      autoCapitalize: 'none',
-      autoCorrect: false,
-      returnKeyType: 'next',
-      keyboardType: 'email-address'
-    },
-    Password: {
-      password: true,
-      secureTextEntry: true,
-      returnKeyType: 'go'
-    }
-  }
-};
 
 {
   /* other */
@@ -133,7 +118,7 @@ const navigationSettings = navigation =>
           />
         )
       };
-const keyboardVerticalOffset = Platform.OS == 'android' ? 0 : 170;
+const keyboardVerticalOffset = Platform.OS == 'android' ? 0 : -5;
 class LogIn extends Component {
   static navigationOptions = ({ navigation }) => navigationSettings(navigation);
 
@@ -150,7 +135,7 @@ class LogIn extends Component {
   handleSignUpPress = () => this.props.navigation.navigate('SignUpScreen');
 
   handleLogInPress = () => {
-    const formValue = this.refs.form.getValue();
+    const formValue = this.formRef.getValue();
 
     if (formValue) {
       Auth.signIn(formValue.Email, formValue.Password).then(response => {
@@ -174,7 +159,6 @@ class LogIn extends Component {
         behavior='padding'
         keyboardVerticalOffset={keyboardVerticalOffset}
         style={styles.container}
-        enabled
       >
         {/* close button if it is android */}
         {Platform.OS == 'android' ? (
@@ -200,15 +184,36 @@ class LogIn extends Component {
         )}
         <View style={styles.form}>
           <Form
-            ref='form'
+            ref={c => {
+              this.formRef = c;
+            }}
             type={Log}
-            options={options}
+            //do not create a variable to hold the value of options this because the getComponent method for some reason wont work
+            options={{
+              fields: {
+                Email: {
+                  autoCapitalize: 'none',
+                  autoCorrect: false,
+                  returnKeyType: 'next',
+                  keyboardType: 'email-address',
+                  onSubmitEditing: () => {
+                    this.formRef.getComponent('Password').refs.input.focus();
+                  }
+                },
+                Password: {
+                  password: true,
+                  secureTextEntry: true,
+                  returnKeyType: 'go',
+                  onSubmitEditing: () => this.handleLogInPress()
+                }
+              }
+            }}
             value={{
               Email: this.state.userEmail,
               Password: this.state.userPass
             }}
             onChange={() => {
-              this.refs.form.getValue();
+              this.formRef.getValue();
             }}
           />
 
@@ -217,7 +222,10 @@ class LogIn extends Component {
 
             <TextButton
               text='Log In'
-              onPress={this.handleLogInPress.bind(this)}
+              onPress={() => {
+                Keyboard.dismiss();
+                this.handleLogInPress();
+              }}
             />
 
             {/* sign up */}
