@@ -18,6 +18,22 @@ import t from 'tcomb-form-native';
 import ImagePicker from 'react-native-image-picker';
 const { width, height } = Dimensions.get('window');
 const { State: TextInputState } = TextInput;
+const userID = User.GET_user_id();
+{
+  /* This controlls what is displayed when the user wants to pick an image. */
+}
+const ImagePickerOptions = {
+  title: 'Select Image',
+  storageOptions: {
+    skipBackup: true,
+    path: 'images'
+  },
+  mediaType: 'photo',
+  //this is the max size of the photo. Smaller sizes = faster upload times
+  maxWidth: 500,
+  maxHeigh: 500
+};
+
 {
   /* T FORM SETTINGS AND OPTIONS */
 }
@@ -56,21 +72,6 @@ var options = {
       label: 'Accessibility Types'
     }
   }
-};
-
-{
-  /* This controlls what is displayed when the user wants to pick an image. */
-}
-const ImagePickerOptions = {
-  title: 'Select Image',
-  storageOptions: {
-    skipBackup: true,
-    path: 'images'
-  },
-  mediaType: 'photo',
-  //this is the max size of the photo. Smaller sizes = faster upload times
-  maxWidth: 500,
-  maxHeigh: 500
 };
 
 {
@@ -133,7 +134,6 @@ const styles = {
     aspectRatio: 1
   }
 };
-const userID = User.GET_user_id();
 
 class AddModal extends Component {
   state = {

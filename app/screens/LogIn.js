@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { Image, View, TouchableOpacity, Text, Platform } from 'react-native';
+import {
+  Image,
+  View,
+  TouchableOpacity,
+  Text,
+  Platform,
+  KeyboardAvoidingView
+} from 'react-native';
 import { IconButton, TextButton } from '../components';
 import imageLogo from '../assets/images/logo.jpeg';
 import { Auth } from '../api/Auth';
@@ -156,7 +163,7 @@ class LogIn extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView behavior='padding' style={styles.container}>
         {/* close button if it is android */}
         {Platform.OS == 'android' ? (
           <IconButton
@@ -219,7 +226,7 @@ class LogIn extends Component {
             <Text style={styles.forgotPassword}>Forgot Password</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
