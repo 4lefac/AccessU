@@ -119,6 +119,7 @@ const navigationSettings = navigation =>
         )
       };
 const keyboardVerticalOffset = Platform.OS == 'android' ? 0 : -5;
+
 class LogIn extends Component {
   static navigationOptions = ({ navigation }) => navigationSettings(navigation);
 
