@@ -126,7 +126,7 @@ const navigationSettings = navigation =>
           />
         )
       };
-
+const keyboardVerticalOffset = Platform.OS == 'android' ? 0 : 300;
 class LogIn extends Component {
   static navigationOptions = ({ navigation }) => navigationSettings(navigation);
 
@@ -163,7 +163,12 @@ class LogIn extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView behavior='padding' style={styles.container}>
+      <KeyboardAvoidingView
+        behavior='padding'
+        keyboardVerticalOffset={keyboardVerticalOffset}
+        style={styles.container}
+        enabled
+      >
         {/* close button if it is android */}
         {Platform.OS == 'android' ? (
           <IconButton
