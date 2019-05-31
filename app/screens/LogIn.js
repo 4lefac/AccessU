@@ -61,9 +61,16 @@ const Log = t.struct({ Email: email, Password: pass });
 
 var options = {
   fields: {
+    Email: {
+      autoCapitalize: 'none',
+      autoCorrect: false,
+      returnKeyType: 'next',
+      keyboardType: 'email-address'
+    },
     Password: {
       password: true,
-      secureTextEntry: true
+      secureTextEntry: true,
+      returnKeyType: 'go'
     }
   }
 };
@@ -126,7 +133,7 @@ const navigationSettings = navigation =>
           />
         )
       };
-const keyboardVerticalOffset = Platform.OS == 'android' ? 0 : 300;
+const keyboardVerticalOffset = Platform.OS == 'android' ? 0 : 170;
 class LogIn extends Component {
   static navigationOptions = ({ navigation }) => navigationSettings(navigation);
 
