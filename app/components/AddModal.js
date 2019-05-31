@@ -367,7 +367,27 @@ class AddModal extends Component {
                 <Form
                   ref='form'
                   type={Location}
-                  options={options}
+                  options={{
+                    fields: {
+                      Location: {
+                        error: 'You must provide a location name.',
+                        label: 'Location Name',
+                        returnKeyType: 'next',
+                        onSubmitEditing: () => {
+                          this.refs.form
+                            .getComponent('Description')
+                            .refs.input.focus();
+                        }
+                      },
+                      Description: {
+                        error: 'You must provide a description.',
+                        returnKeyType: 'go',
+                        onSubmitEditing: () => {
+                          this.handleLocationAdd;
+                        }
+                      }
+                    }
+                  }}
                   value={this.state.locationFormValue}
                   onChange={() => {
                     this.refs.form.getValue();
