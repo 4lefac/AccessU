@@ -41,7 +41,7 @@ var pass = t.refinement(t.String, function(p) {
 
 pass.getValidationErrorMessage = function(value, path, context) {
   if (!value) {
-    return 'You have to enter a password.';
+    return 'You must enter a password.';
   } else {
     return 'Must be atleast 8 letters or digits and must start with a letter.';
   }

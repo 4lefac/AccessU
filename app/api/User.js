@@ -10,6 +10,12 @@ module.exports.User = {
 
     },
     /*
+    ** GET full userInfo Json
+    */
+    GET_user_id: () => {
+        return "tempID"
+    },
+    /*
     ** GET user basic Profile info
     */
     GET_profile: () => {
