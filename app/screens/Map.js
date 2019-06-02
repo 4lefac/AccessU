@@ -238,6 +238,7 @@ class Map extends Component {
       // prevents soft keyboard from moving layout
       <View onLayout={(e) => this.setState({ height: e.nativeEvent.layout.height })}
         style={[styles.container, { height: this.state.height }]}>
+
         {/* MAP */}
 
         <MapComponent
@@ -330,6 +331,7 @@ class Map extends Component {
         {/* ADD MENU */}
 
         <AddPanels thisRef={this}
+          mapRef={this}
           ref={ref => { this.AddPanels = ref }} />
 
       </View>

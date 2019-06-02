@@ -3,35 +3,37 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    // 2 Permission bellow are not required, just use when you have to use geolocation API
-    // If you need FINE location, insert this one
+    <!-- camera permissions when adding images -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.hardware.camera.autofocus" />
+    
+    <!-- location permissions when using geolocation API -->
+    <!-- fine location -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    // Or insert this line if you don't need FINE location
+    <!-- coarse location -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
-      android:name=".MainApplication"
-      android:label="@string/app_name"
-      android:icon="@mipmap/ic_launcher"
-      android:allowBackup="false"
-      android:theme="@style/AppTheme">
-      <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
-      <!-- <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyCHAmau23TI2wcqTwW-513V_88e6OILqyA"/> -->
-      <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="@string/GOOGLE_MAPS_API_KEY" />
-      <activity
-        android:name=".MainActivity"
+        android:name=".MainApplication"
         android:label="@string/app_name"
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-        android:windowSoftInputMode="adjustResize">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-      </activity>
-      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="false"
+        android:theme="@style/AppTheme">
+        <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/GOOGLE_MAPS_API_KEY" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
     </application>
 
 </manifest>
