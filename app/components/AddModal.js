@@ -73,9 +73,9 @@ const ImagePickerOptions = {
   maxHeigh: 500
 };
 
-{
-  /* STYLES */
-}
+
+/* STYLES */
+
 
 const styles = {
   ViewContainer: {
@@ -182,6 +182,8 @@ class AddModal extends Component {
         Routes.POST_Add_Location_Image(data, response.id);
       })
       .then(() => {
+        // reloads map locations
+        this.props.mapRef.getLocations();
         alert('location successfully added');
       })
       .catch(error => {});
@@ -219,6 +221,8 @@ class AddModal extends Component {
         Routes.POST_Add_Entrance_Image(data, response.id);
       })
       .then(() => {
+        // reloads map locations
+        this.props.mapRef.getLocations();
         alert('entrance successfully added');
       })
       .catch(error => {});
@@ -229,7 +233,7 @@ class AddModal extends Component {
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
-        alert('ImagePicker Error: ', response.error);
+        alert('Error: ' + response.error);
       } else {
         // You can also display the image using data: const source = { uri:
         // 'data:image/jpeg;base64,' + response.data };
@@ -472,9 +476,9 @@ class AddModal extends Component {
                     // entrance POST
                     this.handleEntranceAdd();
                   }
-                  alert(
-                    'Uploading...Do not leave the app or some stuff maye uploading incompletely. Uploading will take a while till you get an alert saying its done. You have to manually refresh the app for now. Loading screen coming soon.'
-                  );
+                  // alert(
+                  //   'Uploading...Do not leave the app or some stuff maye uploading incompletely. Uploading will take a while till you get an alert saying its done. You have to manually refresh the app for now. Loading screen coming soon.'
+                  // );
                   this.closeModal();
                   this.props.thisRef.closePanels();
                 }

@@ -199,9 +199,11 @@ class AddPanels extends Component {
                         .MapView
                         .coordinateForPoint({
                           x: width / 2,
-                          y: (Platform.OS == 'android')
-                            ? height / 2 - StatusBar.currentHeight
+                          y:
+                            (Platform.OS == 'android')
+                            ? height / 2 + StatusBar.currentHeight
                             : height / 2
+                            // height / 2
                         })
                         .then(result => {
                           if (this.state.eType == 'location') {
@@ -243,6 +245,7 @@ class AddPanels extends Component {
         {/* ADD MODAL */}
 
         <AddModal
+          mapRef={this.props.mapRef}
           thisRef={this}
           ref={ref => {
             this.AddModal = ref
