@@ -180,7 +180,7 @@ class MapCardScroll extends Component {
               backgroundColor={Theme.Color}
               accessibilityLabel='more info'
               onPress={() => {
-                alert('more info');
+                this.props.navigation.navigate('MoreInfo');
               }}>More info</IconTextButton>
 
             </View>

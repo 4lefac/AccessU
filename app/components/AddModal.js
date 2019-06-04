@@ -221,7 +221,6 @@ class AddModal extends Component {
         Routes.POST_Add_Entrance_Image(data, response.id);
       })
       .then(() => {
-        // reloads map locations
         this.props.mapRef.getLocations();
         alert('entrance successfully added');
       })

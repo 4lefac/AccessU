@@ -91,8 +91,8 @@ class SideMenu extends Component {
                         >My Added Items</SideMenuButton>
 
                         <SideMenuButton icon='info-outline'
-                        onPress={() => navigation.navigate('MoreInfo')}
-                        >More Info</SideMenuButton>
+                        onPress={() => navigation.navigate('About')}
+                        >About</SideMenuButton>
 
                         <SideMenuButton icon='close'
                         onPress={() => {

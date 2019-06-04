@@ -9,6 +9,30 @@ import { Theme } from '../global/';
 class MapComponent extends Component {
     state = {}
 
+    location = null;
+    
+    handleMarkerPress = (location) => {
+        let map = this.props.thisRef;
+        // reset scroll position
+        map.MapCardScroll.resetScroll();
+        // update cards
+        map.MapCardScroll.setupLocation({
+            cardTitleImageUri: location.imageUri,
+            cardTitleTitle: location.name,
+            cardTitleNumEntrances: location.entrances.length,
+            cardTitleDesc: location.description,
+            cardEntrances: location.entrances,
+        });
+        // set map entrances
+        this.MapEntrances.setEntrances(location.entrances);
+
+        // toggle card scroll
+        if (!map.AddPanels.state.bIsOpen) map.toggleCardScroll(1);
+        else map.AddPanels.setState({ location });
+        
+        this.location = location;
+    }
+
     render() {
         return (
             <MapView
@@ -30,8 +54,7 @@ class MapComponent extends Component {
 
             {/* MARKERS */}
 
-            {this.props.locations.map(location => {
-                return (
+            {this.props.locations.map(location => 
                 <MapMarker icon='place'
                     key={location.id.toString()}
                     id={location.id.toString()}
@@ -39,28 +62,9 @@ class MapComponent extends Component {
                     latitude={location.coordinates._latitude}
                     longitude={location.coordinates._longitude}
                     entrances={location.entrances}
-                    onPress={() => {
-                    let map = this.props.thisRef;
-                    // reset scroll position
-                    map.MapCardScroll.resetScroll();
-                    // update cards
-                    map.MapCardScroll.setupLocation({
-                        cardTitleImageUri: location.imageUri,
-                        cardTitleTitle: location.name,
-                        cardTitleNumEntrances: location.entrances.length,
-                        cardTitleDesc: location.description,
-                        cardEntrances: location.entrances,
-                    });
-                    // set map entrances
-                    this.MapEntrances.setEntrances(location.entrances);
-
-                    // toggle card scroll
-                    if (!map.AddPanels.state.bIsOpen) map.toggleCardScroll(1);
-                    else map.AddPanels.setState({ location: location });
-
-                    }} />
-                )
-            })}
+                    onPress={() => this.handleMarkerPress(location)}
+                />
+            )}
 
             {/* ENTRANCES */}
 

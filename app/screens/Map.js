@@ -34,7 +34,7 @@ import { Auth } from '../api/Auth';
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 
-const LATITUDE_DELTA = 0.009;
+const LATITUDE_DELTA = 0.003;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 let userRegion = {
@@ -107,11 +107,15 @@ class Map extends Component {
   /*
   ** retrieves locations
   */
-  getLocations = () => {
+  getLocations = (callback) => {
     Routes.GET_map()
         .then((locations) => {
             if (Array.isArray(locations)) {
-                this.setState({ locations });
+                this.setState({ locations }, () => {
+                  if (callback) {
+                    callback();
+                  }
+                });
             }
         })
         .catch((e) => { throw e });
