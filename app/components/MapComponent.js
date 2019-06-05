@@ -22,6 +22,8 @@ class MapComponent extends Component {
             cardTitleNumEntrances: location.entrances.length,
             cardTitleDesc: location.description,
             cardEntrances: location.entrances,
+
+            location: location,
         });
         // set map entrances
         this.MapEntrances.setEntrances(location.entrances);
