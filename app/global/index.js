@@ -19,7 +19,8 @@ export { version as VERSION } from '../../app.json';
 /*
 ** theme
 */
-export Theme from './Theme';
+import THEME from './Theme';
+export const Theme = THEME;
 
 /*
 ** stores persistent data in local memory (returns Promise)
