@@ -138,6 +138,27 @@ class MapCardScroll extends Component {
         });
     }
 
+    openInMaps = (entrance) => {
+        const scheme = Platform.select({
+            ios: 'maps:0,0?q=',
+            android: 'geo:0,0?q='
+        });
+
+        let lat = entrance.coordinates._latitude;
+        let lng = entrance.coordinates._longitude;
+        const latLng = `${lat},${lng}`;
+
+        const label = this.state.cardTitleTitle + ' '
+        + entrance.direction.toUpperCase() + ' entrance';
+
+        const url = Platform.select({
+            ios: `${scheme}${label}@${latLng}`,
+            android: `${scheme}${latLng}(${label})`
+        });
+
+        Linking.openURL(url);
+    }
+
     render() {
         return (
             <Animated.ScrollView horizontal scrollEventThrottle={100}
@@ -255,34 +276,16 @@ class MapCardScroll extends Component {
                     color={Theme.IconColorBackground}
                     accessibilityLabel='get directions'
                     onPress={() => {
-                        alert('get directions to ' + JSON.stringify(
-                        entrance.coordinates
-                        ));
+                        this.openInMaps(entrance);
+                        // alert('get directions to ' + JSON.stringify(
+                        // entrance.coordinates
+                        // ));
                     }}>Get directions</IconTextButton>
 
                     <IconTextButton icon='directions'
                     color={Theme.IconColorHighlight}
                     accessibilityLabel='open in Google Maps'
-                    onPress={() => {
-                        const scheme = Platform.select({
-                        ios: 'maps:0,0?q=',
-                        android: 'geo:0,0?q='
-                        });
-
-                        let lat = entrance.coordinates._latitude;
-                        let lng = entrance.coordinates._longitude;
-                        const latLng = `${lat},${lng}`;
-
-                        const label = this.state.cardTitleTitle + ' '
-                        + entrance.direction.toUpperCase() + ' entrance';
-
-                        const url = Platform.select({
-                        ios: `${scheme}${label}@${latLng}`,
-                        android: `${scheme}${latLng}(${label})`
-                        });
-
-                        Linking.openURL(url);
-                    }} />
+                    onPress={() => this.openInMaps(entrance)} />
 
                     <IconTextButton icon='info'
                     fill={true}

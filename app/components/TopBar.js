@@ -38,30 +38,30 @@ class TopBar extends Component {
 
         {/* MENU */}
 
-        <View style={styles.menuButton}>
-          <IconButton
-            icon={this.props.userInfo ? 'account-circle' : 'dehaze'}
-            color={this.props.userInfo ? Theme.IconColorHighlight : ''}
-            accessibilityLabel='menu'
-            onPress={() => {
-              Auth.isSignedIn().then((response) => {
-                if (response) {
-                  Keyboard.dismiss();
-                  this.props.thisRef.SideMenu.open();
-                } else {
-                  // alert('You need to log in');
-                  this.props.navigation.navigate('LoginScreen');
-                }
-              });
-              // if (signedInStatus) {
-              //   Keyboard.dismiss();
-              //   this.props.thisRef.SideMenu.open();
-              // } else {
-              //   alert('You need to log in');
-              //   this.props.navigation.navigate('LoginScreen');
-              // }
-            }} />
-        </View>
+        {/* <View style={styles.menuButton}>           
+           <IconButton
+             icon={this.props.userInfo ? 'account-circle' : 'dehaze'}
+             color={this.props.userInfo ? Theme.IconColorHighlight : ''}
+             accessibilityLabel='menu'
+             onPress={() => {
+               Auth.isSignedIn().then((response) => {
+                 if (response) {
+                   Keyboard.dismiss();
+                   this.props.thisRef.SideMenu.open();
+                 } else {
+                   // alert('You need to log in');
+                   this.props.navigation.navigate('LoginScreen');
+                 }
+               });
+               // if (signedInStatus) {
+               //   Keyboard.dismiss();
+               //   this.props.thisRef.SideMenu.open();
+               // } else {
+               //   alert('You need to log in');
+               //   this.props.navigation.navigate('LoginScreen');
+               // }
+             }} />
+        </View> */}
 
         {/* SEARCH BAR */}
 
@@ -71,14 +71,14 @@ class TopBar extends Component {
 
         {/* SETTINGS */}
 
-        <View style={styles.menuButton}>
+        {/* <View style={styles.menuButton}>
           <IconButton icon='settings'
             accessibilityLabel='settings'
             onPress={() => {
               Keyboard.dismiss();
               this.props.thisRef.Settings.open();
             }} />
-        </View>
+        </View> */}
 
       </View>
     );

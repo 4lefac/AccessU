@@ -204,15 +204,16 @@ class Map extends Component {
         this.setState({ userRegion });
       });
 
+      
     // check to see if user is logged in and if the user isn't logged in then we will ask them to.
-    Auth.isSignedIn()
-      .then((response) => {
-        if (response) {
-          this.setState({ userInfo: {} });
-        } else {
-          this.props.navigation.navigate('LoginScreen');
-        }
-      });
+    // Auth.isSignedIn()
+    //   .then((response) => {
+    //     if (response) {
+    //       this.setState({ userInfo: {} });
+    //     } else {
+    //       this.props.navigation.navigate('LoginScreen');
+    //     }
+    //   });
 
     // get locations
     this.getLocations();
@@ -283,12 +284,12 @@ class Map extends Component {
               color={Theme.BackgroundColorContent}
               accessibilityLabel='add or edit entrances'
               onPress={() => {
-                if (userInfo) {
+                // if (userInfo) {
                   this.AddPanels.openPanels();
-                }
-                else {
-                  this.props.navigation.navigate('LoginScreen');
-                }
+                // }
+                // else {
+                  // this.props.navigation.navigate('LoginScreen');
+                // }
               }} />
           </View>
           <View style={styles.mapButtonContainer}>
