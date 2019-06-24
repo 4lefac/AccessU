@@ -27,7 +27,11 @@ export default {
 
     White: '#fff',
     Black: '#000',
+    Orange: '#e98d58',
+    DarkBlue: '#047cb0',
+    LightBlue: '#4fc3f7',
     alertRedColor: '#a94442',
+
     // icons
 
     IconColor: textColor,

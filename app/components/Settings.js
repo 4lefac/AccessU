@@ -1,19 +1,26 @@
 import React, { Component } from 'react';
 import {
-  Text,
+  // Text,
   View,
 } from 'react-native';
 import {
+  IconToggleButton,
   Menu,
 } from './';
 import { Theme } from '../global';
 
-const styles = {
+const style = {
   ViewContainer: {
     flex: 1,
+    flexDirection: 'row',
     backgroundColor: Theme.BackgroundColorContent,
     borderRadius: 10,
     padding: 20,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  },
+  Setting: {
+    flex: 0.3,
   },
 }
 
@@ -29,8 +36,21 @@ class Settings extends Component {
       size={this.props.size}
       from='bottom'
       ref={ref => { this.Menu = ref }}>
-        <View style={styles.ViewContainer}>
-          <Text>Settings will go here.</Text>
+        <View style={style.ViewContainer}>
+          
+          <IconToggleButton
+            style={style.Setting}
+            icon='brightness-6'
+            label='High Contrast'
+            accessibilityLabel='Toggle high contrast'
+            onEnabled={() => {
+              alert('high contrast on');
+            }}
+            onDisabled={() => {
+              alert('high contrast off');
+            }}
+          />
+
         </View>
       </Menu>
     )

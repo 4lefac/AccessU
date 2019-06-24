@@ -42,6 +42,8 @@ export FormTextInput from './FormTextInput';
 
 export IconButton from './IconButton';
 
+export IconToggleButton from './IconToggleButton';
+
 export IconTextButton from './IconTextButton';
 
 export SideMenuButton from './SideMenuButton';

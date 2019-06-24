@@ -34,7 +34,7 @@ import { Auth } from '../api/Auth';
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
 
-const LATITUDE_DELTA = 0.009;
+const LATITUDE_DELTA = 0.003;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 let userRegion = {
@@ -107,11 +107,15 @@ class Map extends Component {
   /*
   ** retrieves locations
   */
-  getLocations = () => {
+  getLocations = (callback) => {
     Routes.GET_map()
         .then((locations) => {
             if (Array.isArray(locations)) {
-                this.setState({ locations });
+                this.setState({ locations }, () => {
+                  if (callback) {
+                    callback();
+                  }
+                });
             }
         })
         .catch((e) => { throw e });
@@ -200,15 +204,16 @@ class Map extends Component {
         this.setState({ userRegion });
       });
 
+      
     // check to see if user is logged in and if the user isn't logged in then we will ask them to.
-    Auth.isSignedIn()
-      .then((response) => {
-        if (response) {
-          this.setState({ userInfo: {} });
-        } else {
-          this.props.navigation.navigate('LoginScreen');
-        }
-      });
+    // Auth.isSignedIn()
+    //   .then((response) => {
+    //     if (response) {
+    //       this.setState({ userInfo: {} });
+    //     } else {
+    //       this.props.navigation.navigate('LoginScreen');
+    //     }
+    //   });
 
     // get locations
     this.getLocations();
@@ -279,12 +284,12 @@ class Map extends Component {
               color={Theme.BackgroundColorContent}
               accessibilityLabel='add or edit entrances'
               onPress={() => {
-                if (userInfo) {
+                // if (userInfo) {
                   this.AddPanels.openPanels();
-                }
-                else {
-                  this.props.navigation.navigate('LoginScreen');
-                }
+                // }
+                // else {
+                  // this.props.navigation.navigate('LoginScreen');
+                // }
               }} />
           </View>
           <View style={styles.mapButtonContainer}>
